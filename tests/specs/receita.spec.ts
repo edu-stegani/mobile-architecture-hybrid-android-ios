@@ -10,8 +10,12 @@ describe('Consultar receitas no card', () => {
         await dashboardScreen.checkDashboard()
     })
 
-    it('deve visualizar receitas cadastradas', async () => {
+    it('deve enviar nova receita', async () => {
         await dashboardScreen.tapCardByText('CADASTRAR RECEITA')
+        await receitaScreen.sendNewRecipe(data.fullName , 'Médica (CRM)', 'MG', 'DIPIRONA')
+    })
+
+    it('deve visualizar receitas cadastradas', async () => {
         await receitaScreen.checkReceita(`Receita ${data.fullName}`)
     })
 
@@ -20,8 +24,14 @@ describe('Consultar receitas no card', () => {
         await receitaScreen.closeRecipeModal()
     })
 
-    it('deve enviar nova receita', async () => {
-        await receitaScreen.sendNewRecipe(data.fullName , 'Médica (CRM)', 'SP', 'DIPIRONA')
+    it('deve visualizar os detalhes da receita', async () => {
+        await receitaScreen.clickSeletorRecipe(`Receita ${data.fullName}`, 'details')
+        await receitaScreen.viewDetailsRecipe()
+    })
+
+    it('deve excluir a receita', async () => {
+        await receitaScreen.clickSeletorRecipe(`Receita ${data.fullName}`, 'delete')
+        await receitaScreen.deleteRecipe()
     })
 
 })

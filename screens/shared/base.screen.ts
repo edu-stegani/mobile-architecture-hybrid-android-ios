@@ -71,4 +71,9 @@ export default class BaseScreen {
         await element.waitForDisplayed()
         await element.setValue(value)
     }
+
+    async checkpointScreen(textCheckpoint: string) {
+        const checkpointText = $(`//*[@text='${textCheckpoint}']`)
+        await checkpointText.waitForDisplayed()
+    }
 }

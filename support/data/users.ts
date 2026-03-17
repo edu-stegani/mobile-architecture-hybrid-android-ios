@@ -1,7 +1,7 @@
 export const users = {
   ctVidalink: {
     cpf: '48827441808',
-    senha: '123456',
+    senha: 'E1234567',
     matricula: '01688',
     firstName: 'Eduardo',
     fullName: 'EDUARDO STEGANI'
