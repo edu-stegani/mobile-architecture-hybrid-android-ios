@@ -1,0 +1,6 @@
+node_modules/
+screenshots/
+allure-results/
+package-lock.json
+*.apk
+*.ipa
