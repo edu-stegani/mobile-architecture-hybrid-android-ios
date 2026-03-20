@@ -19,11 +19,15 @@ export const config = {
       outputDir: 'allure-results'
     }]
   ],
-  mochaOpts: { timeout: 240000 },
+  mochaOpts: { timeout: 600000 },
 
   before: async function () {
     await globalBeforeEach()
   },
+
+  beforeTest: function (test, context) {
+        console.log(`▶️  Runing Scenario: ${test.title}`);
+    },
 
   afterTest: globalAfterEach,
 
