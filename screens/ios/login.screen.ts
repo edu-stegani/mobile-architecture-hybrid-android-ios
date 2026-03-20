@@ -59,6 +59,10 @@ class LoginIOS extends BaseScreen {
         await this.waitAndClick(this.btnAcessar)
     }
 
+    async viewMessageError(message: string){
+        await this.checkpointScreen(`${message}`)
+    }
+
 }
 
 export default new LoginIOS()

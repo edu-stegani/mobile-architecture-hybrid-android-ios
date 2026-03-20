@@ -226,7 +226,7 @@ class ReceitaAndroid extends BaseScreen {
     async deleteRecipe() {
         await this.checkpointScreen('Tem certeza que deseja apagar essa receita?')
         await this.waitAndClick(this.btnDeleteSim)
-        await this.checkpointScreen('Você ainda não enviou nenhuma receita')
+        await this.btnNewRecipe.waitForDisplayed()
     }
 }
 

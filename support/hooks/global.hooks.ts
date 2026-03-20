@@ -2,7 +2,7 @@ import type { Options } from '@wdio/types'
 
 export const globalBeforeEach = async () => {
     console.log('Sessão iniciada:', browser.sessionId)
-    console.log('App pronto na tela inicial')
+    // console.log('App pronto na tela inicial')
 }
 
 export const globalAfterEach: Options.Testrunner['afterTest'] = async (

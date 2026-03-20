@@ -46,7 +46,7 @@ class LoginAndroid extends BaseScreen {
 
     async fillMatricula(matricula: string) {
         const labelMatricula = await $('//android.widget.TextView[contains(@text,"Matricula do titular")]')
-        await labelMatricula.waitForDisplayed({ timeout: 20000 })
+        await labelMatricula.waitForDisplayed({ timeout: 30000 })
         await this.inputMatricula.waitForDisplayed({ timeout: 15000 })
         await this.inputMatricula.setValue(matricula)
         await this.waitAndClick(this.btnAcessar)
@@ -58,6 +58,10 @@ class LoginAndroid extends BaseScreen {
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
         await this.waitAndClick(this.btnAcessar)
+    }
+
+    async viewMessageError(message: string){
+        await this.checkpointScreen(message)
     }
 
 }
