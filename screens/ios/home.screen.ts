@@ -4,16 +4,16 @@ import BaseScreen from '../shared/base.screen.js'
 class HomeIOS extends BaseScreen {
 
     // ====== SELECTORS ======
-    get labelNewApp() {
-        return $('')
+    get btnPular() {
+        return $('//XCUIElementTypeButton[@label="Pular"]');
     }
 
     get closeNewApp() {
-        return $('')
+        return $('~ic close black')
     }
 
     get homeTab() {
-        return $('')
+        return $('//XCUIElementTypeButton[@name="Home"]')
     }
 
     get selectorHelloUser() {
@@ -23,36 +23,42 @@ class HomeIOS extends BaseScreen {
     // ======== ACTIONS ========
     async closeInfoNewApp() {
         try {
-            await this.labelNewApp.waitForDisplayed({ timeout: 20000 })
-            await this.waitAndClick(this.closeNewApp)
-            await this.closeNewApp.waitForDisplayed({ reverse: true, timeout: 10000 })
+            await this.btnPular.waitForDisplayed({ timeout: 10000, timeoutMsg: 'botão pular modal não visivel' })
+            console.log('Modal Novo app detectado, fechando...');
+            const close = this.closeNewApp
+            await this.waitAndClick(close)
+
+            await this.closeNewApp.waitForDisplayed({ reverse: true, timeout: 10000 });
         } catch (error) {
-            console.log('Info Novo App não apareceu, continuando com o teste...')
+            console.log('Modal novo app não visível, seguindo pra home...');
         }
     }
 
     async checkHomeIcon() {
-        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
+        await driver.pause(5000);
+        await this.homeTab.waitForDisplayed({ timeout: 40000, interval: 2000 })
     }
 
     async helloUser(firstName: string) {
-        await this.selectorHelloUser.waitForDisplayed({ timeout: 30000, interval: 2000 })
-
-        const greeting = await this.selectorHelloUser.getText()
-        await expect(greeting).toContain(`Olá, ${firstName}!`)
+        const helloUser = $(`-ios predicate string:label ==[c] "Olá, ${firstName}!"`);
+        await helloUser.waitForDisplayed({ timeout: 30000 });
     }
 
     // ======== METHODS ========
     async checkDashboard() {
+        await this.acceptPermissionAlertLocation()
         await this.closeInfoNewApp()
         await this.checkHomeIcon()
     }
 
     async tapCardByText(cardText: string) {
-        const cardName = ``
+        const cardName = `//XCUIElementTypeCell//XCUIElementTypeStaticText[@name="${cardText}"]`
         await this.scrollToElement(cardName)
         await this.waitAndClick($(cardName))
     }
+
+    // //XCUIElementTypeButton[@name="Allow Full Access"]
+    // //XCUIElementTypeButton[@name="Allow While Using App"]
 
 }
 

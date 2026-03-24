@@ -60,8 +60,8 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndClick(this.btnAcessar)
     }
 
-    async viewMessageError(message: string){
-        await this.checkpointScreen(message)
+    async viewMessageError(){
+        await this.checkpointScreen('Senha incorreta')
     }
 
 }

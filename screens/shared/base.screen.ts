@@ -14,9 +14,7 @@ export default class BaseScreen {
     }
 
     async hideKeyboard() {
-        if (await driver.isKeyboardShown()) {
-            await driver.hideKeyboard();
-        }
+        await this.waitAndClick($('~OK_toolbar'))
     }
 
     async scrollToElement(selector: string, maxRetries = 10) {
@@ -73,7 +71,25 @@ export default class BaseScreen {
     }
 
     async checkpointScreen(textCheckpoint: string) {
-        const checkpointText = $(`//*[@text='${textCheckpoint}']`)
+        const selector = process.env.PLATFORM === 'ios'
+            ? `//*[@label='${textCheckpoint}']`
+            : `//*[@text='${textCheckpoint}']`;
+
+        const checkpointText = $(selector);
         await checkpointText.waitForDisplayed()
+    }
+
+    async acceptPermissionAlertLocation() {
+        try {
+            const btnAllowAlert = $('//XCUIElementTypeButton[@name="Allow While Using App"]')
+            // Aguarda até 10 segundos por qualquer alerta do sistema
+            await btnAllowAlert.waitForDisplayed({
+                timeout: 10000,
+                timeoutMsg: 'Alerta não apareceu, seguindo...'
+            });
+            await btnAllowAlert.click()
+        } catch (e) {
+            // Se não houver alerta, ele apenas ignora e segue
+        }
     }
 }

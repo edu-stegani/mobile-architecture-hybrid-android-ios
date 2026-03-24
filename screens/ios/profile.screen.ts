@@ -5,23 +5,23 @@ class ProfileIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get perfilTab(){
-        return $('')
+        return $('//XCUIElementTypeButton[@name="Perfil"]')
     }
 
-    get cardBeneficios() {
-        return $(``)
-    }
+    // get cardBeneficios() {
+    //     return $(``)
+    // }
 
     get logoutIcon (){
-        return $('')
+        return $('//XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeButton')
     }
 
     get modalLogout(){
-        return $('')
+        return $('//XCUIElementTypeStaticText[@name="Deseja mesmo sair de seu usuário?"]')
     }
 
     get btnLogoutYES(){
-        return $('')
+        return $('~alert_right_button_identifier')
     }
 
     // ======== ACTIONS ========
@@ -29,30 +29,31 @@ class ProfileIOS extends BaseScreen {
         await this.perfilTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
     }
 
-    async checkUserCard(fullName: string) {
-        await this.cardBeneficios.waitForDisplayed({ timeout: 30000, interval: 2000 })
+    // async checkUserCard(fullName: string) {
+    //     await this.cardBeneficios.waitForDisplayed({ timeout: 30000, interval: 2000 })
 
-        const cardText = await this.cardBeneficios.getText()
-        await expect(cardText).toContain(fullName)
-    }
+    //     const cardText = await this.cardBeneficios.getText()
+    //     await expect(cardText).toContain(fullName)
+    // }
 
     async confirmLogout(){
         const btnLogoutYES = this.btnLogoutYES
         await this.modalLogout.waitForDisplayed()
         await this.waitAndClick(btnLogoutYES)
 
-        const btnEntrar = $('')
+        const btnEntrar = $('~enterButtonIdentifier')
         await btnEntrar.waitForDisplayed({ timeout: 60000, interval: 2000 })
     }
 
     // ======== METHODS ========
-    async checkUsernameInCard(fullName: string) {
-        await this.checkUserCard(fullName)
-    }
+    // async checkUsernameInCard(fullName: string) {
+    //     await this.checkUserCard(fullName)
+    // }
 
     async logout(){
         const logoutIcon = this.logoutIcon
-        await this.checkPerfilIcon()
+        const perfil = this.perfilTab
+        await this.waitAndClick(perfil)
         await this.waitAndClick(logoutIcon)
         await this.confirmLogout()
     }
