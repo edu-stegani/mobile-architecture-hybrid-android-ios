@@ -29,7 +29,7 @@ class DbHelper {
 
     // metodos 
 
-    async simpleResetPasswordCount(count: number, socialId: string) {
+    async resetPasswordCount(count: number, socialId: string) {
         const query = `UPDATE login.users SET invalidpasswordcount = $1 WHERE socialid = $2`;
 
         return await this.executeQuery(query, [count, socialId]);
