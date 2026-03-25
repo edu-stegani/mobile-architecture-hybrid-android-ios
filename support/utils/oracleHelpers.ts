@@ -6,9 +6,9 @@ class OracleHelper {
 
     try {
       connection = await oracledb.getConnection({
-        user: 'GERENCIADOR',
-        password: 'grncdr',
-        connectString: '10.10.10.18:1521/DBPROD_PDB1'
+        user: 'username',
+        password: 'password',
+        connectString: '11.11.11.11:1234/password'
       })
 
       const result = await connection.execute(query, params, {autoCommit: true})

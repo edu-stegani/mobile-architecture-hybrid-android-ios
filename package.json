@@ -25,6 +25,7 @@
     "@badisi/wdio-harness": "^4.3.1",
     "@testing-library/webdriverio": "^3.2.1",
     "@types/node": "^25.3.3",
+    "@types/oracledb": "^6.10.2",
     "@types/pg": "^8.18.0",
     "@wdio/appium-service": "^9.24.0",
     "@wdio/browserstack-service": "^9.24.0",
@@ -49,6 +50,7 @@
     "@wdio/allure-reporter": "^9.24.0",
     "appium": "^3.2.0",
     "dotenv": "^17.3.1",
+    "oracledb": "^6.10.0",
     "pg": "^8.20.0"
   }
 }
