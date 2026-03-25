@@ -11,6 +11,14 @@ const RecipeLocators = {
     }
 };
 
+const DetailsLocators = {
+    baseXpath: '//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/clContent"]',
+    ids: {
+        data: 'com.astl.vidalink.beta:id/viewPrescriptionData',
+        iconRemove: 'com.astl.vidalink.beta:id/ivAction1'
+    }
+}
+
 class ReceitaAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
@@ -46,6 +54,10 @@ class ReceitaAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/btDeleteRecipe')
     }
 
+    get btnDeleteSim() {
+        return $('id:com.astl.vidalink.beta:id/btConfirm')
+    }
+
     get btnFinish() {
         return $('id:com.astl.vidalink.beta:id/btnFinish')
     }
@@ -77,11 +89,6 @@ class ReceitaAndroid extends BaseScreen {
     // ======== ACTIONS ========
     async viewRecipes() {
         await this.tollbarMyRecipes.waitForDisplayed({ timeout: 30000, interval: 2000 })
-    }
-
-    async checkpointScreen(textCheckpoint: string) {
-        const checkpointText = $(`//*[@text='${textCheckpoint}']`)
-        await checkpointText.waitForDisplayed()
     }
 
     async checkRecipeElements(recipeName: string) {
@@ -201,6 +208,25 @@ class ReceitaAndroid extends BaseScreen {
         await this.waitAndClick(this.btnFinish)
         // Screen Minhas receitas
         await this.tollbarMyRecipes.waitForDisplayed()
+    }
+
+    async viewDetailsRecipe() {
+        await this.checkpointScreen('Itens da receita')
+        const base = DetailsLocators.baseXpath;
+        const elements = {
+            data: $(`${base}//*[@resource-id="${DetailsLocators.ids.data}"]`),
+            iconRemove: $(`${base}//*[@resource-id="${DetailsLocators.ids.iconRemove}"]`),
+        };
+        for (const el of Object.values(elements)) {
+            await el.waitForDisplayed({ timeout: 15000 });
+        }
+        await this.waitAndClick($('//android.widget.ImageButton'))
+    }
+
+    async deleteRecipe() {
+        await this.checkpointScreen('Tem certeza que deseja apagar essa receita?')
+        await this.waitAndClick(this.btnDeleteSim)
+        await this.btnNewRecipe.waitForDisplayed()
     }
 }
 

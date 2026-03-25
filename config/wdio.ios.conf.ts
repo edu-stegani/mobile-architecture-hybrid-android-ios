@@ -34,7 +34,7 @@ export const config = {
       'appium:platformVersion': '17.0',
       'appium:automationName': 'XCUITest',
 
-      'appium:app': path.join(process.cwd(), 'app', 'app.ipa'),
+      'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5100.ipa'),
 
       'appium:autoAcceptAlerts': true,
       'appium:autoLaunch': true,

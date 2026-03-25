@@ -1,9 +1,16 @@
 export const users = {
   ctVidalink: {
-    cpf: '12345678910',
-    senha: '123456',
-    matricula: '12345',
+    cpf: '48827441808',
+    senha: 'A1234567',
+    matricula: '01688',
     firstName: 'Eduardo',
-    fullName: 'EDUARDO TESTE'
+    fullName: 'EDUARDO STEGANI'
   },
+  ctMilenar: {
+    cpf: '28440152043',
+    senha: 'A1234567',
+    matricula: '506070',
+    firstName: 'William',
+    fullName: 'WILLIAM FERREIRA'
+  }
 }

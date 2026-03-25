@@ -19,11 +19,15 @@ export const config = {
       outputDir: 'allure-results'
     }]
   ],
-  mochaOpts: { timeout: 240000 },
+  mochaOpts: { timeout: 600000 },
 
   before: async function () {
     await globalBeforeEach()
   },
+
+  beforeTest: function (test, context) {
+        console.log(`▶️  Runing Scenario: ${test.title}`);
+    },
 
   afterTest: globalAfterEach,
 
@@ -33,7 +37,7 @@ export const config = {
       'appium:deviceName': 'emulator-5554',
       'appium:platformVersion': '16.0',
       'appium:automationName': 'UiAutomator2',
-      'appium:app': path.join(process.cwd(), 'app', 'app.apk'),
+      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5100.apk'),
 
       'appium:autoGrantPermissions': true,
       'appium:uiautomator2ServerLaunchTimeout': 120000,

@@ -2,86 +2,93 @@ import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
 
 const RecipeLocators = {
-    basePath: (name: string) => `//android.widget.TextView[@text="${name}"]/..`,
+    basePath: (name: string) => ``,
     ids: {
-        image: 'com.astl.vidalink.beta:id/ivAction1',
-        delete: 'com.astl.vidalink.beta:id/ivAction2',
-        status: 'com.astl.vidalink.beta:id/tvPrescriptionStatus',
-        details: 'com.astl.vidalink.beta:id/tvPrescriptionDetails'
+        image: '',
+        delete: '',
+        status: '',
+        details: ''
     }
 };
+
+const DetailsLocators = {
+    baseXpath: '',
+    ids: {
+        data: '',
+        iconRemove: ''
+    }
+}
 
 class ReceitaIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get tollbarMyRecipes() {
-        return $(`//android.widget.TextView[@text="Minhas receitas"]`)
+        return $(``)
     }
 
     get btnCloseRecipeModal() {
-        return $('id:com.astl.vidalink.beta:id/ivCloseButton');
+        return $('');
     }
 
     get btnNewRecipe() {
-        return $('id:com.astl.vidalink.beta:id/btSendNewRecipe')
+        return $('')
     }
 
     get btnConfirmar() {
-        return $('id:com.astl.vidalink.beta:id/btNext')
+        return $('')
     }
 
     get btnAddImage() {
-        return $('id:com.astl.vidalink.beta:id/text_input_end_icon')
+        return $('')
     }
 
     get btnGaleryPhotos() {
-        return $('id:com.astl.vidalink.beta:id/tvSecondOption')
+        return $('')
     }
 
     get btnDeletePicture() {
-        return $('id:com.astl.vidalink.beta:id/btDeletePicture')
+        return $('')
     }
 
     get btnDeleteRecipe() {
-        return $('id:com.astl.vidalink.beta:id/btDeleteRecipe')
+        return $('')
     }
 
     get btnFinish() {
-        return $('id:com.astl.vidalink.beta:id/btnFinish')
+        return $('')
+    }
+
+    get btnDeleteSim() {
+        return $('')
     }
 
     get inputRecipeName() {
-        return $('id:com.astl.vidalink.beta:id/etRecipeName')
+        return $('')
     }
 
     get inputCRM() {
-        return $('id:com.astl.vidalink.beta:id/etRegionalCouncil')
+        return $('')
     }
 
     get inputDate() {
-        return $('id:com.astl.vidalink.beta:id/etDate')
+        return $('')
     }
 
     get inputMedicineName() {
-        return $('id:com.astl.vidalink.beta:id/etMedicineName')
+        return $('')
     }
 
     get selectTypeRecipe() {
-        return $('id:com.astl.vidalink.beta:id/spType')
+        return $('')
     }
 
     get selectState() {
-        return $('id:com.astl.vidalink.beta:id/spState')
+        return $('')
     }
 
     // ======== ACTIONS ========
     async viewRecipes() {
         await this.tollbarMyRecipes.waitForDisplayed({ timeout: 30000, interval: 2000 })
-    }
-
-    async checkpointScreen(textCheckpoint: string) {
-        const checkpointText = $(`//*[@text='${textCheckpoint}']`)
-        await checkpointText.waitForDisplayed()
     }
 
     async checkRecipeElements(recipeName: string) {
@@ -102,7 +109,7 @@ class ReceitaIOS extends BaseScreen {
 
     async selectUser(userName: string) {
         await this.checkpointScreen('Para quem é esta receita?')
-        const userSelected = $(`//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/layout"]/*[contains(@text, '${userName}')]`)
+        const userSelected = $(``)
         await this.waitAndClick(userSelected)
         await this.waitAndSetValue(this.inputRecipeName, `Receita ${userName}`)
         await this.waitAndClick(this.btnConfirmar)
@@ -201,6 +208,25 @@ class ReceitaIOS extends BaseScreen {
         await this.waitAndClick(this.btnFinish)
         // Screen Minhas receitas
         await this.tollbarMyRecipes.waitForDisplayed()
+    }
+
+    async viewDetailsRecipe() {
+        await this.checkpointScreen('Itens da receita')
+        const base = DetailsLocators.baseXpath;
+        const elements = {
+            data: $(`${base}//*[@resource-id="${DetailsLocators.ids.data}"]`),
+            iconRemove: $(`${base}//*[@resource-id="${DetailsLocators.ids.iconRemove}"]`),
+        };
+        for (const el of Object.values(elements)) {
+            await el.waitForDisplayed({ timeout: 15000 });
+        }
+        await this.waitAndClick($('//android.widget.ImageButton'))
+    }
+
+    async deleteRecipe() {
+        await this.checkpointScreen('Tem certeza que deseja apagar essa receita?')
+        await this.waitAndClick(this.btnDeleteSim)
+        await this.checkpointScreen('Você ainda não enviou nenhuma receita')
     }
 }
 

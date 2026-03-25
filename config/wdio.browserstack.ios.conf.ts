@@ -1,5 +1,8 @@
 import type { Options } from '@wdio/types'
 import 'dotenv/config'
+import path from 'node:path'
+
+const buildName = `iOS_Build_${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
 
 export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabilities[] } = {
   runner: 'local',
@@ -16,49 +19,66 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
 
   framework: 'mocha',
   logLevel: 'error',
-  services: ['browserstack'],
+  services: [
+    ['browserstack', {
+      browserstackLocal: false,
+      opts: {
+        verbose: false
+      }
+    }]
+  ],
   reporters: [
-    'spec',
+    // 'spec',
     ['allure', {
       outputDir: 'allure-results'
     }]
   ],
 
   mochaOpts: {
-    timeout: 240000
+    timeout: 600000
   },
 
   beforeTest: async function (test) {
-    // Atualiza o nome da sessão no BrowserStack para o nome do teste atual
-    await driver.execute(`browserstack_executor: {"action": "setSessionName", "arguments": {"name": "${test.title}"}}`);
+    console.log(`▶️  Runing Scenario: ${test.title}`);
   },
 
-  afterTest: async function (test, context, { error, result, duration, passed, retries }) {
-    const status = passed ? "passed" : "failed";
-    const reason = error ? error.message : "Teste finalizado com sucesso";
+  before: async function (capabilities, specs) {
+    const specPath = specs[0]
 
-    await driver.execute(
-      `browserstack_executor: {"action": "setSessionStatus", "arguments": {"status": "${status}", "reason": "${reason}"}}`
-    );
+    const specName = path.basename(specPath)
+
+    await browser.execute('browserstack_executor: ' + JSON.stringify({
+      action: 'setSessionName',
+      arguments: {
+        name: specName
+      }
+    }))
+  },
+
+  afterTest: function (test, context, { error, result, duration, passed, retries }) {
+    if (passed) {
+      browser.executeScript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "Teste OK!"}}', []);
+    } else {
+      browser.executeScript(`browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "${error.message}"}}`, []);
+    }
   },
 
   capabilities: [{
-    platformName: 'iOS',
+    'platformName': 'iOS',
     'appium:automationName': 'XCUITest',
-
-    'appium:app': 'bs://4e57a5dc95859106c6a54bb3b0dab40ce2a8e12d',
-
+    'appium:bundleId': 'br.com.vidalink.beta',
+    'appium:app': 'bs://84b4c3d97c956fab0f8ed98ae07449496e3eab1d',
+    'appium:includeSafariInWebviews': true,
     'appium:autoAcceptAlerts': true,
+    'appium:permissions': '{"br.com.vidalink.beta": {"location": "always"}}',
 
     'bstack:options': {
       deviceName: 'iPhone 15',
       osVersion: '17',
-
       projectName: 'QA Mobile TS',
-      buildName: `iOS_Build_${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
-
+      buildName: buildName,
       debug: true,
-      networkLogs: true
+      networkLogs: false
     }
   }]
 }

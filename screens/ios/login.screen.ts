@@ -6,23 +6,23 @@ class LoginIOS extends BaseScreen {
     // ====== SELECTORS ======
 
     get btnEntrar() {
-        return $('//XCUIElementTypeButton[@name="enterButtonIdentifier"]')
+        return $('~enterButtonIdentifier')
     }
 
     get inputCpf() {
-        return $('//XCUIElementTypeTextField[@name="cpfTextFieldTextFieldIdentifier"]')
+        return $('~cpfTextFieldTextFieldIdentifier')
     }
 
     get inputSenha() {
-        return $('//XCUIElementTypeTextField[@name="passowrdTextFieldTextFieldIdentifier"]')
+        return $('~passowrdTextFieldTextFieldIdentifier')
     }
 
     get inputMatricula() {
-        return $('//XCUIElementTypeTextField[@name="enrollmentTextFieldTextFieldIdentifier"]')
+        return $('~enrollmentTextFieldTextFieldIdentifier')
     }
 
     get btnAcessar() {
-        return $('//XCUIElementTypeButton[@name="signInEnterButtonIdentifier"]')
+        return $('~signInEnterButtonIdentifier')
     }
 
     // ======== ACTIONS ========
@@ -33,17 +33,17 @@ class LoginIOS extends BaseScreen {
     }
 
     async fillCpf(cpf: string) {
-        await this.inputCpf.waitForDisplayed({ timeout: 15000 })
+        await this.inputCpf.waitForDisplayed({ timeout: 20000 })
         await this.inputCpf.setValue(cpf)
     }
 
     async fillSenha(senha: string) {
-        await this.inputSenha.waitForDisplayed({ timeout: 15000 })
+        await this.inputSenha.waitForDisplayed({ timeout: 20000 })
         await this.inputSenha.setValue(senha)
     }
 
     async fillMatricula(matricula: string) {
-        await this.inputMatricula.waitForDisplayed({ timeout: 15000 })
+        await this.inputMatricula.waitForDisplayed({ timeout: 20000 })
         await this.inputMatricula.setValue(matricula)
         await this.hideKeyboard() // Esconde o teclado antes de clicar em Acessar
         await this.waitAndClick(this.btnAcessar)
@@ -57,6 +57,10 @@ class LoginIOS extends BaseScreen {
         await this.fillSenha(senha)
         await this.hideKeyboard() // Esconde o teclado antes de clicar em Acessar
         await this.waitAndClick(this.btnAcessar)
+    }
+
+    async viewMessageError(){
+        await this.checkpointScreen('Quase lá! Ajuste sua senha para prosseguir.')
     }
 
 }
