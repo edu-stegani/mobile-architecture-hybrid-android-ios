@@ -67,7 +67,7 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
     'platformName': 'iOS',
     'appium:automationName': 'XCUITest',
     'appium:bundleId': 'br.com.vidalink.beta',
-    'appium:app': 'bs://84b4c3d97c956fab0f8ed98ae07449496e3eab1d',
+    'appium:app': 'bs://f442d272ee44d5ce5487674204fad9150d236ec5', //v5.10.1
     'appium:includeSafariInWebviews': true,
     'appium:autoAcceptAlerts': true,
     'appium:permissions': '{"br.com.vidalink.beta": {"location": "always"}}',
