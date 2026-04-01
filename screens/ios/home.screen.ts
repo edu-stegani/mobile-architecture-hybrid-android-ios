@@ -57,9 +57,11 @@ class HomeIOS extends BaseScreen {
         await this.waitAndClick($(cardName))
     }
 
-    // //XCUIElementTypeButton[@name="Allow Full Access"]
-    // //XCUIElementTypeButton[@name="Allow While Using App"]
-
+    async tapPilarByName(pilarName: string) {
+        const pilarSelector = ``    // MAPEAR IOS
+        await this.scrollToElement(pilarSelector)
+        await this.waitAndClick($(pilarSelector))
+    }
 }
 
 export default new HomeIOS()

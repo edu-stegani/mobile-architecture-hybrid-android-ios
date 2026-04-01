@@ -3,7 +3,7 @@ import { loginScreen, homeScreen, profileScreen } from '../../screens/index.js'
 import  postgresHelper  from '../../support/utils/postgresHelper.js'
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
 
-const data = users.ctMilenar
+const data = users.ctVidalink
 
 describe('login no app', () => {
 

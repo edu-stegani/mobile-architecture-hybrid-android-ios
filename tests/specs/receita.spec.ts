@@ -1,18 +1,21 @@
 import { users } from '../../support/data/users.js'
-import { loginScreen, homeScreen, receitaScreen } from '../../screens/index.js'
+import { loginScreen, homeScreen, receitaScreen, benefitsScreen } from '../../screens/index.js'
+import oracleHelpers from 'support/utils/oracleHelpers.js'
 
-const data = users.ctMilenar
+const data = users.ctVidalink
 
 describe('cadastrar receitas', () => {
 
     before(async () => {
+        await oracleHelpers.acceptTermAndConditions(data.cpf)
         await loginScreen.login(data.cpf, data.senha)
         await homeScreen.checkDashboard()
     })
 
-    it(' enviar nova receita', async () => {
-        await homeScreen.tapCardByText('CADASTRAR RECEITA')
-        await receitaScreen.sendNewRecipe(data.fullName , 'Médica (CRM)', 'MG', 'DIPIRONA')
+    it('enviar nova receita para titular', async () => {
+        await homeScreen.tapPilarByName('Med')
+        await benefitsScreen.clickLinkByText('Cadastrar receitas')
+        await receitaScreen.sendNewRecipe(data.fullName, 'Médica (CRM)', 'MG', 'DIPIRONA')
     })
 
     it('consultar receitas cadastradas', async () => {

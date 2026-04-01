@@ -2,20 +2,20 @@ import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
 
 const RecipeLocators = {
-    basePath: (name: string) => `//android.widget.TextView[@text="${name}"]/..`,
+    basePath: (name: string) => ``,
     ids: {
-        image: 'com.astl.vidalink.beta:id/ivAction1',
-        delete: 'com.astl.vidalink.beta:id/ivAction2',
-        status: 'com.astl.vidalink.beta:id/tvPrescriptionStatus',
-        details: 'com.astl.vidalink.beta:id/tvPrescriptionDetails'
+        image: '',
+        delete: '',
+        status: '',
+        details: ''
     }
 };
 
 const DetailsLocators = {
-    baseXpath: '//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/clContent"]',
+    baseXpath: '',
     ids: {
-        data: 'com.astl.vidalink.beta:id/viewPrescriptionData',
-        iconRemove: 'com.astl.vidalink.beta:id/ivAction1'
+        data: '',
+        iconRemove: ''
     }
 }
 
@@ -23,67 +23,67 @@ class ReceitaIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get tollbarMyRecipes() {
-        return $(`//android.widget.TextView[@text="Minhas receitas"]`)
+        return $(``)
     }
 
     get btnCloseRecipeModal() {
-        return $('id:com.astl.vidalink.beta:id/ivCloseButton');
+        return $('');
     }
 
     get btnNewRecipe() {
-        return $('id:com.astl.vidalink.beta:id/btSendNewRecipe')
+        return $('')
     }
 
     get btnConfirmar() {
-        return $('id:com.astl.vidalink.beta:id/btNext')
+        return $('')
     }
 
     get btnAddImage() {
-        return $('id:com.astl.vidalink.beta:id/text_input_end_icon')
+        return $('')
     }
 
     get btnGaleryPhotos() {
-        return $('id:com.astl.vidalink.beta:id/tvSecondOption')
+        return $('')
     }
 
     get btnDeletePicture() {
-        return $('id:com.astl.vidalink.beta:id/btDeletePicture')
+        return $('')
     }
 
     get btnDeleteRecipe() {
-        return $('id:com.astl.vidalink.beta:id/btDeleteRecipe')
+        return $('')
     }
 
     get btnFinish() {
-        return $('id:com.astl.vidalink.beta:id/btnFinish')
+        return $('')
     }
 
     get btnDeleteSim() {
-        return $('id:com.astl.vidalink.beta:id/btConfirm')
+        return $('')
     }
 
     get inputRecipeName() {
-        return $('id:com.astl.vidalink.beta:id/etRecipeName')
+        return $('')
     }
 
     get inputCRM() {
-        return $('id:com.astl.vidalink.beta:id/etRegionalCouncil')
+        return $('')
     }
 
     get inputDate() {
-        return $('id:com.astl.vidalink.beta:id/etDate')
+        return $('')
     }
 
     get inputMedicineName() {
-        return $('id:com.astl.vidalink.beta:id/etMedicineName')
+        return $('')
     }
 
     get selectTypeRecipe() {
-        return $('id:com.astl.vidalink.beta:id/spType')
+        return $('')
     }
 
     get selectState() {
-        return $('id:com.astl.vidalink.beta:id/spState')
+        return $('')
     }
 
     // ======== ACTIONS ========
@@ -96,10 +96,10 @@ class ReceitaIOS extends BaseScreen {
 
         const elements = {
             title: $(`(${base})[1]`),
-            image: $(`(${base}//*[@resource-id="${RecipeLocators.ids.image}"])[1]`),
-            delete: $(`(${base}//*[@resource-id="${RecipeLocators.ids.delete}"][1])`),
-            status: $(`(${base}//*[@resource-id="${RecipeLocators.ids.status}"])[1]`),
-            details: $(`(${base}//*[@resource-id="${RecipeLocators.ids.details}"])[1]`)
+            image: $(`(${base}//*[@resource-id="${RecipeLocators.ids.image}"])[1]`),    // MAPEAR IOS
+            delete: $(`(${base}//*[@resource-id="${RecipeLocators.ids.delete}"][1])`),  // MAPEAR IOS
+            status: $(`(${base}//*[@resource-id="${RecipeLocators.ids.status}"])[1]`),      // MAPEAR IOS
+            details: $(`(${base}//*[@resource-id="${RecipeLocators.ids.details}"])[1]`)     // MAPEAR IOS
         };
 
         for (const el of Object.values(elements)) {
@@ -107,11 +107,15 @@ class ReceitaIOS extends BaseScreen {
         }
     }
 
-    async selectUser(userName: string) {
-        await this.checkpointScreen('Para quem é esta receita?')
-        const userSelected = $(`//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/layout"]/*[contains(@text, '${userName}')]`)
-        await this.waitAndClick(userSelected)
-        await this.waitAndSetValue(this.inputRecipeName, `Receita ${userName}`)
+    async selectUserAndGiveNameRecipe(fullNname: string) {
+
+        const selectUser = $(``)    // MAPEAR IOS
+        const isVisible = await selectUser.isExisting()
+        if (isVisible) {
+            await this.waitAndClick(selectUser)
+        }
+
+        await this.waitAndSetValue(this.inputRecipeName, `Receita ${fullNname}`)
         await this.waitAndClick(this.btnConfirmar)
     }
 
@@ -121,10 +125,10 @@ class ReceitaIOS extends BaseScreen {
         await this.waitAndClick(this.btnAddImage)
         await this.waitAndClick(this.btnGaleryPhotos)
 
-        const photo = $('(//android.widget.FrameLayout[@package="com.google.android.photopicker"]//android.view.View[@clickable="true"])[6]');
+        const photo = $('');    // MAPEAR IOS
         await this.waitAndClick(photo)
 
-        const btnDone = $('//android.widget.TextView[@text="Done"]')
+        const btnDone = $('') // MAPEAR IOS
         await this.waitAndClick(btnDone)
 
         await this.btnDeletePicture.waitForDisplayed()
@@ -147,11 +151,11 @@ class ReceitaIOS extends BaseScreen {
     async fillDataRecipe(typeRecipe: string, uf: string) {
         await this.checkpointScreen('Informe os dados da receita')
         await this.waitAndClick(this.selectTypeRecipe)
-        const OptionType = $(`//android.widget.FrameLayout//android.widget.CheckedTextView[@package='com.astl.vidalink.beta'][@text='${typeRecipe}']`)
+        const OptionType = $(``)    // MAPEAR IOS
         await this.waitAndClick(OptionType)
         await this.waitAndSetValue(this.inputCRM, '123456')
         await this.waitAndClick(this.selectState)
-        const optionState = `//android.widget.FrameLayout//android.widget.CheckedTextView[@text='${uf}']`
+        const optionState = ``  // MAPEAR IOS
         await this.scrollToElement(optionState)
         await this.waitAndClick($(optionState))
         const yesterday = await this.getYesterdayDate();
@@ -162,7 +166,7 @@ class ReceitaIOS extends BaseScreen {
     async fillAndSelectMedicine(medicineName: string) {
         await this.checkpointScreen('Quais medicamentos estão na receita?')
         await this.waitAndSetValue(this.inputMedicineName, `${medicineName}`)
-        const selectMedicine = $(`//android.widget.LinearLayout[@resource-id="com.astl.vidalink.beta:id/llMedicineFilter"]//android.widget.TextView[@text='${medicineName}']`)
+        const selectMedicine = $(``)    // MAPEAR IOS
         await this.waitAndClick(selectMedicine)
         await this.btnDeleteRecipe.waitForDisplayed()
         await this.waitAndClick(this.btnConfirmar)
@@ -193,10 +197,9 @@ class ReceitaIOS extends BaseScreen {
         await this.waitAndClick(closeIcon)
     }
 
-    async sendNewRecipe(fullName: string, typeRecipe: string, uf: string, medicine: string) {
-        await this.waitAndClick(this.btnNewRecipe)
-        // Screen para quem é a receita
-        await this.selectUser(fullName)
+    async sendNewRecipe(fullNname: string, typeRecipe: string, uf: string, medicine: string) {
+        // Screen Informe nome para receita
+        await this.selectUserAndGiveNameRecipe(fullNname)
         // Screen anexar foto da receita
         await this.addPhotoRecipe()
         // Screen informe os dados da receita
@@ -226,7 +229,7 @@ class ReceitaIOS extends BaseScreen {
     async deleteRecipe() {
         await this.checkpointScreen('Tem certeza que deseja apagar essa receita?')
         await this.waitAndClick(this.btnDeleteSim)
-        await this.checkpointScreen('Você ainda não enviou nenhuma receita')
+        await this.btnNewRecipe.waitForDisplayed()
     }
 }
 

@@ -107,11 +107,15 @@ class ReceitaAndroid extends BaseScreen {
         }
     }
 
-    async selectUser(userName: string) {
-        await this.checkpointScreen('Para quem é esta receita?')
-        const userSelected = $(`//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/layout"]/*[contains(@text, '${userName}')]`)
-        await this.waitAndClick(userSelected)
-        await this.waitAndSetValue(this.inputRecipeName, `Receita ${userName}`)
+    async selectUserAndGiveNameRecipe(fullNname: string) {
+
+        const selectUser = $(`//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/layout"]/*[contains(@text, '${fullNname}')]`)
+        const isVisible = await selectUser.isExisting()
+        if (isVisible) {
+            await this.waitAndClick(selectUser)
+        }
+
+        await this.waitAndSetValue(this.inputRecipeName, `Receita ${fullNname}`)
         await this.waitAndClick(this.btnConfirmar)
     }
 
@@ -193,10 +197,13 @@ class ReceitaAndroid extends BaseScreen {
         await this.waitAndClick(closeIcon)
     }
 
-    async sendNewRecipe(fullName: string, typeRecipe: string, uf: string, medicine: string) {
-        await this.waitAndClick(this.btnNewRecipe)
-        // Screen para quem é a receita
-        await this.selectUser(fullName)
+    async sendNewRecipe(fullNname: string, typeRecipe: string, uf: string, medicine: string) {
+        // // Screen Minhas receitas
+        // await this.waitAndClick(this.btnNewRecipe) // MUDANÇA NO FLUXO
+        // // Screen para quem é a receita
+        // await this.selectUser(fullName) // MUDANÇA NO FLUXO
+        // Screen Informe nome para receita
+        await this.selectUserAndGiveNameRecipe(fullNname)
         // Screen anexar foto da receita
         await this.addPhotoRecipe()
         // Screen informe os dados da receita

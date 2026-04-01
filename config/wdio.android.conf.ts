@@ -37,7 +37,7 @@ export const config = {
       'appium:deviceName': 'emulator-5554',
       'appium:platformVersion': '16.0',
       'appium:automationName': 'UiAutomator2',
-      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5100.apk'),
+      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5_10_0(27).apk'),
 
       'appium:autoGrantPermissions': true,
       'appium:uiautomator2ServerLaunchTimeout': 120000,

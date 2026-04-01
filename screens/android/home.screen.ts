@@ -23,7 +23,7 @@ class HomeAndroid extends BaseScreen {
     // ======== ACTIONS ========
     async closeInfoNewApp() {
         try {
-            await this.labelNewApp.waitForDisplayed({ timeout: 30000 })
+            await this.labelNewApp.waitForDisplayed({ timeout: 10000 })
             await this.waitAndClick(this.closeNewApp)
             await this.closeNewApp.waitForDisplayed({ reverse: true, timeout: 10000 })
         } catch (error) {
@@ -52,6 +52,12 @@ class HomeAndroid extends BaseScreen {
         const cardName = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvTitle" and @text="${cardText}"]`
         await this.scrollToElement(cardName)
         await this.waitAndClick($(cardName))
+    }
+
+    async tapPilarByName(pilarName: string) {
+        const pilarSelector = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName" and @text="${pilarName}"]`
+        await this.scrollToElement(pilarSelector)
+        await this.waitAndClick($(pilarSelector))
     }
 
 }
