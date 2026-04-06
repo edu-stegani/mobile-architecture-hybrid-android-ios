@@ -37,6 +37,14 @@ export const config = {
       'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5_10_1.ipa'),
 
       'appium:autoAcceptAlerts': true,
+      'appium:autoGrantPermissions': true, 
+      'appium:permissions': JSON.stringify({
+        "br.com.vidalink.beta": {
+          "photos": "yes",
+          "camera": "yes",
+          "medialibrary": "yes"
+        }
+      }),
       'appium:autoLaunch': true,
       'appium:newCommandTimeout': 180,
       'appium:noReset': true,

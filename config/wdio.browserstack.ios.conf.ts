@@ -69,16 +69,14 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
     'appium:bundleId': 'br.com.vidalink.beta',
     'appium:app': 'bs://f442d272ee44d5ce5487674204fad9150d236ec5', //v5.10.1
     'appium:includeSafariInWebviews': true,
-    'appium:autoAcceptAlerts': true,
-    'appium:permissions': '{"br.com.vidalink.beta": {"location": "always"}}',
 
-    'bstack:options': {
-      deviceName: 'iPhone 15',
-      osVersion: '17',
-      projectName: 'QA Mobile TS',
-      buildName: buildName,
-      debug: true,
-      networkLogs: false
-    }
-  }]
+      'bstack:options': {
+        deviceName: 'iPhone 15',
+        osVersion: '17',
+        projectName: 'QA Mobile TS',
+        buildName: buildName,
+        debug: true,
+        networkLogs: false
+      }
+    }]
 }
