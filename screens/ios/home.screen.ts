@@ -36,7 +36,7 @@ class HomeIOS extends BaseScreen {
 
     async checkHomeIcon() {
         await driver.pause(5000);
-        await this.homeTab.waitForDisplayed({ timeout: 40000, interval: 2000 })
+        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
     }
 
     async helloUser(firstName: string) {
@@ -46,6 +46,7 @@ class HomeIOS extends BaseScreen {
 
     // ======== METHODS ========
     async checkDashboard() {
+        await this.acceptFullAccessGalery()
         await this.acceptPermissionAlertLocation()
         await this.closeInfoNewApp()
         await this.checkHomeIcon()
@@ -58,7 +59,7 @@ class HomeIOS extends BaseScreen {
     }
 
     async tapPilarByName(pilarName: string) {
-        const pilarSelector = ``    // MAPEAR IOS
+        const pilarSelector = `//XCUIElementTypeStaticText[@label="${pilarName}. Botão."]/..//XCUIElementTypeOther`
         await this.scrollToElement(pilarSelector)
         await this.waitAndClick($(pilarSelector))
     }

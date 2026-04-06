@@ -52,6 +52,7 @@ class LoginIOS extends BaseScreen {
     // ======== METHODS ========
 
     async login(cpf: string, senha: string) {
+        await this.acceptNotifications()
         await this.tapEntrar()
         await this.fillCpf(cpf)
         await this.fillSenha(senha)

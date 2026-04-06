@@ -8,13 +8,14 @@ const __dirname = path.dirname(__filename);
 
 export default class BaseScreen {
     async waitAndClick(element: ChainablePromiseElement) {
-        await element.waitForDisplayed()
+        await element.waitForDisplayed({ timeout: 10000 })
         await element.waitForEnabled()
         await element.click()
     }
 
     async hideKeyboard() {
-        await this.waitAndClick($('~OK_toolbar'))
+        const ok = `-ios predicate string:name ==[c] "ok_toolbar"`;
+        await this.waitAndClick($(ok));
     }
 
     async scrollToElement(selector: string, maxRetries = 10) {
@@ -53,16 +54,38 @@ export default class BaseScreen {
         await driver.pause(500);
     }
 
+    // async uploadImageFromProject() {
+    //     // Caminho da imagem no projeto
+    //     const localFilePath = path.resolve(__dirname, '../../support/image/recipe.jpg');
+
+    //     // Caminho de destino no dispositivo
+    //     const devicePath = '/sdcard/Download/recipe.jpg';
+
+    //     const data = fs.readFileSync(localFilePath).toString('base64');
+    //     await driver.pushFile(devicePath, data);
+    //     console.log(`Arquivo enviado para: ${devicePath}`);
+    // }
+
     async uploadImageFromProject() {
-        // Caminho da imagem no projeto
         const localFilePath = path.resolve(__dirname, '../../support/image/recipe.jpg');
-
-        // Caminho de destino no dispositivo
-        const devicePath = '/sdcard/Download/recipe.jpg';
-
         const data = fs.readFileSync(localFilePath).toString('base64');
-        await driver.pushFile(devicePath, data);
-        console.log(`Arquivo enviado para: ${devicePath}`);
+
+        if (driver.isAndroid) {
+            const devicePath = '/sdcard/Download/recipe.jpg';
+            await driver.pushFile(devicePath, data);
+            console.log(`[Android] Arquivo enviado para: ${devicePath}`);
+        } else {
+            const caps = driver.capabilities as any;
+            const isBrowserStack = caps['bstack:options'] || caps['browserstack.user'];
+
+            if (isBrowserStack) {
+                console.log(`[iOS BrowserStack] device bstack já tem midia...`);
+            } else {
+                console.log(`[iOS] Executando localmente no Simulador...`);
+                await driver.execute('mobile: addMedia', { path: localFilePath });
+            }
+            console.log(`[iOS] Imagem processada para a galeria`);
+        }
     }
 
     async waitAndSetValue(element: ChainablePromiseElement, value: string) {
@@ -76,20 +99,41 @@ export default class BaseScreen {
             : `//*[@text='${textCheckpoint}']`;
 
         const checkpointText = $(selector);
-        await checkpointText.waitForDisplayed()
+        await checkpointText.waitForDisplayed({timeout: 10000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado`});
     }
 
     async acceptPermissionAlertLocation() {
         try {
-            const btnAllowAlert = $('//XCUIElementTypeButton[@name="Allow While Using App"]')
-            // Aguarda até 10 segundos por qualquer alerta do sistema
-            await btnAllowAlert.waitForDisplayed({
-                timeout: 10000,
-                timeoutMsg: 'Alerta não apareceu, seguindo...'
-            });
-            await btnAllowAlert.click()
+            const btnAllow = $('//XCUIElementTypeButton[@name="Allow While Using App"]')
+            await this.waitAndClick(btnAllow)
         } catch (e) {
             // Se não houver alerta, ele apenas ignora e segue
         }
+    }
+
+    async acceptNotifications() {
+        try {
+            const btnAllow = $('//XCUIElementTypeButton[@name="Allow"]')
+            await this.waitAndClick(btnAllow)
+        } catch (e) {
+            // Se não houver alerta, ele apenas ignora e segue
+        }
+    }
+
+    async acceptFullAccessGalery() {
+        try {
+            const btnAllow = $('//XCUIElementTypeButton[@name="Allow Full Access"]')
+            await this.waitAndClick(btnAllow)
+        } catch (e) {
+            // Se não houver alerta, ele apenas ignora e segue
+        }
+    }
+    
+    async selectPickerValue(value: string) {
+        const picker = await $('-ios predicate string:type == "XCUIElementTypePickerWheel"');
+        await picker.waitForDisplayed({ timeout: 5000 });
+        await picker.click();
+        await picker.setValue(value);
+        await picker.click();
     }
 }

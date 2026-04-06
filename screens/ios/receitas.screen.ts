@@ -23,7 +23,7 @@ class ReceitaIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get tollbarMyRecipes() {
-        return $(``)
+        return $(`~Minhas receitas`)
     }
 
     get btnCloseRecipeModal() {
@@ -34,20 +34,20 @@ class ReceitaIOS extends BaseScreen {
         return $('')
     }
 
-    get btnConfirmar() {
-        return $('')
+    get btnProximo() {
+        return $('//XCUIElementTypeStaticText[@label="Próximo"]')
     }
 
     get btnAddImage() {
-        return $('')
+        return $('(//XCUIElementTypeButton[@label="ic prescription add"]//../../../..//XCUIElementTypeButton)[2]')  //(//XCUIElementTypeButton)[4]
     }
 
     get btnGaleryPhotos() {
-        return $('')
+        return $('//XCUIElementTypeStaticText[@name="Galeria de Fotos"]/../XCUIElementTypeOther')
     }
 
     get btnDeletePicture() {
-        return $('')
+        return $('~ic trash')
     }
 
     get btnDeleteRecipe() {
@@ -55,7 +55,7 @@ class ReceitaIOS extends BaseScreen {
     }
 
     get btnFinish() {
-        return $('')
+        return $('//XCUIElementTypeButton[@label="Finalizar"]')
     }
 
     get btnDeleteSim() {
@@ -63,27 +63,27 @@ class ReceitaIOS extends BaseScreen {
     }
 
     get inputRecipeName() {
-        return $('')
+        return $('//XCUIElementTypeTextField[@value="Nome da receita"]')
     }
 
     get inputCRM() {
-        return $('')
+        return $('//XCUIElementTypeStaticText[@name="Número do conselho"]/..//XCUIElementTypeTextField')
     }
 
     get inputDate() {
-        return $('')
+        return $('//XCUIElementTypeTextField[@value="dd/mm/aaaa"]')
     }
 
     get inputMedicineName() {
-        return $('')
+        return $('//XCUIElementTypeTextField[@value="Insira o nome do medicamento"]')
     }
 
     get selectTypeRecipe() {
-        return $('')
+        return $('//XCUIElementTypeTextField[@value="Selecione o tipo"]')
     }
 
     get selectState() {
-        return $('')
+        return $('//XCUIElementTypeTextField[@value="Selecione a UF"]')
     }
 
     // ======== ACTIONS ========
@@ -109,14 +109,15 @@ class ReceitaIOS extends BaseScreen {
 
     async selectUserAndGiveNameRecipe(fullNname: string) {
 
-        const selectUser = $(``)    // MAPEAR IOS
+        const selectUser = $(`//XCUIElementTypeStaticText[contains(@value, '${fullNname}')]/../XCUIElementTypeButton`)
         const isVisible = await selectUser.isExisting()
         if (isVisible) {
             await this.waitAndClick(selectUser)
         }
 
         await this.waitAndSetValue(this.inputRecipeName, `Receita ${fullNname}`)
-        await this.waitAndClick(this.btnConfirmar)
+        await this.hideKeyboard()
+        await this.waitAndClick(this.btnProximo)
     }
 
     async addPhotoRecipe() {
@@ -125,14 +126,14 @@ class ReceitaIOS extends BaseScreen {
         await this.waitAndClick(this.btnAddImage)
         await this.waitAndClick(this.btnGaleryPhotos)
 
-        const photo = $('');    // MAPEAR IOS
-        await this.waitAndClick(photo)
+        const photo = $('-ios class chain:**/XCUIElementTypeImage[`name BEGINSWITH "Photo"`][1]');
+        await this.waitAndClick(photo) // Seleciona a primeira foto da galeria
 
-        const btnDone = $('') // MAPEAR IOS
+        const btnDone = $('//XCUIElementTypeButton[@label="Done"]')
         await this.waitAndClick(btnDone)
 
         await this.btnDeletePicture.waitForDisplayed()
-        this.waitAndClick(this.btnConfirmar)
+        this.waitAndClick(this.btnProximo)
     }
 
     async getYesterdayDate() {
@@ -149,27 +150,45 @@ class ReceitaIOS extends BaseScreen {
     }
 
     async fillDataRecipe(typeRecipe: string, uf: string) {
-        await this.checkpointScreen('Informe os dados da receita')
-        await this.waitAndClick(this.selectTypeRecipe)
-        const OptionType = $(``)    // MAPEAR IOS
-        await this.waitAndClick(OptionType)
-        await this.waitAndSetValue(this.inputCRM, '123456')
-        await this.waitAndClick(this.selectState)
-        const optionState = ``  // MAPEAR IOS
-        await this.scrollToElement(optionState)
-        await this.waitAndClick($(optionState))
+        await this.checkpointScreen('Informe os dados da receita');
+
+        // --- Tipo de Receita ---
+        await this.waitAndClick(this.selectTypeRecipe);
+        await this.selectPickerValue(typeRecipe);
+        await this.hideKeyboard();
+
+        // --- CRM ---
+        await this.waitAndClick(this.inputCRM);
+        await this.inputCRM.addValue('123456');
+        await this.hideKeyboard();
+
+        // --- UF ---
+        await this.waitAndClick(this.selectState);
+        await this.selectPickerValue(uf);
+        await this.hideKeyboard();
+
+        // --- Data ---
         const yesterday = await this.getYesterdayDate();
-        await this.waitAndSetValue(this.inputDate, yesterday)
-        await this.waitAndClick(this.btnConfirmar)
+        await this.inputDate.addValue(yesterday);
+        await this.hideKeyboard();
+
+        await this.waitAndClick(this.btnProximo);
     }
 
     async fillAndSelectMedicine(medicineName: string) {
         await this.checkpointScreen('Quais medicamentos estão na receita?')
         await this.waitAndSetValue(this.inputMedicineName, `${medicineName}`)
-        const selectMedicine = $(``)    // MAPEAR IOS
-        await this.waitAndClick(selectMedicine)
-        await this.btnDeleteRecipe.waitForDisplayed()
-        await this.waitAndClick(this.btnConfirmar)
+
+        // aguarda lista aparecer
+        const lista = $('-ios predicate string:type == "XCUIElementTypeTable"');
+        await lista.waitForDisplayed({ timeout: 5000 });
+
+        // busca item com match exato
+        const item = $(`-ios predicate string:type == "XCUIElementTypeStaticText" AND name == "${medicineName}"`);
+        await this.waitAndClick(item);
+        await this.hideKeyboard();
+        await this.btnDeletePicture.waitForDisplayed()
+        await this.waitAndClick(this.btnProximo)
     }
 
     // ======== METHODS ========
@@ -206,11 +225,10 @@ class ReceitaIOS extends BaseScreen {
         await this.fillDataRecipe(typeRecipe, uf)
         // Screen quais medicamentos 
         await this.fillAndSelectMedicine(medicine)
-        // Screen receita enviada
+        // // Screen receita enviada
         await this.checkpointScreen('Receita enviada!')
         await this.waitAndClick(this.btnFinish)
-        // Screen Minhas receitas
-        await this.tollbarMyRecipes.waitForDisplayed()
+        await this.btnFinish.waitForDisplayed({reverse: true})
     }
 
     async viewDetailsRecipe() {

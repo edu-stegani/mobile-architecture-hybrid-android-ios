@@ -5,7 +5,7 @@ class BenefitIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get titleBenefitMed() {
-        return $('')    // MAPEAR IOS
+        return $('~Med') 
     }
 
     // ====== METHODS ======
@@ -15,7 +15,7 @@ class BenefitIOS extends BaseScreen {
 
     async clickLinkByText(linkText: string) {
         await this.checkBenefitScreen()
-        const linkSelector = `` // MAPEAR IOS
+        const linkSelector = `//XCUIElementTypeTable//XCUIElementTypeStaticText[@label="${linkText}"]` 
         await this.scrollToElement(linkSelector)
         await this.waitAndClick($(linkSelector))
     }
