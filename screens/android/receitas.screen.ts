@@ -110,10 +110,9 @@ class ReceitaAndroid extends BaseScreen {
     async selectUserAndGiveNameRecipe(fullNname: string) {
 
         const selectUser = $(`//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/layout"]/*[contains(@text, '${fullNname}')]`)
-        const isVisible = await selectUser.isExisting()
-        if (isVisible) {
+        try {
             await this.waitAndClick(selectUser)
-        }
+        } catch (e) { }
 
         await this.waitAndSetValue(this.inputRecipeName, `Receita ${fullNname}`)
         await this.waitAndClick(this.btnConfirmar)
