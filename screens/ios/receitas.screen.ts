@@ -2,22 +2,14 @@ import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
 
 const RecipeLocators = {
-    basePath: (name: string) => ``,
+    basePath: (name: string) => `//XCUIElementTypeCell//XCUIElementTypeStaticText[@name="${name}"]`,
     ids: {
-        image: '',
-        delete: '',
-        status: '',
-        details: ''
+        image: 'XCUIElementTypeButton[@name="ic photo receita"]',
+        delete: 'XCUIElementTypeButton[@name="ic trash"]',
+        status: 'XCUIElementTypeStaticText[7]',
+        details: 'XCUIElementTypeStaticText[@name="Detalhes por itens (1)"]'
     }
 };
-
-const DetailsLocators = {
-    baseXpath: '',
-    ids: {
-        data: '',
-        iconRemove: ''
-    }
-}
 
 class ReceitaIOS extends BaseScreen {
 
@@ -27,11 +19,11 @@ class ReceitaIOS extends BaseScreen {
     }
 
     get btnCloseRecipeModal() {
-        return $('');
+        return $('~ic little close');
     }
 
     get btnNewRecipe() {
-        return $('')
+        return $('~submitNewReceiptButtonIdentifier')
     }
 
     get btnProximo() {
@@ -50,16 +42,12 @@ class ReceitaIOS extends BaseScreen {
         return $('~ic trash')
     }
 
-    get btnDeleteRecipe() {
-        return $('')
-    }
-
     get btnFinish() {
         return $('//XCUIElementTypeButton[@label="Finalizar"]')
     }
 
     get btnDeleteSim() {
-        return $('')
+        return $('~primaryButtonIdentifier')
     }
 
     get inputRecipeName() {
@@ -96,10 +84,10 @@ class ReceitaIOS extends BaseScreen {
 
         const elements = {
             title: $(`(${base})[1]`),
-            image: $(`(${base}//*[@resource-id="${RecipeLocators.ids.image}"])[1]`),    // MAPEAR IOS
-            delete: $(`(${base}//*[@resource-id="${RecipeLocators.ids.delete}"][1])`),  // MAPEAR IOS
-            status: $(`(${base}//*[@resource-id="${RecipeLocators.ids.status}"])[1]`),      // MAPEAR IOS
-            details: $(`(${base}//*[@resource-id="${RecipeLocators.ids.details}"])[1]`)     // MAPEAR IOS
+            image: $(`(${base}/../${RecipeLocators.ids.image})[1]`),
+            delete: $(`(${base}/../${RecipeLocators.ids.delete})[1]`),
+            status: $(`(${base}/../${RecipeLocators.ids.status})[1]`),
+            details: $(`(${base}/../${RecipeLocators.ids.details})[1]`)
         };
 
         for (const el of Object.values(elements)) {
@@ -108,12 +96,10 @@ class ReceitaIOS extends BaseScreen {
     }
 
     async selectUserAndGiveNameRecipe(fullNname: string) {
-
-        const selectUser = $(`//XCUIElementTypeStaticText[contains(@value, '${fullNname}')]/../XCUIElementTypeButton`)
-        const isVisible = await selectUser.isExisting()
-        if (isVisible) {
+        const selectUser = $(`//XCUIElementTypeStaticText[contains(@value, '${fullNname}')]/../XCUIElementTypeButton[@label="ic prescription radio unselect"]`)
+        try {
             await this.waitAndClick(selectUser)
-        }
+        } catch (e) { }
 
         await this.waitAndSetValue(this.inputRecipeName, `Receita ${fullNname}`)
         await this.hideKeyboard()
@@ -202,10 +188,10 @@ class ReceitaIOS extends BaseScreen {
 
         const elements = {
             title: $(`(${base})[1]`),
-            image: $(`(${base}//*[@resource-id="${RecipeLocators.ids.image}"])[1]`),
-            delete: $(`(${base}//*[@resource-id="${RecipeLocators.ids.delete}"][1])`),
-            status: $(`(${base}//*[@resource-id="${RecipeLocators.ids.status}"])[1]`),
-            details: $(`(${base}//*[@resource-id="${RecipeLocators.ids.details}"])[1]`)
+            image: $(`(${base}/../${RecipeLocators.ids.image})[1]`),
+            delete: $(`(${base}/../${RecipeLocators.ids.delete})[1]`),
+            status: $(`(${base}/../${RecipeLocators.ids.status})[1]`),
+            details: $(`(${base}/../${RecipeLocators.ids.details})[1]`)
         };
         const targetSelector = elements[selector]
         await this.waitAndClick(targetSelector)
@@ -232,16 +218,9 @@ class ReceitaIOS extends BaseScreen {
     }
 
     async viewDetailsRecipe() {
-        await this.checkpointScreen('Itens da receita')
-        const base = DetailsLocators.baseXpath;
-        const elements = {
-            data: $(`${base}//*[@resource-id="${DetailsLocators.ids.data}"]`),
-            iconRemove: $(`${base}//*[@resource-id="${DetailsLocators.ids.iconRemove}"]`),
-        };
-        for (const el of Object.values(elements)) {
-            await el.waitForDisplayed({ timeout: 15000 });
-        }
-        await this.waitAndClick($('//android.widget.ImageButton'))
+        // await this.checkpointScreen('Itens da receita')
+        await this.btnDeletePicture.waitForDisplayed()
+        await this.waitAndClick($('~navBarBackButtonIdentifier'))
     }
 
     async deleteRecipe() {
