@@ -54,18 +54,6 @@ export default class BaseScreen {
         await driver.pause(500);
     }
 
-    // async uploadImageFromProject() {
-    //     // Caminho da imagem no projeto
-    //     const localFilePath = path.resolve(__dirname, '../../support/image/recipe.jpg');
-
-    //     // Caminho de destino no dispositivo
-    //     const devicePath = '/sdcard/Download/recipe.jpg';
-
-    //     const data = fs.readFileSync(localFilePath).toString('base64');
-    //     await driver.pushFile(devicePath, data);
-    //     console.log(`Arquivo enviado para: ${devicePath}`);
-    // }
-
     async uploadImageFromProject() {
         const localFilePath = path.resolve(__dirname, '../../support/image/recipe.jpg');
         const data = fs.readFileSync(localFilePath).toString('base64');
@@ -73,7 +61,7 @@ export default class BaseScreen {
         if (driver.isAndroid) {
             const devicePath = '/sdcard/Download/recipe.jpg';
             await driver.pushFile(devicePath, data);
-            console.log(`[Android] Arquivo enviado para: ${devicePath}`);
+            console.log(`[Android Local] Arquivo enviado para dispositivo: ${devicePath}`);
         } else {
             const caps = driver.capabilities as any;
             const isBrowserStack = caps['bstack:options'] || caps['browserstack.user'];
@@ -81,10 +69,9 @@ export default class BaseScreen {
             if (isBrowserStack) {
                 console.log(`[iOS BrowserStack] device bstack já tem midia...`);
             } else {
-                console.log(`[iOS] Executando localmente no Simulador...`);
+                console.log(`[iOS Local] Executando localmente no Simulador...`);
                 await driver.execute('mobile: addMedia', { path: localFilePath });
             }
-            console.log(`[iOS] Imagem processada para a galeria`);
         }
     }
 
@@ -99,36 +86,30 @@ export default class BaseScreen {
             : `//*[@text='${textCheckpoint}']`;
 
         const checkpointText = $(selector);
-        await checkpointText.waitForDisplayed({timeout: 10000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado`});
+        await checkpointText.waitForDisplayed({ timeout: 20000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
     }
 
     async acceptPermissionAlertLocation() {
+        const btnAllow = $('//XCUIElementTypeButton[@name="Allow While Using App"]')
         try {
-            const btnAllow = $('//XCUIElementTypeButton[@name="Allow While Using App"]')
             await this.waitAndClick(btnAllow)
-        } catch (e) {
-            // Se não houver alerta, ele apenas ignora e segue
-        }
+        } catch (e) { }
     }
 
     async acceptNotifications() {
+        const btnAllow = $('//XCUIElementTypeButton[@name="Allow"]')
         try {
-            const btnAllow = $('//XCUIElementTypeButton[@name="Allow"]')
             await this.waitAndClick(btnAllow)
-        } catch (e) {
-            // Se não houver alerta, ele apenas ignora e segue
-        }
+        } catch (e) { }
     }
 
     async acceptFullAccessGalery() {
+        const btnAllow = $('//XCUIElementTypeButton[@name="Allow Full Access"]')
         try {
-            const btnAllow = $('//XCUIElementTypeButton[@name="Allow Full Access"]')
             await this.waitAndClick(btnAllow)
-        } catch (e) {
-            // Se não houver alerta, ele apenas ignora e segue
-        }
+        } catch (e) { }
     }
-    
+
     async selectPickerValue(value: string) {
         const picker = await $('-ios predicate string:type == "XCUIElementTypePickerWheel"');
         await picker.waitForDisplayed({ timeout: 5000 });

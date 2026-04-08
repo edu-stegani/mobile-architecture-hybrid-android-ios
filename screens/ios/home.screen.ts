@@ -23,15 +23,11 @@ class HomeIOS extends BaseScreen {
     // ======== ACTIONS ========
     async closeInfoNewApp() {
         try {
-            await this.btnPular.waitForDisplayed({ timeout: 10000, timeoutMsg: 'botão pular modal não visivel' })
-            console.log('Modal Novo app detectado, fechando...');
+            await this.btnPular.waitForDisplayed({ timeout: 10000 });
             const close = this.closeNewApp
             await this.waitAndClick(close)
-
             await this.closeNewApp.waitForDisplayed({ reverse: true, timeout: 10000 });
-        } catch (error) {
-            console.log('Modal novo app não visível, seguindo pra home...');
-        }
+        } catch (e) { }
     }
 
     async checkHomeIcon() {
