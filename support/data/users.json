@@ -1,0 +1,36 @@
+{
+    "users": {
+        "Eduardo": {
+            "fullName": "EDUARDO STEGANI",
+            "cpf": "48827441808",
+            "password": "A1234567",
+            "matricula": "01688",
+            "CT": "CT000409",
+            "cardNumber": "80409003022302",
+            "miscData": "78929495",
+            "birthdate": "2000-12-08"
+        },
+        "William": {
+            "fullName": "WILLIAM FERREIRA",
+            "cpf": "28440152043",
+            "password": "A1234567",
+            "matricula": "506070",
+            "CT": "CT001000",
+            "cardNumber": "81000000002905",
+            "miscData": "79271403",
+            "birthdate": "1995-01-01",
+            "dependents": [
+                {
+                    "fullName": "VIVIAN FERREIRA",
+                    "cpf": "04845459060",
+                    "passwaord": "",
+                    "matricula": "506070",
+                    "CT": "CT001000",
+                    "cardNumber": "81000000004502",
+                    "miscData": "79271432",
+                    "birthdate": "2010-01-01"
+                }
+            ]
+        }
+    }
+}

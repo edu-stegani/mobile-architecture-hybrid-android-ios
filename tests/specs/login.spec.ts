@@ -1,9 +1,10 @@
-import { users } from '../../support/data/users.js'
+import data from '../../support/data/users.json' with { type: 'json' };
 import { loginScreen, homeScreen, profileScreen } from '../../screens/index.js'
 import  postgresHelper  from '../../support/utils/postgresHelper.js'
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
+import { only } from 'node:test';
 
-const data = users.ctVidalink
+const user = data.users.Eduardo
 
 describe('login no app', () => {
 
@@ -12,19 +13,19 @@ describe('login no app', () => {
   })
 
   it('login com sucesso - com validação matricula', async () => {
-    await postgresHelper.updatePasswordForWeakPass(data.cpf)  // query alterar para senha fraca 6 digitos
-    await oracleHelpers.acceptTermAndConditions(data.cpf) // query que aceita termo e condições
+    await postgresHelper.updatePasswordForWeakPass(user.cpf)  // query alterar para senha fraca 6 digitos
+    await oracleHelpers.acceptTermAndConditions(user.cpf) // query que aceita termo e condições
 
-    await loginScreen.login( data.cpf, '123456' )
-    await loginScreen.fillMatricula(data.matricula)
+    await loginScreen.login( user.cpf, '123456' )
+    await loginScreen.fillMatricula(user.matricula)
     await homeScreen.checkDashboard()
   })
 
   it('login com sucesso - sem validação matricula', async () => {
-    await postgresHelper.updatePasswordForStrong(data.cpf)  // query alterar para senha forte
-    await oracleHelpers.acceptTermAndConditions(data.cpf) // query que aceita termo e condições
+    await postgresHelper.updatePasswordForStrong(user.cpf)  // query alterar para senha forte
+    await oracleHelpers.acceptTermAndConditions(user.cpf) // query que aceita termo e condições
 
-    await loginScreen.login( data.cpf, data.senha )
+    await loginScreen.login( user.cpf, user.password )
     await homeScreen.checkDashboard()
   })
 
@@ -33,9 +34,9 @@ describe('login no app', () => {
 describe('fluxos negativos - login no app', () => {
 
   it('senha incorreta', async () => {
-    await postgresHelper.resetPasswordCount(0, data.cpf); // query resetando a contagem de senha incorreta
+    await postgresHelper.resetPasswordCount(0, user.cpf); // query resetando a contagem de senha incorreta
 
-    await loginScreen.login( data.cpf, 'senha-incorreta' )
+    await loginScreen.login( user.cpf, 'senha-incorreta' )
     await loginScreen.viewMessageError()
   })
 

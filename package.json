@@ -9,7 +9,7 @@
   "scripts": {
     "test:android": "cross-env PLATFORM=android wdio run config/wdio.android.conf.ts",
     "test:ios": "cross-env PLATFORM=ios wdio run config/wdio.ios.conf.ts",
-    "temp": "cross-env PLATFORM=android wdio run config/wdio.android.conf.ts --spec receita",
+    "temp": "cross-env PLATFORM=android wdio run config/wdio.android.conf.ts --spec login",
     "test:ios:bstack": "cross-env PLATFORM=ios npx wdio run config/wdio.browserstack.ios.conf.ts",
     "temp:bstack": "cross-env PLATFORM=ios npx wdio run config/wdio.browserstack.ios.conf.ts --spec tests/specs/receita.spec.ts",
     "report:generate": "npx allure generate -o allure-report allure-results",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@badisi/wdio-harness": "^4.3.1",
     "@testing-library/webdriverio": "^3.2.1",
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.5.2",
     "@types/pg": "^8.18.0",
     "@wdio/appium-service": "^9.24.0",
     "@wdio/browserstack-service": "^9.24.0",
@@ -49,6 +49,7 @@
     "@wdio/allure-reporter": "^9.24.0",
     "appium": "^3.2.0",
     "dotenv": "^17.3.1",
+    "oracledb": "^6.10.0",
     "pg": "^8.20.0"
   }
 }
