@@ -1,14 +1,19 @@
 import data from '../../support/data/users.json' with { type: 'json' };
 import { loginScreen, homeScreen, receitaScreen, benefitsScreen } from '../../screens/index.js'
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
+import { flowSendRecipe } from '../../support/utils/apiHelpers.js'
 
-const user = data.users.William
+const user = data.users.Eduardo;
+
+before(async () => {
+    await flowSendRecipe(user);
+    await oracleHelpers.acceptTermAndConditions(user.cpf)
+})
 
 beforeEach(async () => {
-    await driver.terminateApp('br.com.vidalink.beta');
-    await driver.activateApp('br.com.vidalink.beta');
-
-    await oracleHelpers.acceptTermAndConditions(user.cpf)   //pré condição 
+    const appId = driver.isAndroid ? 'com.astl.vidalink.beta' : 'br.com.vidalink.beta';
+    try { await driver.terminateApp(appId); } catch (e) { }
+    await driver.activateApp(appId);
 
     await loginScreen.login(user.cpf, user.password)
     await homeScreen.checkDashboard()
