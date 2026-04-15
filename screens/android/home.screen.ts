@@ -4,11 +4,11 @@ import BaseScreen from '../shared/base.screen.js'
 class HomeAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
-    get labelNewApp() {
-        return $('//android.widget.TextView[@text="Novo app, nova estrutura"]')
+    get btnPular() {
+        return $('id:com.astl.vidalink.beta:id/btNext')
     }
 
-    get closeNewApp() {
+    get closeIcon() {
         return $('id=com.astl.vidalink.beta:id/ivClose')
     }
 
@@ -21,14 +21,13 @@ class HomeAndroid extends BaseScreen {
     }
 
     // ======== ACTIONS ========
-    async closeInfoNewApp() {
+    async closeTutorial() {
         try {
-            await this.labelNewApp.waitForDisplayed({ timeout: 10000 })
-            await this.waitAndClick(this.closeNewApp)
-            await this.closeNewApp.waitForDisplayed({ reverse: true, timeout: 10000 })
-        } catch (error) {
-            console.log('Info Novo App não apareceu, continuando com o teste...')
-        }
+            await this.btnPular.waitForDisplayed({ timeout: 20000 })
+            const close = this.closeIcon
+            await this.waitAndClick(close)
+            await close.waitForDisplayed({ reverse: true, timeout: 10000 })
+        } catch (error) { }
     }
 
     async checkHomeIcon() {
@@ -44,7 +43,7 @@ class HomeAndroid extends BaseScreen {
 
     // ======== METHODS ========
     async checkDashboard() {
-        await this.closeInfoNewApp()
+        await this.closeTutorial()
         await this.checkHomeIcon()
     }
 

@@ -8,7 +8,8 @@
             "CT": "CT000409",
             "cardNumber": "80409003022302",
             "miscData": "78929495",
-            "birthdate": "2000-12-08"
+            "birthdate": "2000-12-08",
+            "clientGroup": "VIDALINK AMIL"
         },
         "William": {
             "fullName": "WILLIAM FERREIRA",
@@ -19,6 +20,7 @@
             "cardNumber": "81000000002905",
             "miscData": "79271403",
             "birthdate": "1995-01-01",
+            "clientGroup": "MILENAR PJ",
             "dependents": [
                 {
                     "fullName": "VIVIAN FERREIRA",

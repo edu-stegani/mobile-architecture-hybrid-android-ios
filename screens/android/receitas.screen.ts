@@ -121,14 +121,19 @@ class ReceitaAndroid extends BaseScreen {
     async addPhotoRecipe() {
         await this.uploadImageFromProject()
         await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
+        if (await driver.isKeyboardShown()) {
+            await driver.back();
+        }
         await this.waitAndClick(this.btnAddImage)
         await this.waitAndClick(this.btnGaleryPhotos)
 
-        const photo = $('(//android.widget.FrameLayout[@package="com.google.android.photopicker"]//android.view.View[@clickable="true"])[6]');
+        const photo = $('(//android.widget.ImageView[@resource-id="com.google.android.providers.media.module:id/icon_thumbnail"])[1]');
         await this.waitAndClick(photo)
 
         const btnDone = $('//android.widget.TextView[@text="Done"]')
-        await this.waitAndClick(btnDone)
+        if (await btnDone.isDisplayed()) {
+            await this.waitAndClick(btnDone)
+        }
 
         await this.btnDeletePicture.waitForDisplayed()
         this.waitAndClick(this.btnConfirmar)
@@ -197,10 +202,6 @@ class ReceitaAndroid extends BaseScreen {
     }
 
     async sendNewRecipe(fullNname: string, typeRecipe: string, uf: string, medicine: string) {
-        // // Screen Minhas receitas
-        // await this.waitAndClick(this.btnNewRecipe) // MUDANÇA NO FLUXO
-        // // Screen para quem é a receita
-        // await this.selectUser(fullName) // MUDANÇA NO FLUXO
         // Screen Informe nome para receita
         await this.selectUserAndGiveNameRecipe(fullNname)
         // Screen anexar foto da receita
@@ -209,11 +210,10 @@ class ReceitaAndroid extends BaseScreen {
         await this.fillDataRecipe(typeRecipe, uf)
         // Screen quais medicamentos 
         await this.fillAndSelectMedicine(medicine)
-        // Screen receita enviada
+        // // Screen receita enviada
         await this.checkpointScreen('Receita enviada!')
         await this.waitAndClick(this.btnFinish)
-        // Screen Minhas receitas
-        await this.tollbarMyRecipes.waitForDisplayed()
+        await this.btnFinish.waitForDisplayed({ reverse: true })
     }
 
     async viewDetailsRecipe() {
@@ -226,7 +226,7 @@ class ReceitaAndroid extends BaseScreen {
         for (const el of Object.values(elements)) {
             await el.waitForDisplayed({ timeout: 15000 });
         }
-        await this.waitAndClick($('//android.widget.ImageButton'))
+        await this.back()
     }
 
     async deleteRecipe() {
@@ -234,6 +234,7 @@ class ReceitaAndroid extends BaseScreen {
         await this.waitAndClick(this.btnDeleteSim)
         await this.btnNewRecipe.waitForDisplayed()
     }
+
 }
 
 export default new ReceitaAndroid()
