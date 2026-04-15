@@ -26,8 +26,8 @@ export const config = {
   },
 
   beforeTest: function (test, context) {
-        console.log(`▶️  Runing Scenario: ${test.title}`);
-    },
+    console.log(`▶️  Runing Scenario: ${test.title}`);
+  },
 
   afterTest: globalAfterEach,
 
@@ -37,18 +37,20 @@ export const config = {
       'appium:deviceName': 'emulator-5554',
       'appium:platformVersion': '16.0',
       'appium:automationName': 'UiAutomator2',
-      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5_10_1(28).apk'),
+      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5_10_1.apk'),
+
+      'appium:appPackage': 'com.astl.vidalink.beta',
+      'appium:appWaitActivity': '*',
+      'appium:noReset': false,
+      'appium:fullReset': false,
 
       'appium:autoGrantPermissions': true,
       'appium:uiautomator2ServerLaunchTimeout': 120000,
       'appium:autoLaunch': true,
       'appium:adbExecTimeout': 120000,
       'appium:newCommandTimeout': 180,
-      'appium:noReset': false,
       'appium:dontStopAppOnReset': true,
-      'appium:fullReset': false,
       'appium:noSign': true,
-      'appium:appWaitActivity': '*',
       'appium:appWaitDuration': 30000,
       'appium:disableWindowAnimation': true,
     },
