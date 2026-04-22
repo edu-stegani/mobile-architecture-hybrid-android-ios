@@ -46,14 +46,6 @@ class ReceitaAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/tvSecondOption')
     }
 
-    get btnDeletePicture() {
-        return $('id:com.astl.vidalink.beta:id/btDeletePicture')
-    }
-
-    get btnDeleteRecipe() {
-        return $('id:com.astl.vidalink.beta:id/btDeleteRecipe')
-    }
-
     get btnDeleteSim() {
         return $('id:com.astl.vidalink.beta:id/btConfirm')
     }
@@ -119,24 +111,9 @@ class ReceitaAndroid extends BaseScreen {
     }
 
     async addPhotoRecipe() {
-        await this.uploadImageFromProject()
         await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
-        if (await driver.isKeyboardShown()) {
-            await driver.back();
-        }
-        await this.waitAndClick(this.btnAddImage)
-        await this.waitAndClick(this.btnGaleryPhotos)
-
-        const photo = $('(//android.widget.ImageView[@resource-id="com.google.android.providers.media.module:id/icon_thumbnail"])[1]');
-        await this.waitAndClick(photo)
-
-        const btnDone = $('//android.widget.TextView[@text="Done"]')
-        if (await btnDone.isDisplayed()) {
-            await this.waitAndClick(btnDone)
-        }
-
-        await this.btnDeletePicture.waitForDisplayed()
-        this.waitAndClick(this.btnConfirmar)
+        await this.addPhoto('recipe.jpg')
+        await this.waitAndClick(this.btnConfirmar)
     }
 
     async getYesterdayDate() {
@@ -172,7 +149,7 @@ class ReceitaAndroid extends BaseScreen {
         await this.waitAndSetValue(this.inputMedicineName, `${medicineName}`)
         const selectMedicine = $(`//android.widget.LinearLayout[@resource-id="com.astl.vidalink.beta:id/llMedicineFilter"]//android.widget.TextView[@text='${medicineName}']`)
         await this.waitAndClick(selectMedicine)
-        await this.btnDeleteRecipe.waitForDisplayed()
+        await this.btnDeleteAndroid.waitForDisplayed()
         await this.waitAndClick(this.btnConfirmar)
     }
 

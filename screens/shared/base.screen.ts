@@ -7,6 +7,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default class BaseScreen {
+    // LOCATORS ANDROID
+    get btnDeleteAndroid() {
+        return $('id:com.astl.vidalink.beta:id/btDeleteRecipe')
+    }
+
+    get btnDeletePictureAndroid() {
+        return $('id:com.astl.vidalink.beta:id/btDeletePicture')
+    }
+
+    // LOCATORS IOS
+    get btnDeletePictureIOS() {
+        return $('~ic trash')
+    }
+
+    // METHODS
     async waitAndClick(element: ChainablePromiseElement) {
         await element.waitForDisplayed({ timeout: 15000 })
         await element.waitForEnabled()
@@ -20,15 +35,15 @@ export default class BaseScreen {
 
     async scrollToElement(selector: string, maxRetries = 10) {
         for (let i = 0; i < maxRetries; i++) {
-            await driver.pause(1000);
             const el = await $(selector);
-            if (await el.isExisting()) {
-                if (await el.isDisplayed()) {
-                    console.log(`Elemento encontrado e visível no scroll ${i}`);
-                    return; // PARA o loop aqui
-                }
-            }
-            console.log(`Elemento não visível, tentando swipe ${i + 1}...`);
+
+            const isVisible = await el.waitUntil(async () => {
+                return (await el.isExisting()) && (await el.isDisplayed());
+            }, { timeout: 1000, interval: 100 }).catch(() => false);
+
+            if (isVisible) return;
+
+            console.log(`Tentando swipe ${i + 1}...`);
             await this.performSwipeUp();
         }
         throw new Error(`Elemento não encontrado: ${selector}`);
@@ -54,8 +69,8 @@ export default class BaseScreen {
         await driver.pause(500);
     }
 
-    async uploadImageFromProject() {
-        const localFilePath = path.resolve(__dirname, '../../support/image/recipe.jpg');
+    async uploadImageFromProject(imageJPG: string) {
+        const localFilePath = path.resolve(__dirname, `../../support/image/${imageJPG}`);
         const data = fs.readFileSync(localFilePath).toString('base64');
 
         const caps = driver.capabilities as any;
@@ -65,7 +80,7 @@ export default class BaseScreen {
             if (isBrowserStack) {
                 console.log(`[Android BrowserStack] device bstack já tem midia...`);
             } else {
-                const devicePath = '/sdcard/Download/recipe.jpg';
+                const devicePath = '/sdcard/Download/image.jpg';
                 await driver.pushFile(devicePath, data);
                 console.log(`[Android Local] Arquivo enviado para dispositivo: ${devicePath}`);
             }
@@ -78,6 +93,42 @@ export default class BaseScreen {
             }
         }
     }
+
+    async addPhoto(imageJPG: string) {
+            await this.uploadImageFromProject(imageJPG)
+            
+            if (await driver.isKeyboardShown()) {
+                await driver.back();
+            }
+
+            const btnAddImageSelector = driver.isIOS
+                ? $(`(//XCUIElementTypeButton[@label="ic prescription add"]//../../../..//XCUIElementTypeButton)[2]`)
+                : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);
+            await this.waitAndClick(btnAddImageSelector)
+
+            const btnGaleryPhotos = driver.isIOS
+                ? $(`//XCUIElementTypeStaticText[@name="Galeria de Fotos"]/../XCUIElementTypeOther`)
+                : $(`id:com.astl.vidalink.beta:id/tvSecondOption`);
+            await this.waitAndClick(btnGaleryPhotos)
+    
+            const photo = driver.isIOS
+                ? $('-ios class chain:**/XCUIElementTypeImage[`name BEGINSWITH "Photo"`][1]')
+                : $(`android=new UiSelector().descriptionStartsWith("Photo taken on").instance(0)`);
+            await this.waitAndClick(photo)
+    
+            const btnDone = driver.isIOS
+                ? $('//XCUIElementTypeButton[@label="Done"]')
+                : $('//android.widget.TextView[@text="Done"]');
+            if (await btnDone.isDisplayed()) {
+                await this.waitAndClick(btnDone)
+            }
+    
+            const btnDeletePicture = driver.isIOS
+                ? this.btnDeletePictureIOS
+                : this.btnDeletePictureAndroid;
+            await btnDeletePicture.waitForDisplayed()
+            
+        }
 
     async waitAndSetValue(element: ChainablePromiseElement, value: string) {
         await element.waitForDisplayed()

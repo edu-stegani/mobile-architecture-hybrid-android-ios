@@ -38,10 +38,6 @@ class ReceitaIOS extends BaseScreen {
         return $('//XCUIElementTypeStaticText[@name="Galeria de Fotos"]/../XCUIElementTypeOther')
     }
 
-    get btnDeletePicture() {
-        return $('~ic trash')
-    }
-
     get btnFinish() {
         return $('//XCUIElementTypeButton[@label="Finalizar"]')
     }
@@ -107,18 +103,8 @@ class ReceitaIOS extends BaseScreen {
     }
 
     async addPhotoRecipe() {
-        await this.uploadImageFromProject()
         await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
-        await this.waitAndClick(this.btnAddImage)
-        await this.waitAndClick(this.btnGaleryPhotos)
-
-        const photo = $('-ios class chain:**/XCUIElementTypeImage[`name BEGINSWITH "Photo"`][1]');
-        await this.waitAndClick(photo) // Seleciona a primeira foto da galeria
-
-        const btnDone = $('//XCUIElementTypeButton[@label="Done"]')
-        await this.waitAndClick(btnDone)
-
-        await this.btnDeletePicture.waitForDisplayed()
+        await this.addPhoto('recipe.jpg')
         this.waitAndClick(this.btnProximo)
     }
 
@@ -173,7 +159,7 @@ class ReceitaIOS extends BaseScreen {
         const item = $(`-ios predicate string:type == "XCUIElementTypeStaticText" AND name == "${medicineName}"`);
         await this.waitAndClick(item);
         await this.hideKeyboard();
-        await this.btnDeletePicture.waitForDisplayed()
+        await this.btnDeletePictureIOS.waitForDisplayed()
         await this.waitAndClick(this.btnProximo)
     }
 
@@ -219,7 +205,7 @@ class ReceitaIOS extends BaseScreen {
 
     async viewDetailsRecipe() {
         // await this.checkpointScreen('Itens da receita')
-        await this.btnDeletePicture.waitForDisplayed()
+        await this.btnDeletePictureIOS.waitForDisplayed()
         await this.back()
     }
 
