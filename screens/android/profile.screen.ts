@@ -13,7 +13,7 @@ class ProfileAndroid extends BaseScreen {
     }
 
     get logoutIcon (){
-        return $('id:com.astl.vidalink.beta:id/ivLogout')
+        return $('id:com.astl.vidalink.beta:id/logout')
     }
 
     get modalLogout(){

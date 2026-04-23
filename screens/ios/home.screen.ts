@@ -8,7 +8,7 @@ class HomeIOS extends BaseScreen {
         return $('//XCUIElementTypeButton[@label="Pular"]');
     }
 
-    get closeNewApp() {
+    get closeIcon() {
         return $('~ic close black')
     }
 
@@ -21,12 +21,12 @@ class HomeIOS extends BaseScreen {
     }
 
     // ======== ACTIONS ========
-    async closeInfoNewApp() {
+    async closeTutorial() {
         try {
             await this.btnPular.waitForDisplayed({ timeout: 10000 });
-            const close = this.closeNewApp
+            const close = this.closeIcon
             await this.waitAndClick(close)
-            await this.closeNewApp.waitForDisplayed({ reverse: true, timeout: 10000 });
+            await close.waitForDisplayed({ reverse: true, timeout: 10000 });
         } catch (e) { }
     }
 
@@ -44,7 +44,7 @@ class HomeIOS extends BaseScreen {
     async checkDashboard() {
         await this.acceptFullAccessGalery()
         await this.acceptPermissionAlertLocation()
-        await this.closeInfoNewApp()
+        await this.closeTutorial()
         await this.checkHomeIcon()
     }
 

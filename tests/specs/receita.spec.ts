@@ -1,16 +1,21 @@
-import { users } from '../../support/data/users.js'
+import data from '../../support/data/users.json' with { type: 'json' };
 import { loginScreen, homeScreen, receitaScreen, benefitsScreen } from '../../screens/index.js'
-import oracleHelpers from 'support/utils/oracleHelpers.js'
+import oracleHelpers from '../../support/utils/oracleHelpers.js'
+import { flowSendRecipe } from '../../support/utils/apiHelpers.js'
 
-const data = users.ctMilenar
+const user = data.users.Eduardo;
+
+before(async () => {
+    await flowSendRecipe(user);
+    await oracleHelpers.acceptTermAndConditions(user.cpf)
+})
 
 beforeEach(async () => {
-    await driver.terminateApp('br.com.vidalink.beta');
-    await driver.activateApp('br.com.vidalink.beta');
+    const appId = driver.isAndroid ? 'com.astl.vidalink.beta' : 'br.com.vidalink.beta';
+    try { await driver.terminateApp(appId); } catch (e) { }
+    await driver.activateApp(appId);
 
-    await oracleHelpers.acceptTermAndConditions(data.cpf)   //pré condição 
-
-    await loginScreen.login(data.cpf, data.senha)
+    await loginScreen.login(user.cpf, user.password)
     await homeScreen.checkDashboard()
 })
 
@@ -19,36 +24,36 @@ describe('cadastrar receitas', () => {
     it('enviar nova receita para titular', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Cadastrar receitas')
-        await receitaScreen.sendNewRecipe(data.fullName, 'Médica (CRM)', 'MG', 'DIPIRONA')
+        await receitaScreen.sendNewRecipe(user.fullName, 'Médica (CRM)', 'MG', 'DIPIRONA')
     })
 
     it('consultar receitas cadastradas', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Histórico de receitas')
-        await receitaScreen.checkReceita(`Receita ${data.fullName}`)
+        await receitaScreen.checkReceita(`Receita ${user.fullName}`)
     })
 
     it('consultar imagem da receita', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Histórico de receitas')
-        await receitaScreen.checkReceita(`Receita ${data.fullName}`)
-        await receitaScreen.clickSeletorRecipe(`Receita ${data.fullName}`, 'image')
+        await receitaScreen.checkReceita(`Receita ${user.fullName}`)
+        await receitaScreen.clickSeletorRecipe(`Receita ${user.fullName}`, 'image')
         await receitaScreen.closeRecipeModal()
     })
 
     it('consultar detalhes da receita', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Histórico de receitas')
-        await receitaScreen.checkReceita(`Receita ${data.fullName}`)
-        await receitaScreen.clickSeletorRecipe(`Receita ${data.fullName}`, 'details')
+        await receitaScreen.checkReceita(`Receita ${user.fullName}`)
+        await receitaScreen.clickSeletorRecipe(`Receita ${user.fullName}`, 'details')
         await receitaScreen.viewDetailsRecipe()
     })
 
     it('excluir a receita', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Histórico de receitas')
-        await receitaScreen.checkReceita(`Receita ${data.fullName}`)
-        await receitaScreen.clickSeletorRecipe(`Receita ${data.fullName}`, 'delete')
+        await receitaScreen.checkReceita(`Receita ${user.fullName}`)
+        await receitaScreen.clickSeletorRecipe(`Receita ${user.fullName}`, 'delete')
         await receitaScreen.deleteRecipe()
     })
 

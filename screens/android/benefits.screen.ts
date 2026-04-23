@@ -15,7 +15,7 @@ class BenefitAndroid extends BaseScreen {
 
     async clickLinkByText(linkText: string) {
         await this.checkBenefitScreen()
-        const linkSelector = `//androidx.recyclerview.widget.RecyclerView[@resource-id="com.astl.vidalink.beta:id/rvLinks"]//android.widget.TextView[@text="${linkText}"]`
+        const linkSelector = `(//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvTitle"][@text="${linkText}"])[1]`
         await this.scrollToElement(linkSelector)
         await this.waitAndClick($(linkSelector))
     }

@@ -21,8 +21,12 @@ export const config = {
   ],
   mochaOpts: { timeout: 240000 },
 
-  beforeTest: async function () {
+  before: async function () {
     await globalBeforeEach()
+  },
+
+  beforeTest: function (test, context) {
+    console.log(`▶️  Runing Scenario: ${test.title}`);
   },
 
   afterTest: globalAfterEach,
@@ -37,7 +41,7 @@ export const config = {
       'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5_10_1.ipa'),
 
       'appium:autoAcceptAlerts': true,
-      'appium:autoGrantPermissions': true, 
+      'appium:autoGrantPermissions': true,
       'appium:permissions': JSON.stringify({
         "br.com.vidalink.beta": {
           "photos": "yes",

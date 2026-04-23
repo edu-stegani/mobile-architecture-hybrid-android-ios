@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 export default class BaseScreen {
     async waitAndClick(element: ChainablePromiseElement) {
-        await element.waitForDisplayed({ timeout: 10000 })
+        await element.waitForDisplayed({ timeout: 15000 })
         await element.waitForEnabled()
         await element.click()
     }
@@ -58,14 +58,18 @@ export default class BaseScreen {
         const localFilePath = path.resolve(__dirname, '../../support/image/recipe.jpg');
         const data = fs.readFileSync(localFilePath).toString('base64');
 
-        if (driver.isAndroid) {
-            const devicePath = '/sdcard/Download/recipe.jpg';
-            await driver.pushFile(devicePath, data);
-            console.log(`[Android Local] Arquivo enviado para dispositivo: ${devicePath}`);
-        } else {
-            const caps = driver.capabilities as any;
-            const isBrowserStack = caps['bstack:options'] || caps['browserstack.user'];
+        const caps = driver.capabilities as any;
+        const isBrowserStack = caps['bstack:options'] || caps['browserstack.user'];
 
+        if (driver.isAndroid) {
+            if (isBrowserStack) {
+                console.log(`[Android BrowserStack] device bstack já tem midia...`);
+            } else {
+                const devicePath = '/sdcard/Download/recipe.jpg';
+                await driver.pushFile(devicePath, data);
+                console.log(`[Android Local] Arquivo enviado para dispositivo: ${devicePath}`);
+            }
+        } else {
             if (isBrowserStack) {
                 console.log(`[iOS BrowserStack] device bstack já tem midia...`);
             } else {
@@ -87,6 +91,13 @@ export default class BaseScreen {
 
         const checkpointText = $(selector);
         await checkpointText.waitForDisplayed({ timeout: 20000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
+    }
+
+    async back() {
+        const backIcon = process.env.PLATFORM === 'ios'
+            ? `~navBarBackButtonIdentifier`
+            : `//android.widget.ImageButton`;
+        await this.waitAndClick($(`${backIcon}`))
     }
 
     async acceptPermissionAlertLocation() {

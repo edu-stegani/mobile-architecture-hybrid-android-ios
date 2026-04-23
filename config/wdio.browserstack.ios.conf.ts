@@ -1,6 +1,7 @@
 import type { Options } from '@wdio/types'
 import 'dotenv/config'
 import path from 'node:path'
+import { setBSName, setBSTestAnnotation, setBSTestResult } from '../support/hooks/global.hooks.js'
 
 const buildName = `iOS_Build_${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
 
@@ -22,70 +23,27 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
   services: [
     ['browserstack', {
       browserstackLocal: false,
-      opts: {
-        verbose: false
-      }
+      opts: { verbose: false }
     }]
   ],
   reporters: [
-    // 'spec',
-    ['allure', {
-      outputDir: 'allure-results'
-    }]
+    ['allure', { outputDir: 'allure-results' }]
   ],
 
   mochaOpts: {
     timeout: 600000
   },
 
-  beforeTest: async function (test) {
-    const message = `▶️ Início: ${test.title}`
-
-    console.log(message);
-
-    await browser.execute('browserstack_executor: ' + JSON.stringify({
-      action: 'annotate',
-      arguments: {
-        data: message,
-        level: 'info'
-      }
-    }))
-  },
-
   before: async function (capabilities, specs) {
-    const specPath = specs[0]
-
-    const specName = path.basename(specPath)
-
-    await browser.execute('browserstack_executor: ' + JSON.stringify({
-      action: 'setSessionName',
-      arguments: {
-        name: specName
-      }
-    }))
+    await setBSName(specs);
   },
 
-  afterTest: async function (test, context, { error, passed }) {
-    const message = passed
-      ? `✅ Sucesso: ${test.title}`
-      : `❌ Falha: ${test.title} - ${error?.message}`
+  beforeTest: async function (test) {
+    await setBSTestAnnotation(test); // <--- Apenas uma linha
+  },
 
-    await browser.execute('browserstack_executor: ' + JSON.stringify({
-      action: 'annotate',
-      arguments: {
-        data: message,
-        level: passed ? 'info' : 'error'
-      }
-    }))
-
-    // Verifica status do teste e marca como passed ou failed na BrowserStack
-    await browser.execute('browserstack_executor: ' + JSON.stringify({
-      action: 'setSessionStatus',
-      arguments: {
-        status: passed ? 'passed' : 'failed',
-        reason: passed ? 'Teste OK!' : error?.message
-      }
-    }))
+  afterTest: async function (test, context, result) {
+    await setBSTestResult(test, context, result);
   },
 
   capabilities: [{

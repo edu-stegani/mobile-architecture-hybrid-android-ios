@@ -220,7 +220,7 @@ class ReceitaIOS extends BaseScreen {
     async viewDetailsRecipe() {
         // await this.checkpointScreen('Itens da receita')
         await this.btnDeletePicture.waitForDisplayed()
-        await this.waitAndClick($('~navBarBackButtonIdentifier'))
+        await this.back()
     }
 
     async deleteRecipe() {
