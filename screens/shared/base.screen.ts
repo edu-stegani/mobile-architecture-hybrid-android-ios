@@ -103,7 +103,7 @@ export default class BaseScreen {
 
             const btnAddImageSelector = driver.isIOS
                 ? $(`(//XCUIElementTypeButton[@label="ic prescription add"]//../../../..//XCUIElementTypeButton)[2]`)
-                : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);
+                : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);  //com.astl.vidalink.beta:id/etAddPicture
             await this.waitAndClick(btnAddImageSelector)
 
             const btnGaleryPhotos = driver.isIOS

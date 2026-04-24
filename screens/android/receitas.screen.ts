@@ -110,7 +110,7 @@ class ReceitaAndroid extends BaseScreen {
         await this.waitAndClick(this.btnConfirmar)
     }
 
-    async addPhotoRecipe() {
+    async sendRecipePhoto() {
         await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
         await this.addPhoto('recipe.jpg')
         await this.waitAndClick(this.btnConfirmar)
@@ -182,7 +182,7 @@ class ReceitaAndroid extends BaseScreen {
         // Screen Informe nome para receita
         await this.selectUserAndGiveNameRecipe(fullNname)
         // Screen anexar foto da receita
-        await this.addPhotoRecipe()
+        await this.sendRecipePhoto()
         // Screen informe os dados da receita
         await this.fillDataRecipe(typeRecipe, uf)
         // Screen quais medicamentos 
