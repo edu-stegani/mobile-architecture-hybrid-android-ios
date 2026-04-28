@@ -44,6 +44,34 @@ class ReembolsoAndroid extends BaseScreen {
         return `//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/clRefundItem"]`
     }
 
+    get selectBank() {
+        return $('id:com.astl.vidalink.beta:id/etBank')
+    }
+
+    get optionBank() {
+        return `//*[@resource-id="com.astl.vidalink.beta:id/rvBank"]`
+    }
+
+    get inputAgency() {
+        return $('id:com.astl.vidalink.beta:id/etAgencyNumber')
+    }
+
+    get inputAccount() {
+        return $('id:com.astl.vidalink.beta:id/etAccountNumber')
+    }
+
+    get inputDigit() {
+        return $('id:com.astl.vidalink.beta:id/etAccountDigit')
+    }
+
+    get btnConfirmDataBank() {
+        return $(`//android.widget.Button[@resource-id="com.astl.vidalink.beta:id/btnNextFile"]`)
+    }
+
+    get btnConfirmDataBankPopUp() {
+        return $(`id:com.astl.vidalink.beta:id/btConfirm`)
+    }
+
     // ======== ACTIONS ========
     async viewTollbarReembolso() {
         const tollbarReembolso = this.tollbarReembolso
@@ -71,7 +99,7 @@ class ReembolsoAndroid extends BaseScreen {
         await this.checkpointScreen('Para quem é o reembolso?')
         await this.waitAndClick(btnRadioUser)
 
-        try { await driver.hideKeyboard(); } catch (error) {  }
+        try { await driver.hideKeyboard(); } catch (error) { }
         await this.waitAndClick(this.btnConfirmRefund)
     }
 
@@ -96,7 +124,27 @@ class ReembolsoAndroid extends BaseScreen {
         await this.waitAndClick(this.btnSendRecipe)
     }
 
-    async viewCardRefundAndGetProtocol(){
+    async reportBankForRefund(bankName: string) {
+        const selectBank = this.selectBank
+        const optionBank = $(`${this.optionBank}//*[contains(@text,"${bankName}")]`)
+        const inputAgency = this.inputAgency
+        const inputAccount = this.inputAccount
+        const inputDigit = this.inputDigit
+        const btnConfirmDataBankPopUp = this.btnConfirmDataBankPopUp
+
+        await this.checkpointScreen('Agora é só conferir ou alterar seus dados bancários cadastrados')
+        await this.waitAndClick(selectBank)
+        await this.waitAndClick(optionBank)
+        await this.waitAndSetValue(inputAgency, '12345')
+        await this.waitAndSetValue(inputAccount, '12345678')
+        await this.waitAndSetValue(inputDigit, '9')
+        await this.waitAndClick(this.btnConfirmDataBank)
+
+        await this.checkpointScreen('Seus reembolsos serão realizados nesta conta')
+        await this.waitAndClick(btnConfirmDataBankPopUp)
+    }
+
+    async viewCardRefundAndGetProtocol() {
         const cardRefund = $(`(${this.cardRefund})[1]`)
         await cardRefund.waitForDisplayed({ timeout: 15000 })
 
@@ -120,10 +168,15 @@ class ReembolsoAndroid extends BaseScreen {
         await this.whatIsReasonRefund(reason)
         await this.sendInvoicePhoto()
         await this.sendRecipePhoto()
+        try {
+            await this.reportBankForRefund('Banco do Brasil')
+        } catch (error) { console.log('Fluxo sem preenchimento de dados bancários.') }
         await labelSuccess.waitForDisplayed({ timeout: 20000 })
         await labelDataSended.waitForDisplayed({ timeout: 10000 })
         await this.waitAndClick(btnConcluir)
         await this.viewCardRefundAndGetProtocol()
+
+
     }
 
 }

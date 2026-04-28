@@ -18,17 +18,17 @@ describe('Solicitar Reembolso Vidalink: ', () => {
 
 })
 
-// describe('Solicitar Reembolso CT Fora: ', () => {
-//     const user = data.users.William
+describe('Solicitar Reembolso CT Externo: ', () => {
+    const user = data.users.William
 
-//     beforeEach(async () => {
-//         await AppHelper.resetAndLogin(user.cpf, user.password);
-//     })
+    beforeEach(async () => {
+        await AppHelper.resetAndLogin(user.cpf, user.password);
+    })
 
-//     it('solicitar reembolso com sucesso', async () => {
-//         await homeScreen.tapPilarByName('Med')
-//         await benefitsScreen.clickLinkByText('Reembolso')
-//         await reembolsoScreen.requestNewRefund('DIPIRONA', user.fullName ,'Falha no APP Vidalink')
-//     })
+    it('solicitar reembolso com sucesso', async () => {
+        await homeScreen.tapPilarByName('Med')
+        await benefitsScreen.clickLinkByText('Reembolso')
+        await reembolsoScreen.requestNewRefund('DIPIRONA', user.fullName ,'Melhor preco da farmacia')
+    })
 
-// })
+})
