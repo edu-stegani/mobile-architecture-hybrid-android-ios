@@ -13,8 +13,8 @@
     "test:browserstack:android": "cross-env PLATFORM=android npx wdio run config/wdio.browserstack.android.conf.ts",
     "test:browserstack:ios": "cross-env PLATFORM=ios npx wdio run config/wdio.browserstack.ios.conf.ts",
 
-    "temp:local": "cross-env PLATFORM=android wdio run config/wdio.android.conf.ts --spec reembolso",
-    "temp:bstack": "cross-env PLATFORM=android npx wdio run config/wdio.browserstack.android.conf.ts --spec login",
+    "temp:local": "cross-env PLATFORM=ios npx wdio run config/wdio.ios.conf.ts --spec reembolso",
+    "temp:bstack": "cross-env PLATFORM=ios npx wdio run config/wdio.browserstack.ios.conf.ts --spec reembolso",
   
     "report:generate": "npx allure generate -o allure-report allure-results",
     "report:open": "npx allure open allure-report",

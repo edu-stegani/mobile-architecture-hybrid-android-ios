@@ -13,7 +13,7 @@ describe('Solicitar Reembolso Vidalink: ', () => {
     it('solicitar reembolso com sucesso', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Reembolso')
-        await reembolsoScreen.requestNewRefund('DIPIRONA', user.fullName ,'Falha no APP Vidalink')
+        await reembolsoScreen.requestNewRefund('PARACETAMOL', user.fullName ,'Falha no APP Vidalink')
     })
 
 })
@@ -28,7 +28,7 @@ describe('Solicitar Reembolso CT Externo: ', () => {
     it('solicitar reembolso com sucesso', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Reembolso')
-        await reembolsoScreen.requestNewRefund('DIPIRONA', user.fullName ,'Melhor preco da farmacia')
+        await reembolsoScreen.requestNewRefund('RIVOTRIL', user.fullName ,'Melhor preco da farmacia')
     })
 
 })

@@ -5,71 +5,63 @@ class ReembolsoIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get tollbarReembolso() {
-        return $('//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/toolbar"]//android.widget.TextView[@text="Reembolso"]')
+        return $('~Reembolso')
     }
 
     get btnRequestRefund() {
-        return $('id:com.astl.vidalink.beta:id/btRequestRefund')
+        return $('//XCUIElementTypeButton[@label="Solicitar reembolso"]')
     }
 
     get inputMedicineName() {
-        return $('id:com.astl.vidalink.beta:id/etMedicineName')
+        return $('//XCUIElementTypeTextField[@value="Buscar..."]')
     }
 
     get btnConfirmRefund() {
-        return $('android=new UiSelector().resourceId("com.astl.vidalink.beta:id/btnNextRefundRequest").text("Confirmar")')
+        return $('//XCUIElementTypeButton[@label="Confirmar"]')
     }
 
     get btnSendInvoice() {
-        return $('//android.widget.Button[@content-desc="cupomfiscal"]')    //new UiSelector().resourceId("com.astl.vidalink.beta:id/btnNextFile")  android=new UiSelector().resourceId("com.astl.vidalink.beta:id/btnNextFile").text("Enviar Nota Fiscal")
+        return $('//XCUIElementTypeButton[@name="Enviar nota fiscal"]')
     }
 
     get btnSendRecipe() {
-        return $('//android.widget.Button[@content-desc="receitamedica"]')    //android=new UiSelector().resourceId("com.astl.vidalink.beta:id/btnNextFile").text("Enviar receita")
+        return $('//XCUIElementTypeButton[@name="Enviar receita"]')
     }
 
-    get labelSuccess(){
-        return $(`//*[@resource-id="com.astl.vidalink.beta:id/tvLabel"][@text="SUCESSO"]`)
+    get labelSuccess() {
+        return $(`//XCUIElementTypeStaticText[@label="SUCESSO"]`)
     }
 
-    get labelDataSended(){
-        return $('//*[@resource-id="com.astl.vidalink.beta:id/tvMessage"][@text="Dados enviados."]')
+    get labelDataSended() {
+        return $('~titleDataSend')
     }
 
     get btnFinish() {
-        return $('id:com.astl.vidalink.beta:id/btFinish')
+        return $('//XCUIElementTypeButton[@label="Concluir"]')
     }
 
     get cardRefund() {
-        return `//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/clRefundItem"]`
+        return `//XCUIElementTypeTable/XCUIElementTypeCell`
     }
 
     get selectBank() {
-        return $('id:com.astl.vidalink.beta:id/etBank')
-    }
-
-    get optionBank() {
-        return `//*[@resource-id="com.astl.vidalink.beta:id/rvBank"]`
+        return $('//XCUIElementTypeStaticText[@name="Selecione o banco"]/following::XCUIElementTypeTextField[1]')
     }
 
     get inputAgency() {
-        return $('id:com.astl.vidalink.beta:id/etAgencyNumber')
+        return $('//XCUIElementTypeStaticText[@name="Agência (sem dígito)"]/following::XCUIElementTypeTextField[1]')
     }
 
     get inputAccount() {
-        return $('id:com.astl.vidalink.beta:id/etAccountNumber')
+        return $('//XCUIElementTypeStaticText[@name="Conta"]/following::XCUIElementTypeTextField[1]')
     }
 
     get inputDigit() {
-        return $('id:com.astl.vidalink.beta:id/etAccountDigit')
-    }
-
-    get btnConfirmDataBank() {
-        return $(`//android.widget.Button[@resource-id="com.astl.vidalink.beta:id/btnNextFile"]`)
+        return $('//XCUIElementTypeStaticText[@name="Conta"]/following::XCUIElementTypeTextField[2]')
     }
 
     get btnConfirmDataBankPopUp() {
-        return $(`id:com.astl.vidalink.beta:id/btConfirm`)
+        return $(`//XCUIElementTypeButton[@label="Confirmar dados"]`)
     }
 
     // ======== ACTIONS ========
@@ -80,8 +72,8 @@ class ReembolsoIOS extends BaseScreen {
 
     async fillAndSelectMedicineName(medicineName: string) {
         const inputNomeMedicamento = this.inputMedicineName
-        const filteredOption = $(`//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvMedicineName" and @text="${medicineName}"]`)
-        const iconeDelete = this.btnDeleteAndroid
+        const filteredOption = $(`//XCUIElementTypeTable//XCUIElementTypeStaticText[@name="${medicineName}"]`)
+        const iconeDelete = this.btnDeleteIOS
 
         await this.checkpointScreen('Informe os nomes dos medicamentos para solicitar o reembolso')
         await this.waitAndSetValue(inputNomeMedicamento, medicineName)
@@ -89,26 +81,30 @@ class ReembolsoIOS extends BaseScreen {
         await this.waitAndClick(filteredOption)
         await iconeDelete.waitForDisplayed();
 
-        try { await driver.hideKeyboard(); } catch (error) { }
+        await this.hideKeyboard()
         await this.waitAndClick(this.btnConfirmRefund)
     }
 
     async whoIsTheRefundFor(userName: string) {
-        const btnRadioUser = $(`//android.widget.TextView[contains(@text,"${userName}")]`)
+        const btnRadioUser = $(`//XCUIElementTypeStaticText[contains(@value, '${userName}')]/../XCUIElementTypeButton[@label="ic prescription radio unselect"]`)
 
         await this.checkpointScreen('Para quem é o reembolso?')
-        await this.waitAndClick(btnRadioUser)
+        await btnRadioUser.waitForDisplayed()
+        await btnRadioUser.click()
+        // await this.waitAndClick(btnRadioUser)
 
-        try { await driver.hideKeyboard(); } catch (error) {  }
+        try { await this.hideKeyboard() } catch (error) { }
         await this.waitAndClick(this.btnConfirmRefund)
     }
 
     async whatIsReasonRefund(reason: string) {
-        const radioOption = $(`//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvCustomerName" and @text="${reason}"]`)
+        const radioOption = $(`//XCUIElementTypeStaticText[contains(@value, '${reason}')]/../XCUIElementTypeButton[@label="ic prescription radio unselect"]`)
 
         await this.checkpointScreen('Qual é o motivo do reembolso?')
 
-        await this.waitAndClick(radioOption)
+        // await this.waitAndClick(radioOption)
+        await radioOption.waitForDisplayed()
+        await radioOption.click()
         await this.waitAndClick(this.btnConfirmRefund)
     }
 
@@ -119,26 +115,29 @@ class ReembolsoIOS extends BaseScreen {
     }
 
     async sendRecipePhoto() {
-        await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
+        await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica')
         await this.addPhoto('recipe.jpg')
         await this.waitAndClick(this.btnSendRecipe)
     }
 
     async reportBankForRefund(bankName: string) {
-        const selectBank = this.selectBank
-        const optionBank = $(`${this.optionBank}//*[contains(@text,"${bankName}")]`)
-        const inputAgency = this.inputAgency
-        const inputAccount = this.inputAccount
-        const inputDigit = this.inputDigit
+        const optionBank = $(`//XCUIElementTypeCell[.//XCUIElementTypeStaticText[contains(@label, "${bankName}")]]`)
+        const inputBank =    $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[1]')
+        const inputAgency =  $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[2]')
+        const inputAccount = $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[3]')
+        const inputDigit =   $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[4]')
         const btnConfirmDataBankPopUp = this.btnConfirmDataBankPopUp
 
         await this.checkpointScreen('Agora é só conferir ou alterar seus dados bancários cadastrados')
-        await this.waitAndClick(selectBank)
+        await this.waitAndClick(inputBank)
         await this.waitAndClick(optionBank)
-        await this.waitAndSetValue(inputAgency, '12345')
+        await this.waitAndSetValue(inputAgency, '1234')
+        try { await this.hideKeyboard() } catch (error) { }
         await this.waitAndSetValue(inputAccount, '12345678')
+        try { await this.hideKeyboard() } catch (error) { }
         await this.waitAndSetValue(inputDigit, '9')
-        await this.waitAndClick(this.btnConfirmDataBank)
+        try { await this.hideKeyboard() } catch (error) { }
+        await this.waitAndClick(this.btnConfirmRefund)
 
         await this.checkpointScreen('Seus reembolsos serão realizados nesta conta')
         await this.waitAndClick(btnConfirmDataBankPopUp)
@@ -148,9 +147,11 @@ class ReembolsoIOS extends BaseScreen {
         const cardRefund = $(`(${this.cardRefund})[1]`)
         await cardRefund.waitForDisplayed({ timeout: 15000 })
 
-        const protocol = $(`(${this.cardRefund}//*[@resource-id="com.astl.vidalink.beta:id/tvRefundProtocol"])[1]`)
+        const protocol = $(`(${this.cardRefund}//XCUIElementTypeStaticText[2])[1]`)
+        const labelTexto = await protocol.getAttribute('label');
+        const protocolValue = labelTexto?.match(/Protocolo:\s\d+/);
+
         await protocol.waitForDisplayed({ timeout: 15000 })
-        const protocolValue = await protocol.getText()
         await console.log(`${protocolValue}`)
     }
 
@@ -169,7 +170,7 @@ class ReembolsoIOS extends BaseScreen {
         await this.sendInvoicePhoto()
         await this.sendRecipePhoto()
         try {
-            await this.reportBankForRefund('Banco do Brasil')
+        await this.reportBankForRefund('Banco do Brasil')
         } catch (error) { console.log('Fluxo sem preenchimento de dados bancários.') }
         await labelSuccess.waitForDisplayed({ timeout: 20000 })
         await labelDataSended.waitForDisplayed({ timeout: 10000 })

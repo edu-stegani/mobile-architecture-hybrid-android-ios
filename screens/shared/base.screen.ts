@@ -17,6 +17,10 @@ export default class BaseScreen {
     }
 
     // LOCATORS IOS
+    get btnDeleteIOS() {
+        return $('~ic delete')
+    }
+
     get btnDeletePictureIOS() {
         return $('~ic trash')
     }
@@ -24,7 +28,6 @@ export default class BaseScreen {
     // METHODS
     async waitAndClick(element: ChainablePromiseElement) {
         await element.waitForDisplayed({ timeout: 15000 })
-        await element.waitForEnabled()
         await element.click()
     }
 
@@ -85,53 +88,48 @@ export default class BaseScreen {
                 console.log(`[Android Local] Arquivo enviado para dispositivo: ${devicePath}`);
             }
         } else {
-            if (isBrowserStack) {
-                console.log(`[iOS BrowserStack] device bstack já tem midia...`);
-            } else {
-                console.log(`[iOS Local] Executando localmente no Simulador...`);
-                await driver.execute('mobile: addMedia', { path: localFilePath });
-            }
+            console.log(`[iOS] device já tem midia...`);
         }
     }
 
     async addPhoto(imageJPG: string) {
-            await this.uploadImageFromProject(imageJPG)
-            
-            if (await driver.isKeyboardShown()) {
-                await driver.back();
-            }
+        await this.uploadImageFromProject(imageJPG)
 
-            const btnAddImageSelector = driver.isIOS
-                ? $(`(//XCUIElementTypeButton[@label="ic prescription add"]//../../../..//XCUIElementTypeButton)[2]`)
-                : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);  //com.astl.vidalink.beta:id/etAddPicture
-            await this.waitAndClick(btnAddImageSelector)
+        if (await driver.isKeyboardShown()) {
+            await driver.back();
+        }
+        
+        const btnAddImageSelector = driver.isIOS
+            ? $(`(//XCUIElementTypeTextField/../../..//XCUIElementTypeButton)[2]`)
+            : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);  //com.astl.vidalink.beta:id/etAddPicture
+        await this.waitAndClick(btnAddImageSelector)
 
-            const btnGaleryPhotos = driver.isIOS
-                ? $(`//XCUIElementTypeStaticText[@name="Galeria de Fotos"]/../XCUIElementTypeOther`)
-                : $(`id:com.astl.vidalink.beta:id/tvSecondOption`);
-            await this.waitAndClick(btnGaleryPhotos)
-    
-            const photo = driver.isIOS
-                ? $('-ios class chain:**/XCUIElementTypeImage[`name BEGINSWITH "Photo"`][1]')
-                : $(`android=new UiSelector().descriptionStartsWith("Photo taken on").instance(0)`);
-            await this.waitAndClick(photo)
-    
-            const btnDone = driver.isIOS
-                ? $('//XCUIElementTypeButton[@label="Done"]')
-                : $('//android.widget.TextView[@text="Done"]');
-            if (await btnDone.isDisplayed()) {
-                await this.waitAndClick(btnDone)
-            }
-    
-            const btnDeletePicture = driver.isIOS
-                ? this.btnDeletePictureIOS
-                : this.btnDeletePictureAndroid;
-            await btnDeletePicture.waitForDisplayed()
-            
+        const btnGaleryPhotos = driver.isIOS
+            ? $(`(//XCUIElementTypeStaticText//../../XCUIElementTypeCell)[2]`)
+            : $(`id:com.astl.vidalink.beta:id/tvSecondOption`);
+        await this.waitAndClick(btnGaleryPhotos)
+
+        const photo = driver.isIOS
+            ? $('(//XCUIElementTypeOther[@name="PXZoomablePhotosLayout-Group"]//XCUIElementTypeImage)[1]')
+            : $(`android=new UiSelector().descriptionStartsWith("Photo taken on").instance(0)`);
+        await this.waitAndClick(photo)
+
+        const btnDone = driver.isIOS
+            ? $('//XCUIElementTypeButton[@label="Done"]')
+            : $('//android.widget.TextView[@text="Done"]');
+        if (await btnDone.isDisplayed()) {
+            await this.waitAndClick(btnDone)
         }
 
+        const btnDeletePicture = driver.isIOS
+            ? this.btnDeletePictureIOS
+            : this.btnDeletePictureAndroid;
+        await btnDeletePicture.waitForDisplayed()
+
+    }
+
     async waitAndSetValue(element: ChainablePromiseElement, value: string) {
-        await element.waitForDisplayed()
+        await element.waitForDisplayed({timeout: 10000})
         await element.setValue(value)
     }
 
