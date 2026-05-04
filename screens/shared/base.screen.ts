@@ -92,6 +92,29 @@ export default class BaseScreen {
         }
     }
 
+    async getPhotoElement(): Promise<ChainablePromiseElement> {
+        // === ANDROID ===
+        if (driver.isAndroid) {
+            return $('android=new UiSelector().descriptionStartsWith("Photo taken on").instance(0)');
+        }
+    
+        // === IOS ===
+        const selectorSim = '(//XCUIElementTypeOther[@name="PXZoomablePhotosLayout-Group"]//XCUIElementTypeImage)[1]';
+        const selectorBS = '-ios class chain:**/XCUIElementTypeImage[`name BEGINSWITH "Photo"`][1]';
+    
+        await browser.waitUntil(async () => {
+            return (await $(selectorSim).isExisting()) || (await $(selectorBS).isExisting());
+        }, { timeout: 15000 });
+    
+        if (await $(selectorSim).isExisting()) {
+            // console.log("Ambiente detectado: Simulador");
+            return $(selectorSim);
+        }
+    
+        // console.log("Ambiente detectado: BrowserStack");
+        return $(selectorBS);
+    }
+    
     async addPhoto(imageJPG: string) {
         await this.uploadImageFromProject(imageJPG)
 
@@ -101,7 +124,7 @@ export default class BaseScreen {
         
         const btnAddImageSelector = driver.isIOS
             ? $(`(//XCUIElementTypeTextField/../../..//XCUIElementTypeButton)[2]`)
-            : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);  //com.astl.vidalink.beta:id/etAddPicture
+            : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);
         await this.waitAndClick(btnAddImageSelector)
 
         const btnGaleryPhotos = driver.isIOS
@@ -109,10 +132,8 @@ export default class BaseScreen {
             : $(`id:com.astl.vidalink.beta:id/tvSecondOption`);
         await this.waitAndClick(btnGaleryPhotos)
 
-        const photo = driver.isIOS
-            ? $('(//XCUIElementTypeOther[@name="PXZoomablePhotosLayout-Group"]//XCUIElementTypeImage)[1]')
-            : $(`android=new UiSelector().descriptionStartsWith("Photo taken on").instance(0)`);
-        await this.waitAndClick(photo)
+        const photo = await this.getPhotoElement()
+        await photo.click()
 
         const btnDone = driver.isIOS
             ? $('//XCUIElementTypeButton[@label="Done"]')
