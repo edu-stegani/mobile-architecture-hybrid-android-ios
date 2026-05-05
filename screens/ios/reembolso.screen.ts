@@ -45,19 +45,19 @@ class ReembolsoIOS extends BaseScreen {
     }
 
     get selectBank() {
-        return $('//XCUIElementTypeStaticText[@name="Selecione o banco"]/following::XCUIElementTypeTextField[1]')
+        return $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[1]')
     }
 
     get inputAgency() {
-        return $('//XCUIElementTypeStaticText[@name="Agência (sem dígito)"]/following::XCUIElementTypeTextField[1]')
+        return $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[2]')
     }
 
     get inputAccount() {
-        return $('//XCUIElementTypeStaticText[@name="Conta"]/following::XCUIElementTypeTextField[1]')
+        return $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[3]')
     }
 
     get inputDigit() {
-        return $('//XCUIElementTypeStaticText[@name="Conta"]/following::XCUIElementTypeTextField[2]')
+        return  $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[4]')
     }
 
     get btnConfirmDataBankPopUp() {
@@ -122,10 +122,10 @@ class ReembolsoIOS extends BaseScreen {
 
     async reportBankForRefund(bankName: string) {
         const optionBank = $(`//XCUIElementTypeCell[.//XCUIElementTypeStaticText[contains(@label, "${bankName}")]]`)
-        const inputBank =    $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[1]')
-        const inputAgency =  $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[2]')
-        const inputAccount = $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[3]')
-        const inputDigit =   $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[4]')
+        const inputBank = this.selectBank
+        const inputAgency =  this.inputAgency
+        const inputAccount = this.inputAccount
+        const inputDigit =  this.inputDigit
         const btnConfirmDataBankPopUp = this.btnConfirmDataBankPopUp
 
         await this.checkpointScreen('Agora é só conferir ou alterar seus dados bancários cadastrados')
