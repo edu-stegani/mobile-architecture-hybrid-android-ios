@@ -47,7 +47,7 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
     },
 
     beforeTest: async function (test) {
-        await setBSTestAnnotation(test); // <--- Apenas uma linha
+        await setBSTestAnnotation(test); 
     },
 
     afterTest: async function (test, context, result) {

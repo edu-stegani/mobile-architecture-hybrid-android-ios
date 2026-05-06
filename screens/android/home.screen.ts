@@ -5,7 +5,7 @@ class HomeAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
     get btnPular() {
-        return $('id:com.astl.vidalink.beta:id/btNext')
+        return $('id:com.astl.vidalink.beta:id/tvPrevious')
     }
 
     get closeIcon() {
@@ -27,7 +27,7 @@ class HomeAndroid extends BaseScreen {
             const close = this.closeIcon
             await this.waitAndClick(close)
             await close.waitForDisplayed({ reverse: true, timeout: 10000 })
-        } catch (error) { }
+        } catch (error) { console.log('Tutorial home não exibido') }
     }
 
     async checkHomeIcon() {

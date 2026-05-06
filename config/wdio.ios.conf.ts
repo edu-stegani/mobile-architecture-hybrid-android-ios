@@ -34,23 +34,16 @@ export const config = {
   capabilities: [
     {
       platformName: 'iOS',
-      'appium:deviceName': 'iPhone 15',
-      'appium:platformVersion': '17.0',
+      'appium:deviceName': 'iPhone 16 Plus',
+      'appium:platformVersion': '18.4',
       'appium:automationName': 'XCUITest',
 
-      'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5_10_1.ipa'),
+      'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5_10_1.app'),
 
       'appium:autoAcceptAlerts': true,
       'appium:autoGrantPermissions': true,
-      'appium:permissions': JSON.stringify({
-        "br.com.vidalink.beta": {
-          "photos": "yes",
-          "camera": "yes",
-          "medialibrary": "yes"
-        }
-      }),
       'appium:autoLaunch': true,
-      'appium:newCommandTimeout': 180,
+      'appium:newCommandTimeout': 240,
       'appium:noReset': true,
       'appium:fullReset': false,
       'appium:showXcodeLog': false,

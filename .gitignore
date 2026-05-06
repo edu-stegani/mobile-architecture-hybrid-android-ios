@@ -8,3 +8,4 @@ local.log
 package-lock.json
 *.apk
 *.ipa
+*.app
