@@ -47,6 +47,12 @@ class DbHelper {
         return await this.executeQuery(query, [socialId]);
     }
 
+    async updateRecognitionFace(facerecognitiontype: string, CT: string) {
+        const query = `UPDATE login.face_recognition_configuration SET facerecognitiontype= $1 WHERE customerid= $2;`;
+
+        return await this.executeQuery(query, [facerecognitiontype, CT]);
+    }
+
 }
 
 export default new DbHelper();
