@@ -22,6 +22,25 @@ class OracleHelper {
     }
   }
 
+  async executeSelect(query: string, params: any[] = []) {
+    let connection: oracledb.Connection | undefined
+    try {
+      connection = await oracledb.getConnection({
+        user: 'GERENCIADOR',
+        password: 'grncdr',
+        connectString: '10.10.10.18:1521/DBPROD_PDB1'
+      })
+
+      const result = await connection.execute(query, params)
+      return result.rows; // Aqui retornará as linhas com os dados
+
+    } finally {
+      if (connection) {
+        await connection.close()
+      }
+    }
+  }
+
   // Métodos
 
   async acceptTermAndConditions(socialId: string) {
@@ -34,6 +53,26 @@ class OracleHelper {
     const query = `UPDATE IIS.RMB_CLIENTE SET CONTA_CORRENTE=NULL, BANCO=NULL, AGENCIA_DV=NULL WHERE CPF=:1`
 
     return await this.executeQuery(query, [socialId]);
+  }
+
+  async getLastSMS(socialId: string) {
+    const query = `
+      SELECT TOKENSMS 
+      FROM (
+        SELECT TOKENSMS 
+        FROM IIS.TOKEN 
+        WHERE MEMBER_ID = :1 
+          AND DATA >= SYSDATE - (1/1440) 
+        ORDER BY DATA DESC
+      ) WHERE ROWNUM = 1
+    `;
+    const rows = await this.executeSelect(query, [socialId]) as any[][];
+
+    if (!rows || rows.length === 0) {
+      return null;
+    }
+
+    return rows[0][0];
   }
 }
 
