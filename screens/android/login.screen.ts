@@ -1,5 +1,6 @@
 import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
+import oracleHelpers from '../../support/utils/oracleHelpers.js'
 
 class LoginAndroid extends BaseScreen {
 
@@ -24,32 +25,68 @@ class LoginAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/btnAccess')
     }
 
+    get ForgotPasswordLink() {
+        return $('id:com.astl.vidalink.beta:id/tvNewLoginForgotPassword')
+    }
+
+    get inputDateBirth() {
+        return $('//android.widget.EditText[contains, (@text="dd/mm/aaaa")]')
+    }
+
+    get btnLocateRegister() {
+        return $('id:com.astl.vidalink.beta:id/btnRegisterAccess')
+    }
+
+    get inputCode() {
+        return $('id:com.astl.vidalink.beta:id/etCodeSms')
+    }
+
+    get btnConfirmRegister() {
+        return $('id:com.astl.vidalink.beta:id/btnConfirmRegister')
+    }
+
+    get btnOk() {
+        return $('id:com.astl.vidalink.beta:id/btAgree')
+    }
+
+    get iconLock() {
+        return $('id:com.astl.vidalink.beta:id/lavLock')
+    }
+
+    get inputNewPassword() {
+        return $('id:com.astl.vidalink.beta:id/etFirstField')
+    }
+
+    get inputConfirmPassword() {
+        return $('id:com.astl.vidalink.beta:id/etSecondField')
+    }
+
     // ======== ACTIONS ========
-    async tapEntrar(){
-        await this.btnEntrar.waitForDisplayed({ timeout: 60000, interval: 2000 })
-        await this.btnEntrar.click()
+    async tapEntrar() {
+        await this.waitAndClick(this.btnEntrar)
     }
 
     async fillCpf(cpf: string) {
-        await this.inputCpf.waitForDisplayed({ timeout: 15000 })
-        await this.inputCpf.setValue(cpf)
-        const iconCpfCheck = await $(`//android.widget.EditText[@resource-id='com.astl.vidalink.beta:id/etFirstField']/..//android.widget.ImageButton[@resource-id='com.astl.vidalink.beta:id/text_input_end_icon']`)
-        await iconCpfCheck.waitForDisplayed({ timeout: 15000 })
+        const inputCpf = this.inputCpf
+        await this.waitAndSetValue(inputCpf, cpf)
     }
 
     async fillSenha(senha: string) {
-        await this.inputSenha.waitForDisplayed({ timeout: 15000 })
-        await this.inputSenha.setValue(senha)
-        const iconPasswordCheck = await $(`//android.widget.EditText[@resource-id='com.astl.vidalink.beta:id/etSecondField']/..//android.widget.ImageButton[@resource-id='com.astl.vidalink.beta:id/text_input_end_icon']`)
-        await iconPasswordCheck.waitForDisplayed({ timeout: 15000 })
+        const inputSenha = this.inputSenha
+        await this.waitAndSetValue(inputSenha, senha)
     }
 
     async fillMatricula(matricula: string) {
-        const labelMatricula = await $('//android.widget.TextView[contains(@text,"Matricula do titular")]')
-        await labelMatricula.waitForDisplayed({ timeout: 30000 })
-        await this.inputMatricula.waitForDisplayed({ timeout: 15000 })
-        await this.inputMatricula.setValue(matricula)
+        const inputMatricula = this.inputMatricula
+
+        await this.checkpointScreen('Matricula do titular')
+        await this.waitAndSetValue(inputMatricula, matricula)
         await this.waitAndClick(this.btnAcessar)
+    }
+
+    async fillDateOfBirth(dateOfBirth: string) {
+        const inputDateBirth = this.inputDateBirth
+        await this.waitAndSetValue(inputDateBirth, dateOfBirth)
     }
 
     // ======== METHODS ========
@@ -60,8 +97,68 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndClick(this.btnAcessar)
     }
 
-    async viewMessageError(){
+    async viewMessageError() {
         await this.checkpointScreen('Senha incorreta')
+    }
+
+    async clickForgotPassword() {
+        const linkEsqueciSenha = this.ForgotPasswordLink
+        await this.waitAndClick(linkEsqueciSenha)
+    }
+
+    async locateRegistration(cpf: string, dateOfBirth: string, matricula: string) {
+        const btnLocateRegister = this.btnLocateRegister
+
+        await this.tapEntrar()
+        await this.clickForgotPassword()
+        await this.checkpointScreen('Vamos localizar seu cadastro Vidalink')
+        await this.fillCpf(cpf)
+        await this.fillDateOfBirth(dateOfBirth)
+        await this.waitAndClick(btnLocateRegister)
+        await this.fillMatricula(matricula)
+    }
+
+    async informTokenSMS(socialId: string) {
+        let smsToken = null;
+        const inputCode = this.inputCode
+        const iconCheck = $('id:com.astl.vidalink.beta:id/text_input_end_icon')
+        const btnConfirmRegister = this.btnConfirmRegister
+
+        await this.checkpointScreen('Enviamos um código de verificação para o celular')
+
+        await browser.waitUntil(async () => {
+
+            smsToken = await oracleHelpers.getLastSMS(socialId) // query para pegar o ultimo SMS recebido;
+            return smsToken !== null && smsToken !== undefined;
+
+        }, {
+            timeout: 60000,
+            timeoutMsg: 'ERRO: O SMS não recebido em 60 segundos',
+            interval: 3000
+        });
+        console.log(`Sucesso! Token capturado: ${smsToken}`);
+
+        await this.waitAndSetValue(inputCode, smsToken!.toString())
+        await iconCheck.waitForDisplayed({ timeout: 10000 })
+
+        await this.waitAndClick(btnConfirmRegister)
+    }
+
+    async informNewPassword(newPassword: string) {
+        const btnOk = this.btnOk
+        const iconLock = this.iconLock
+        const inputNewPassword = this.inputNewPassword
+        const inputConfirmPassword = this.inputConfirmPassword
+
+        await this.checkpointScreen('Tenha uma senha segura')
+        await this.waitAndClick(btnOk)
+
+        await iconLock.waitForDisplayed({ timeout: 10000 })
+        await this.waitAndSetValue(inputNewPassword, newPassword)
+        await this.waitAndSetValue(inputConfirmPassword, newPassword)
+
+        await this.waitAndClick(this.btnAcessar)
+        await this.checkpointScreen('SUCESSO')
     }
 
 }

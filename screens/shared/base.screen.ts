@@ -55,7 +55,7 @@ export default class BaseScreen {
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;
-        const startY = size.height * 0.7;
+        const startY = size.height * 0.6;
         const endY = size.height * 0.2;
 
         await driver.performActions([{
@@ -156,8 +156,8 @@ export default class BaseScreen {
 
     async checkpointScreen(textCheckpoint: string) {
         const selector = process.env.PLATFORM === 'ios'
-            ? `//*[@label='${textCheckpoint}']`
-            : `//*[@text='${textCheckpoint}']`;
+            ? `//*[contains(@label, '${textCheckpoint}')]`
+            : `//*[contains(@text, '${textCheckpoint}')]`;
 
         const checkpointText = $(selector);
         await checkpointText.waitForDisplayed({ timeout: 20000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
