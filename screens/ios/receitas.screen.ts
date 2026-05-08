@@ -26,10 +26,6 @@ class ReceitaIOS extends BaseScreen {
         return $('~submitNewReceiptButtonIdentifier')
     }
 
-    get btnProximo() {
-        return $('//XCUIElementTypeStaticText[@label="Próximo"]')
-    }
-
     get btnAddImage() {
         return $('(//XCUIElementTypeButton[@label="ic prescription add"]//../../../..//XCUIElementTypeButton)[2]')  //(//XCUIElementTypeButton)[4]
     }
@@ -99,13 +95,13 @@ class ReceitaIOS extends BaseScreen {
 
         await this.waitAndSetValue(this.inputRecipeName, `Receita ${fullNname}`)
         await this.hideKeyboard()
-        await this.waitAndClick(this.btnProximo)
+        await this.waitAndClick(this.btnProximoIOS)
     }
 
     async addPhotoRecipe() {
         await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
         await this.addPhoto('recipe.jpg')
-        this.waitAndClick(this.btnProximo)
+        this.waitAndClick(this.btnProximoIOS)
     }
 
     async getYesterdayDate() {
@@ -144,7 +140,7 @@ class ReceitaIOS extends BaseScreen {
         await this.inputDate.addValue(yesterday);
         await this.hideKeyboard();
 
-        await this.waitAndClick(this.btnProximo);
+        await this.waitAndClick(this.btnProximoIOS);
     }
 
     async fillAndSelectMedicine(medicineName: string) {
@@ -160,7 +156,7 @@ class ReceitaIOS extends BaseScreen {
         await this.waitAndClick(item);
         await this.hideKeyboard();
         await this.btnDeletePictureIOS.waitForDisplayed()
-        await this.waitAndClick(this.btnProximo)
+        await this.waitAndClick(this.btnProximoIOS)
     }
 
     // ======== METHODS ========

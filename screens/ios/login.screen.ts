@@ -27,39 +27,39 @@ class LoginIOS extends BaseScreen {
     }
 
     get ForgotPasswordLink() {
-        return $('')
+        return $('~forgotPasswordLabelIdentifier')
     }
 
     get inputDateBirth() {
-        return $('')
+        return $('~birthDateTextFieldTextFieldIdentifier')
     }
 
     get btnLocateRegister() {
-        return $('')
+        return $('~findRegisterButtonIdentifier')
     }
 
     get inputCode() {
-        return $('')
+        return $('~codeTextFieldTextFieldIdentifier')
     }
 
     get btnConfirmRegister() {
-        return $('')
+        return $('~confirmButtonIdentifier')
     }
 
     get btnOk() {
-        return $('')
+        return $('~tipCardOkButtonIdentifier')
     }
 
     get iconLock() {
-        return $('')
+        return $('~animatedViewIdentifier')
     }
 
     get inputNewPassword() {
-        return $('')
+        return $('~passwordTextFieldTextFieldIdentifier')
     }
 
     get inputConfirmPassword() {
-        return $('')
+        return $('~passwordConfirmationTextFieldTextFieldIdentifier')
     }
 
     // ======== ACTIONS ========
@@ -72,11 +72,13 @@ class LoginIOS extends BaseScreen {
     async fillCpf(cpf: string) {
         await this.inputCpf.waitForDisplayed({ timeout: 20000 })
         await this.inputCpf.setValue(cpf)
+        await this.hideKeyboard()
     }
 
     async fillSenha(senha: string) {
         await this.inputSenha.waitForDisplayed({ timeout: 20000 })
         await this.inputSenha.setValue(senha)
+        await this.hideKeyboard()
     }
 
     async fillMatricula(matricula: string) {
@@ -89,6 +91,7 @@ class LoginIOS extends BaseScreen {
     async fillDateOfBirth(dateOfBirth: string) {
         const inputDateBirth = this.inputDateBirth
         await this.waitAndSetValue(inputDateBirth, dateOfBirth)
+        await this.hideKeyboard()
     }
 
     // ======== METHODS ========
@@ -109,19 +112,21 @@ class LoginIOS extends BaseScreen {
         await this.waitAndClick(linkEsqueciSenha)
     }
 
-    async locateRegistration(cpf: string, dateOfBirth: string) {
+    async locateRegistration(cpf: string, dateOfBirth: string, matricula: string) {
         const btnLocateRegister = this.btnLocateRegister
 
+        await this.tapEntrar()
+        await this.clickForgotPassword()
         await this.checkpointScreen('Vamos localizar seu cadastro Vidalink')
         await this.fillCpf(cpf)
         await this.fillDateOfBirth(dateOfBirth)
         await this.waitAndClick(btnLocateRegister)
+        await this.fillMatricula(matricula)
     }
 
     async informTokenSMS(socialId: string) {
         let smsToken = null;
         const inputCode = this.inputCode
-        const iconCheck = $('id:com.astl.vidalink.beta:id/text_input_end_icon')
         const btnConfirmRegister = this.btnConfirmRegister
 
         await this.checkpointScreen('Enviamos um código de verificação para o celular')
@@ -139,8 +144,7 @@ class LoginIOS extends BaseScreen {
         console.log(`Sucesso! Token capturado: ${smsToken}`);
 
         await this.waitAndSetValue(inputCode, smsToken!.toString())
-        await iconCheck.waitForDisplayed({ timeout: 10000 })
-
+        await this.hideKeyboard()
         await this.waitAndClick(btnConfirmRegister)
     }
 
@@ -155,16 +159,16 @@ class LoginIOS extends BaseScreen {
 
         await iconLock.waitForDisplayed({ timeout: 10000 })
         await this.waitAndSetValue(inputNewPassword, newPassword)
+        await this.hideKeyboard()
         await this.waitAndSetValue(inputConfirmPassword, newPassword)
+        await this.hideKeyboard()
 
-        await this.waitAndClick(this.btnAcessar)
-        await this.checkpointScreen('SUCESSO')
+        await this.waitAndClick(this.btnProximoIOS)
     }
 
     async passwordCantBeEqualPrevious() {
-        await this.checkpointScreen('Atenção!')
-        await this.checkpointScreen('A nova senha não pode ser igual a senha anterior.')
-        await this.waitAndClick(this.btnConfirmPopUp)
+        await this.checkpointScreen('Atenção! A nova senha não pode ser igual a senha anterior.')
+        await this.waitAndClick($('~primaryButtonIdentifier'))
     }
 
 }
