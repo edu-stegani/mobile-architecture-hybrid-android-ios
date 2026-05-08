@@ -15,6 +15,10 @@ export default class BaseScreen {
     get btnDeletePictureAndroid() {
         return $('id:com.astl.vidalink.beta:id/btDeletePicture')
     }
+    
+    get btnConfirmPopUp() {
+        return $(`id:com.astl.vidalink.beta:id/btConfirm`)
+    }
 
     // LOCATORS IOS
     get btnDeleteIOS() {

@@ -9,21 +9,17 @@ const user = data.users.Eduardo
 
 before(async () => {
   await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+  await oracleHelpers.acceptTermAndConditions(user.cpf)
 })
 
 beforeEach(async () => {
   await AppHelper.resetApp();
 })
 
-describe('login no app', () => {
-
-  afterEach(async () => {
-    await profileScreen.logout()
-  })
+describe('Login no App', () => {
 
   it('login com sucesso - com validação matricula', async () => {
     await postgresHelper.updatePasswordForWeakPass(user.cpf)  // query alterar para senha fraca 6 digitos
-    await oracleHelpers.acceptTermAndConditions(user.cpf) // query que aceita termo e condições
 
     await loginScreen.login(user.cpf, '123456')
     await loginScreen.fillMatricula(user.matricula)
@@ -32,17 +28,11 @@ describe('login no app', () => {
 
   it('login com sucesso - sem validação matricula', async () => {
     await postgresHelper.updatePasswordForStrong(user.cpf)  // query alterar para senha forte
-    await oracleHelpers.acceptTermAndConditions(user.cpf) // query que aceita termo e condições
 
     await loginScreen.login(user.cpf, user.password)
     await homeScreen.checkDashboard()
+    await profileScreen.logout()
   })
-
-
-
-})
-
-describe('fluxos negativos - login no app', () => {
 
   it('senha incorreta', async () => {
     await postgresHelper.resetPasswordCount(0, user.cpf); // query resetando a contagem de senha incorreta
@@ -53,16 +43,25 @@ describe('fluxos negativos - login no app', () => {
 
 })
 
-it.only('esqueci minha senha', async () => {
-  
-  await loginScreen.locateRegistration(user.cpf, user.birthdate, user.matricula)
-  await loginScreen.informTokenSMS(user.cpf)
-  await loginScreen.informNewPassword('Teste111') // deixar essa senha randomica
-  await homeScreen.checkDashboard()
+describe('Esqueci minha senha', () => {
+
+  beforeEach(async () => {
+    await postgresHelper.updatePasswordForStrong(user.cpf)
+  })
+
+  it('esqueci minha senha', async () => {
+    await loginScreen.locateRegistration(user.cpf, user.birthdate, user.matricula)
+    await loginScreen.informTokenSMS(user.cpf)
+    await loginScreen.informNewPassword('Teste123')
+    await loginScreen.checkpointScreen('SUCESSO')
+    await homeScreen.checkDashboard()
+  })
+
+  it('senha igual a anterior', async () => {
+    await loginScreen.locateRegistration(user.cpf, user.birthdate, user.matricula)
+    await loginScreen.informTokenSMS(user.cpf)
+    await loginScreen.informNewPassword(user.password)
+    await loginScreen.passwordCantBeEqualPrevious()
+  })
 
 })
-
-// Atenção!
-// A nova senha não pode ser igual a senha anterior.
-// com.astl.vidalink.beta:id/tvMessage
-// com.astl.vidalink.beta:id/btConfirm

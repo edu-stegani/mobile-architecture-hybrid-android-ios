@@ -68,10 +68,6 @@ class ReembolsoAndroid extends BaseScreen {
         return $(`//android.widget.Button[@resource-id="com.astl.vidalink.beta:id/btnNextFile"]`)
     }
 
-    get btnConfirmDataBankPopUp() {
-        return $(`id:com.astl.vidalink.beta:id/btConfirm`)
-    }
-
     // ======== ACTIONS ========
     async viewTollbarReembolso() {
         const tollbarReembolso = this.tollbarReembolso
@@ -130,7 +126,7 @@ class ReembolsoAndroid extends BaseScreen {
         const inputAgency = this.inputAgency
         const inputAccount = this.inputAccount
         const inputDigit = this.inputDigit
-        const btnConfirmDataBankPopUp = this.btnConfirmDataBankPopUp
+        const btnConfirmDataBankPopUp = this.btnConfirmPopUp
 
         await this.checkpointScreen('Agora é só conferir ou alterar seus dados bancários cadastrados')
         await this.waitAndClick(selectBank)

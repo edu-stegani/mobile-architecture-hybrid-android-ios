@@ -161,6 +161,12 @@ class LoginIOS extends BaseScreen {
         await this.checkpointScreen('SUCESSO')
     }
 
+    async passwordCantBeEqualPrevious() {
+        await this.checkpointScreen('Atenção!')
+        await this.checkpointScreen('A nova senha não pode ser igual a senha anterior.')
+        await this.waitAndClick(this.btnConfirmPopUp)
+    }
+
 }
 
 export default new LoginIOS()

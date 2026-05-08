@@ -158,7 +158,12 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndSetValue(inputConfirmPassword, newPassword)
 
         await this.waitAndClick(this.btnAcessar)
-        await this.checkpointScreen('SUCESSO')
+    }
+
+    async passwordCantBeEqualPrevious() {
+        await this.checkpointScreen('Atenção!')
+        await this.checkpointScreen('A nova senha não pode ser igual a senha anterior.')
+        await this.waitAndClick(this.btnConfirmPopUp)
     }
 
 }
