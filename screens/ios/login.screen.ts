@@ -65,26 +65,23 @@ class LoginIOS extends BaseScreen {
     // ======== ACTIONS ========
 
     async tapEntrar() {
-        await this.btnEntrar.waitForDisplayed({ timeout: 60000, interval: 2000 })
-        await this.btnEntrar.click()
+        await this.acceptNotifications()
+        await this.waitAndClick(this.btnEntrar)
     }
 
     async fillCpf(cpf: string) {
-        await this.inputCpf.waitForDisplayed({ timeout: 20000 })
-        await this.inputCpf.setValue(cpf)
+        await this.waitAndSetValue(this.inputCpf, cpf)
         await this.hideKeyboard()
     }
 
     async fillSenha(senha: string) {
-        await this.inputSenha.waitForDisplayed({ timeout: 20000 })
-        await this.inputSenha.setValue(senha)
+        await this.waitAndSetValue(this.inputSenha, senha)
         await this.hideKeyboard()
     }
 
     async fillMatricula(matricula: string) {
-        await this.inputMatricula.waitForDisplayed({ timeout: 20000 })
-        await this.inputMatricula.setValue(matricula)
-        await this.hideKeyboard() // Esconde o teclado antes de clicar em Acessar
+        await this.waitAndSetValue(this.inputMatricula, matricula)
+        await this.hideKeyboard() 
         await this.waitAndClick(this.btnAcessar)
     }
 
