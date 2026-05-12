@@ -89,9 +89,7 @@ class ReembolsoIOS extends BaseScreen {
         const btnRadioUser = $(`//XCUIElementTypeStaticText[contains(@value, '${userName}')]/../XCUIElementTypeButton[@label="ic prescription radio unselect"]`)
 
         await this.checkpointScreen('Para quem é o reembolso?')
-        await btnRadioUser.waitForDisplayed()
-        await btnRadioUser.click()
-        // await this.waitAndClick(btnRadioUser)
+        await this.waitAndClick(btnRadioUser)
 
         try { await this.hideKeyboard() } catch (error) { }
         await this.waitAndClick(this.btnConfirmRefund)
@@ -101,10 +99,7 @@ class ReembolsoIOS extends BaseScreen {
         const radioOption = $(`//XCUIElementTypeStaticText[contains(@value, '${reason}')]/../XCUIElementTypeButton[@label="ic prescription radio unselect"]`)
 
         await this.checkpointScreen('Qual é o motivo do reembolso?')
-
-        // await this.waitAndClick(radioOption)
-        await radioOption.waitForDisplayed()
-        await radioOption.click()
+        await this.waitAndClick(radioOption)
         await this.waitAndClick(this.btnConfirmRefund)
     }
 

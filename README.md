@@ -97,7 +97,7 @@ Para facilitar a manutenção, o projeto segue a seguinte estrutura:
 ## Autor e Time de QA
 Este projeto é desenvolvido e mantido pelo time de Qualidade:
 
-Responsável: Eduardo Stegani - [My e-mail](estegani@vidalink.com.br)
+Responsável: Eduardo Stegani - estegani@vidalink.com.br
 
 ### Time de QA:
 

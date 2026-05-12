@@ -31,28 +31,27 @@ export const config = {
 
   afterTest: globalAfterEach,
 
-  capabilities: [
-    {
-      platformName: 'Android',
-      'appium:deviceName': 'emulator-5554',
-      'appium:platformVersion': '16.0',
-      'appium:automationName': 'UiAutomator2',
-      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5_10_1.apk'),
+  capabilities:
+  [{
+    platformName: 'Android',
+    'appium:deviceName': 'emulator-5554',
+    'appium:platformVersion': '16.0',
+    'appium:automationName': 'UiAutomator2',
+    'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5_10_1.apk'),
 
-      'appium:appPackage': 'com.astl.vidalink.beta',
-      'appium:appWaitActivity': '*',
-      'appium:noReset': false,
-      'appium:fullReset': false,
+    'appium:appPackage': 'com.astl.vidalink.beta',
+    'appium:appWaitActivity': '*',
+    'appium:noReset': false,
+    'appium:fullReset': false,
 
-      'appium:autoGrantPermissions': true,
-      'appium:uiautomator2ServerLaunchTimeout': 120000,
-      'appium:autoLaunch': true,
-      'appium:adbExecTimeout': 120000,
-      'appium:newCommandTimeout': 180,
-      'appium:dontStopAppOnReset': true,
-      'appium:noSign': true,
-      'appium:appWaitDuration': 30000,
-      'appium:disableWindowAnimation': true,
-    },
-  ],
+    'appium:autoGrantPermissions': true,
+    'appium:uiautomator2ServerLaunchTimeout': 120000,
+    'appium:autoLaunch': true,
+    'appium:adbExecTimeout': 120000,
+    'appium:newCommandTimeout': 180,
+    'appium:dontStopAppOnReset': true,
+    'appium:noSign': true,
+    'appium:appWaitDuration': 30000,
+    'appium:disableWindowAnimation': true,
+  }],
 } satisfies Options.Testrunner & { capabilities: WebdriverIO.Capabilities[] }

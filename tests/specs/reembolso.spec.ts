@@ -13,7 +13,7 @@ before(async () => {
 
 const performSetup = (user:  {cpf: string; password: string;} ) => {
     beforeEach(async () => {
-        await AppHelper.resetAndLogin(user.cpf, user.password);
+        await AppHelper.login(user.cpf, user.password);
     });
 };
 

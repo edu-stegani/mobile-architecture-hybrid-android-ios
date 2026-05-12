@@ -16,6 +16,10 @@ export default class BaseScreen {
         return $('id:com.astl.vidalink.beta:id/btDeletePicture')
     }
 
+    get btnConfirmPopUp() {
+        return $(`id:com.astl.vidalink.beta:id/btConfirm`)
+    }
+
     // LOCATORS IOS
     get btnDeleteIOS() {
         return $('~ic delete')
@@ -23,6 +27,10 @@ export default class BaseScreen {
 
     get btnDeletePictureIOS() {
         return $('~ic trash')
+    }
+
+    get btnProximoIOS() {
+        return $('//XCUIElementTypeButton[@name="Próximo"]')
     }
 
     // METHODS
@@ -55,7 +63,7 @@ export default class BaseScreen {
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;
-        const startY = size.height * 0.7;
+        const startY = size.height * 0.6;
         const endY = size.height * 0.2;
 
         await driver.performActions([{
@@ -97,31 +105,31 @@ export default class BaseScreen {
         if (driver.isAndroid) {
             return $('android=new UiSelector().descriptionStartsWith("Photo taken on").instance(0)');
         }
-    
+
         // === IOS ===
         const selectorSim = '(//XCUIElementTypeOther[@name="PXZoomablePhotosLayout-Group"]//XCUIElementTypeImage)[1]';
         const selectorBS = '-ios class chain:**/XCUIElementTypeImage[`name BEGINSWITH "Photo"`][1]';
-    
+
         await browser.waitUntil(async () => {
             return (await $(selectorSim).isExisting()) || (await $(selectorBS).isExisting());
         }, { timeout: 15000 });
-    
+
         if (await $(selectorSim).isExisting()) {
             // console.log("Ambiente detectado: Simulador");
             return $(selectorSim);
         }
-    
+
         // console.log("Ambiente detectado: BrowserStack");
         return $(selectorBS);
     }
-    
+
     async addPhoto(imageJPG: string) {
         await this.uploadImageFromProject(imageJPG)
 
         if (await driver.isKeyboardShown()) {
             await driver.back();
         }
-        
+
         const btnAddImageSelector = driver.isIOS
             ? $(`(//XCUIElementTypeTextField/../../..//XCUIElementTypeButton)[2]`)
             : $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);
@@ -150,14 +158,14 @@ export default class BaseScreen {
     }
 
     async waitAndSetValue(element: ChainablePromiseElement, value: string) {
-        await element.waitForDisplayed({timeout: 10000})
+        await element.waitForDisplayed({ timeout: 10000 })
         await element.setValue(value)
     }
 
     async checkpointScreen(textCheckpoint: string) {
         const selector = process.env.PLATFORM === 'ios'
-            ? `//*[@label='${textCheckpoint}']`
-            : `//*[@text='${textCheckpoint}']`;
+            ? `//*[contains(@label, '${textCheckpoint}')]`
+            : `//*[contains(@text, '${textCheckpoint}')]`;
 
         const checkpointText = $(selector);
         await checkpointText.waitForDisplayed({ timeout: 20000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
