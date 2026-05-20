@@ -20,6 +20,10 @@ export default class BaseScreen {
         return $(`id:com.astl.vidalink.beta:id/btConfirm`)
     }
 
+    get tollbar() {
+        return '//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/toolbar"]'
+    }
+
     // LOCATORS IOS
     get btnDeleteIOS() {
         return $('~ic delete')
@@ -49,7 +53,7 @@ export default class BaseScreen {
             const el = await $(selector);
 
             const isVisible = await el.waitUntil(async () => {
-                return (await el.isExisting()) && (await el.isDisplayed());
+                return (await el.isExisting());
             }, { timeout: 1000, interval: 100 }).catch(() => false);
 
             if (isVisible) return;
