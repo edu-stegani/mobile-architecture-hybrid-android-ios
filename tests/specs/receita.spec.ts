@@ -12,7 +12,7 @@ before(async () => {
 })
 
 beforeEach(async () => {
-    await AppHelper.resetAndLogin(user.cpf, user.password);
+    await AppHelper.login(user.cpf, user.password);
 })
 
 describe('cadastrar receitas', () => {

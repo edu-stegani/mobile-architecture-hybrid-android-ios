@@ -69,7 +69,7 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         const inputSearch = this.inputSearch
         await this.waitAndClick(inputSearch)
         await inputSearch.setValue(name)
-        await driver.execute('mobile: pressKey', { keycode: 66 });
+        await driver.execute('mobile: performEditorAction', { action: 'search' });
         try { await driver.hideKeyboard(); } catch (error) { }
     }
 
@@ -80,7 +80,7 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         const discountMedicine = $(`${cardMedicine}${this.discountProduct}`)
         const discountedPrice = $(`${cardMedicine}${this.discountedPrice}`)
         
-        await $(cardMedicine).waitForDisplayed()
+        await $(cardMedicine).waitForDisplayed({ timeout: 10000 })
         await nameMedicine.waitForDisplayed()
         await fullPrice.waitForDisplayed()
         await discountMedicine.waitForDisplayed()
