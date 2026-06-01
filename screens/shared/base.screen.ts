@@ -67,7 +67,7 @@ export default class BaseScreen {
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;
-        const startY = size.height * 0.6;
+        const startY = size.height * 0.5;
         const endY = size.height * 0.2;
 
         await driver.performActions([{

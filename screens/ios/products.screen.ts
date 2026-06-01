@@ -5,77 +5,77 @@ class BuscarMedicamentoIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get inputSearch() {
-        return $(``)
+        return $(`//XCUIElementTypeTextField[@value="Buscar..."]`)
     }
 
     get cardProduct() {
-        return ``
+        return `//XCUIElementTypeTable/XCUIElementTypeCell`
     }
 
     get priceProduct() {
-        return ``
+        return `/XCUIElementTypeStaticText[3]`
     }
 
     get discountProduct() {
-        return ``
+        return `/XCUIElementTypeStaticText[6]`
     }
 
     get discountedPrice() {
-        return ``
+        return `/XCUIElementTypeStaticText[5]`
     }
 
     get filterButton() {
-        return $(``)
+        return $(`//XCUIElementTypeButton[contains(@name, "Ordenado por:")]`)
     }
 
     get optionsFilter() {
-        return $('')
+        return $('//XCUIElementTypeOther/XCUIElementTypeStaticText[@name="Ordenar por"]/../XCUIElementTypeTable')
     }
 
     get cardPharmacy() {
-        return ``
+        return `//XCUIElementTypeTable/XCUIElementTypeCell`
     }
 
     get pharmacyName() {
-        return ``
+        return `/XCUIElementTypeStaticText[1]`
     }
 
     get pharmacyDistance() {
-        return ``
+        return `/XCUIElementTypeStaticText[contains(@name, "Distância:")]`
     }
 
     get priceMax(){
-        return ``
+        return `/XCUIElementTypeStaticText[contains(@name, "Preço máximo:")]`
     }
 
     get priceMin(){
-        return ``
+        return `/XCUIElementTypeStaticText[contains(@name, "A partir de:")]`
     }
 
     get pharmacyViewDetails() {
-        return ``
+        return `/XCUIElementTypeStaticText[@name="Ver detalhes da farmácia"]`
     }
 
     // ======== ACTIONS ========
-    async viewTollbarBuscarMedicamentos() {
-        const tollbarBuscarMedicamento = $(`${this.tollbar}//android.widget.TextView[@text="Buscar medicamentos"]`)
-        await tollbarBuscarMedicamento.waitForDisplayed({ timeout: 10000 })
-    }
-
+    
     // ======== METHODS ========
     async searchProduct(name: string) {
-        await this.viewTollbarBuscarMedicamentos()
+        await this.checkpointScreen('Buscar medicamentos')
 
         const inputSearch = this.inputSearch
         await this.waitAndClick(inputSearch)
         await inputSearch.setValue(name)
-        await driver.execute('mobile: pressKey', { keycode: 66 });
-        try { await driver.hideKeyboard(); } catch (error) { }
+
+        const btnReturnTeclado = await $('~Return');
+        if (await btnReturnTeclado.isExisting()) {
+            await btnReturnTeclado.click();
+        }
+        try { await this.hideKeyboard() } catch (error) { }
     }
 
     async viewProductDetails(index: string, name: string) {
         const cardMedicine = `(${this.cardProduct})[${index}]`
-        const nameMedicine = $(`${cardMedicine}//android.widget.TextView[contains(@text, "${name}")]`)
+        const nameMedicine = $(`${cardMedicine}/XCUIElementTypeStaticText[contains(@name, "${name}")]`)
         const fullPrice = $(`${cardMedicine}${this.priceProduct}`)
         const discountMedicine = $(`${cardMedicine}${this.discountProduct}`)
         const discountedPrice = $(`${cardMedicine}${this.discountedPrice}`)
@@ -92,9 +92,9 @@ class BuscarMedicamentoIOS extends BaseScreen {
         const filter = this.filterButton
         const options = this.optionsFilter
         
-        const selectedOption = $(`//*[contains(@text, "${option}")]`)  
+        const selectedOption = $(`//XCUIElementTypeTable//XCUIElementTypeStaticText[@name="${option}"]`)  
 
-        const firstPharmacy = $(`(${this.cardPharmacy})[1]`)
+        const firstPharmacy = `(${this.cardPharmacy})[1]`
         const pharmacyName = $(`${firstPharmacy}${this.pharmacyName}`)
         const pharmacyDistance = $(`${firstPharmacy}${this.pharmacyDistance}`)
         const pharmacyPriceMax = $(`${firstPharmacy}${this.priceMax}`)
@@ -107,7 +107,7 @@ class BuscarMedicamentoIOS extends BaseScreen {
         await options.waitForDisplayed()
         await this.waitAndClick(selectedOption)
 
-        await firstPharmacy.waitForDisplayed()
+        await $(firstPharmacy).waitForDisplayed()
         await pharmacyName.waitForDisplayed()
         await pharmacyDistance.waitForDisplayed()
         await pharmacyPriceMax.waitForDisplayed()

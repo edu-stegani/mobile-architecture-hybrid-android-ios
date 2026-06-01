@@ -94,13 +94,13 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         
         const selectedOption = $(`//*[contains(@text, "${option}")]`)   //android.widget.TextView
 
-        const firstPharmacy = $(`(${this.cardPharmacy})[1]`)
+        const firstPharmacy = `(${this.cardPharmacy})[1]`
         
-        const pharmacyName = $(`${this.cardPharmacy}${this.pharmacyName}`)
-        const pharmacyDistance = $(`${this.cardPharmacy}${this.pharmacyDistance}`)
-        const pharmacyPriceMax = $(`${this.cardPharmacy}${this.priceMax}`)
-        const pharmacyPriceMin = $(`${this.cardPharmacy}${this.priceMin}`)
-        const pharmacyViewDetails = $(`${this.cardPharmacy}${this.pharmacyViewDetails}`)
+        const pharmacyDistance = $(`${firstPharmacy}${this.pharmacyDistance}`)
+        const pharmacyName = $(`${firstPharmacy}${this.pharmacyName}`)
+        const pharmacyPriceMax = $(`${firstPharmacy}${this.priceMax}`)
+        const pharmacyPriceMin = $(`${firstPharmacy}${this.priceMin}`)
+        const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
 
         await this.waitAndClick($(cardMedicine))
 
@@ -108,7 +108,7 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         await options.waitForDisplayed()
         await this.waitAndClick(selectedOption) 
 
-        await firstPharmacy.waitForDisplayed()
+        await $(firstPharmacy).waitForDisplayed()
         await pharmacyName.waitForDisplayed()
         await pharmacyDistance.waitForDisplayed()
         await pharmacyPriceMax.waitForDisplayed()
