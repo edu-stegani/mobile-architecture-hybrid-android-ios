@@ -57,7 +57,7 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
     capabilities: [{
         'platformName': 'Android',
         'appium:automationName': 'UiAutomator2',
-        'appium:app': 'bs://b36d0594efefdf30ca1015618c5097a46b8e70c8',
+        'appium:app': 'bs://0a854af9746bf449c20379837269eeccd6650306', //v5.10.2
         'appium:appPackage': 'com.astl.vidalink.beta',
         
         'appium:autoGrantPermissions': true,
@@ -68,7 +68,8 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
             projectName: 'QA Mobile TS',
             buildName: buildName,
             debug: true,
-            networkLogs: false
-        }
+            networkLogs: false,
+            'local': true
+        } as any
     }]
 }

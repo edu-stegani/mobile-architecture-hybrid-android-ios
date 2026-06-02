@@ -1,13 +1,17 @@
 import data from '../../support/data/users.json' with { type: 'json' };
 import { AppHelper } from '../../support/utils/appHelper.js'
 import { homeScreen, benefitsScreen, buscarMedicamentoScreen } from '../../screens/index.js'
-import { before } from 'node:test';
 import postgresHelper from '../../support/utils/postgresHelper.js';
 
 const user = data.users.Eduardo
 
 before(async () => {
     await postgresHelper.updatePasswordForStrong(user.cpf)
+
+    await driver.setGeoLocation({
+            latitude: -23.615799,
+            longitude: -46.570010,
+        });
 })
 
 beforeEach(async () => {

@@ -1,6 +1,5 @@
 import type { Options } from '@wdio/types'
 import 'dotenv/config'
-import path from 'node:path'
 import { setBSName, setBSTestAnnotation, setBSTestResult } from '../support/hooks/global.hooks.js'
 
 const buildName = `iOS_Build_${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
@@ -22,7 +21,7 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
   logLevel: 'error',
   services: [
     ['browserstack', {
-      browserstackLocal: false,
+      browserstackLocal: true,
       opts: { verbose: false }
     }]
   ],
@@ -59,7 +58,8 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
       projectName: 'QA Mobile TS',
       buildName: buildName,
       debug: true,
-      networkLogs: false
-    }
+      networkLogs: false,
+      'local': true
+    } as any
   }]
 }

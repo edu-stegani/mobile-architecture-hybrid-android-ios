@@ -44,11 +44,11 @@ class BuscarMedicamentoIOS extends BaseScreen {
         return `/XCUIElementTypeStaticText[contains(@name, "Distância:")]`
     }
 
-    get priceMax(){
+    get priceMax() {
         return `/XCUIElementTypeStaticText[contains(@name, "Preço máximo:")]`
     }
 
-    get priceMin(){
+    get priceMin() {
         return `/XCUIElementTypeStaticText[contains(@name, "A partir de:")]`
     }
 
@@ -57,7 +57,7 @@ class BuscarMedicamentoIOS extends BaseScreen {
     }
 
     // ======== ACTIONS ========
-    
+
     // ======== METHODS ========
     async searchProduct(name: string) {
         await this.checkpointScreen('Buscar medicamentos')
@@ -79,7 +79,7 @@ class BuscarMedicamentoIOS extends BaseScreen {
         const fullPrice = $(`${cardMedicine}${this.priceProduct}`)
         const discountMedicine = $(`${cardMedicine}${this.discountProduct}`)
         const discountedPrice = $(`${cardMedicine}${this.discountedPrice}`)
-        
+
         await $(cardMedicine).waitForDisplayed()
         await nameMedicine.waitForDisplayed()
         await fullPrice.waitForDisplayed()
@@ -91,8 +91,13 @@ class BuscarMedicamentoIOS extends BaseScreen {
         const cardMedicine = `(${this.cardProduct})[1]`
         const filter = this.filterButton
         const options = this.optionsFilter
-        
-        const selectedOption = $(`//XCUIElementTypeTable//XCUIElementTypeStaticText[@name="${option}"]`)  
+
+        let filterText = option;
+        if (driver.isIOS && option === 'Menor Preço') {
+            filterText = 'Menor preço';
+        }
+
+        const selectedOption = $(`//XCUIElementTypeTable//XCUIElementTypeStaticText[@name="${filterText}"]`)
 
         const firstPharmacy = `(${this.cardPharmacy})[1]`
         const pharmacyName = $(`${firstPharmacy}${this.pharmacyName}`)

@@ -80,7 +80,7 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         const discountMedicine = $(`${cardMedicine}${this.discountProduct}`)
         const discountedPrice = $(`${cardMedicine}${this.discountedPrice}`)
         
-        await $(cardMedicine).waitForDisplayed({ timeout: 10000 })
+        await $(cardMedicine).waitForDisplayed({ timeout: 30000 })
         await nameMedicine.waitForDisplayed()
         await fullPrice.waitForDisplayed()
         await discountMedicine.waitForDisplayed()
