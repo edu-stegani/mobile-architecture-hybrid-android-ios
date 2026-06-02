@@ -15,11 +15,11 @@
 
     "test:browserstack:android": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts",
     "test:browserstack:ios": "cross-env PLATFORM=ios npx wdio run config/wdio.ios.browserstack.ts",
-    
-    "temp:local": "cross-env PLATFORM=android npx wdio run config/wdio.android.emulator.ts --spec login",
-    "temp:device": "cross-env PLATFORM=android npx wdio run config/wdio.android.device.ts --spec login",
-    "temp:bstack": "cross-env PLATFORM=ios npx wdio run config/wdio.android.browserstack.ts --spec login",
-    
+
+    "temp:local": "cross-env PLATFORM=android npx wdio run config/wdio.android.emulator.ts --spec produtos",
+    "temp:device": "cross-env PLATFORM=android npx wdio run config/wdio.android.device.ts --spec produtos",
+    "temp:bstack": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts --spec produtos",
+
     "report:generate": "npx allure generate -o allure-report allure-results",
     "report:open": "npx allure open allure-report",
     "report:serve": "npx allure serve allure-results",
@@ -46,6 +46,7 @@
     "appium-device-farm": "^11.3.2",
     "appium-uiautomator2-driver": "^7.0.0",
     "appium-xcuitest-driver": "^10.24.2",
+    "browserstack-local": "^1.5.13",
     "cross-env": "^10.1.0",
     "expect-webdriverio": "^5.6.4",
     "rimraf": "^6.1.3",

@@ -101,7 +101,7 @@ class LoginIOS extends BaseScreen {
     }
 
     async viewMessageError() {
-        await this.checkpointScreen('Quase lá! Ajuste sua senha para prosseguir.')
+        await this.checkpointScreen('Senha incorreta')
     }
 
     async clickForgotPassword() {

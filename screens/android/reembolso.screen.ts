@@ -4,10 +4,6 @@ import BaseScreen from '../shared/base.screen.js'
 class ReembolsoAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
-    get tollbarReembolso() {
-        return $('//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/toolbar"]//android.widget.TextView[@text="Reembolso"]')
-    }
-
     get btnRequestRefund() {
         return $('id:com.astl.vidalink.beta:id/btRequestRefund')
     }
@@ -70,7 +66,7 @@ class ReembolsoAndroid extends BaseScreen {
 
     // ======== ACTIONS ========
     async viewTollbarReembolso() {
-        const tollbarReembolso = this.tollbarReembolso
+        const tollbarReembolso = $(`${this.tollbar}//android.widget.TextView[@text="Reembolso"]`)
         await tollbarReembolso.waitForDisplayed({ timeout: 10000 })
     }
 

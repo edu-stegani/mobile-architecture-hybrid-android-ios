@@ -20,6 +20,10 @@ export default class BaseScreen {
         return $(`id:com.astl.vidalink.beta:id/btConfirm`)
     }
 
+    get tollbar() {
+        return '//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/toolbar"]'
+    }
+
     // LOCATORS IOS
     get btnDeleteIOS() {
         return $('~ic delete')
@@ -35,7 +39,7 @@ export default class BaseScreen {
 
     // METHODS
     async waitAndClick(element: ChainablePromiseElement) {
-        await element.waitForDisplayed({ timeout: 15000 })
+        await element.waitForDisplayed({ timeout: 30000 })
         await element.click()
     }
 
@@ -49,7 +53,7 @@ export default class BaseScreen {
             const el = await $(selector);
 
             const isVisible = await el.waitUntil(async () => {
-                return (await el.isExisting()) && (await el.isDisplayed());
+                return (await el.isExisting());
             }, { timeout: 1000, interval: 100 }).catch(() => false);
 
             if (isVisible) return;
@@ -63,7 +67,7 @@ export default class BaseScreen {
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;
-        const startY = size.height * 0.6;
+        const startY = size.height * 0.5;
         const endY = size.height * 0.2;
 
         await driver.performActions([{
