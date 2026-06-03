@@ -64,6 +64,50 @@ export default class BaseScreen {
         throw new Error(`Elemento não encontrado: ${selector}`);
     }
 
+    async SwipeLeftCoordinates(coordinateY: number) {
+        const size = await driver.getWindowRect();
+
+        const startX = size.width * 0.6;
+        const endX = size.width * 0.1;
+
+        const centerY = coordinateY; // Coordenada Y fixa para o swipe 
+
+        await driver.performActions([{
+            type: 'pointer',
+            id: 'finger1',
+            parameters: { pointerType: 'touch' },
+            actions: [
+                { type: 'pointerMove', duration: 0, x: startX, y: centerY },
+                { type: 'pointerDown', button: 0 },
+                { type: 'pointerMove', duration: 600, origin: 'viewport', x: endX, y: centerY },
+                { type: 'pointerUp', button: 0 }
+            ]
+        }]);
+        await driver.pause(600);
+    }
+
+    async SwipeRightCoordinates(coordinateY: number) {
+        const size = await driver.getWindowRect();
+
+        const startX = size.width * 0.4;
+        const endX = size.width * 0.9;
+
+        const centerY = coordinateY; // Coordenada Y fixa para o swipe 
+
+        await driver.performActions([{
+            type: 'pointer',
+            id: 'finger1',
+            parameters: { pointerType: 'touch' },
+            actions: [
+                { type: 'pointerMove', duration: 0, x: startX, y: centerY },
+                { type: 'pointerDown', button: 0 },
+                { type: 'pointerMove', duration: 600, origin: 'viewport', x: endX, y: centerY },
+                { type: 'pointerUp', button: 0 }
+            ]
+        }]);
+        await driver.pause(600);
+    }
+
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;

@@ -31,6 +31,16 @@
                     "cardNumber": "81000000004502",
                     "miscData": "79271432",
                     "birthdate": "2010-01-01"
+                },
+                {
+                    "fullName": "LEANDRO FERREIRA",
+                    "cpf": "18888776001",
+                    "passwaord": "",
+                    "matricula": "506070",
+                    "CT": "CT001000",
+                    "cardNumber": "81000000004604",
+                    "miscData": "79271436",
+                    "birthdate": "2025-01-01"
                 }
             ]
         }
