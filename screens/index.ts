@@ -5,6 +5,7 @@ import ProfileAndroid from './android/profile.screen.js'
 import BenefitAndroid from './android/benefits.screen.js'
 import ReembolsoAndroid from './android/reembolso.screen.js'
 import BuscarMedicamentoAndroid from './android/products.screen.js'
+import CardAndroid from './android/card.screen.js'
 
 import LoginIOS from './ios/login.screen.js'
 import HomeIOS from './ios/home.screen.js'
@@ -13,6 +14,7 @@ import ProfileIOS from './ios/profile.screen.js'
 import BenefitIOS from './ios/benefits.screen.js'
 import ReembolsoIOS from './ios/reembolso.screen.js'
 import BuscarMedicamentoIOS from './ios/products.screen.js'
+import CardIOS from './ios/card.screen.js'
 
 const platform = process.env.PLATFORM
 
@@ -36,3 +38,6 @@ export const reembolsoScreen =
 
 export const buscarMedicamentoScreen =
   platform === 'ios' ? BuscarMedicamentoIOS : BuscarMedicamentoAndroid
+
+export const cardScreen =
+  platform === 'ios' ? CardIOS : CardAndroid
