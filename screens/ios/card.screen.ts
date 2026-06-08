@@ -32,13 +32,13 @@ class CardIOS extends BaseScreen {
     // ======== METHODS ========
     async navigationAndViewCards(name1: string, name2: string, name3: string) {
         const cardNumber1 = await this.viewCardAndName(name1)
-        await this.SwipeLeftCoordinates(220)
+        await this.SwipeLeftCoordinates(210)
         const cardNumber2 = await this.viewCardAndName(name2)
-        await this.SwipeLeftCoordinates(220)
+        await this.SwipeLeftCoordinates(210)
         const cardNumber3 = await this.viewCardAndName(name3)
 
-        await this.SwipeRightCoordinates(220)
-        await this.SwipeRightCoordinates(220)
+        await this.SwipeRightCoordinates(210)
+        await this.SwipeRightCoordinates(210)
 
         await this.waitAndClick($(this.cardTab))
 

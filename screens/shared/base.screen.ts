@@ -67,7 +67,7 @@ export default class BaseScreen {
     async SwipeLeftCoordinates(coordinateY: number) {
         const size = await driver.getWindowRect();
 
-        const startX = size.width * 0.6;
+        const startX = size.width * 0.8;
         const endX = size.width * 0.1;
 
         const centerY = coordinateY; // Coordenada Y fixa para o swipe 
@@ -79,7 +79,8 @@ export default class BaseScreen {
             actions: [
                 { type: 'pointerMove', duration: 0, x: startX, y: centerY },
                 { type: 'pointerDown', button: 0 },
-                { type: 'pointerMove', duration: 600, origin: 'viewport', x: endX, y: centerY },
+                { type: 'pause', duration: 1000},
+                { type: 'pointerMove', duration: 1000, origin: 'viewport', x: endX, y: centerY },
                 { type: 'pointerUp', button: 0 }
             ]
         }]);
@@ -89,7 +90,7 @@ export default class BaseScreen {
     async SwipeRightCoordinates(coordinateY: number) {
         const size = await driver.getWindowRect();
 
-        const startX = size.width * 0.4;
+        const startX = size.width * 0.2;
         const endX = size.width * 0.9;
 
         const centerY = coordinateY; // Coordenada Y fixa para o swipe 
@@ -101,7 +102,8 @@ export default class BaseScreen {
             actions: [
                 { type: 'pointerMove', duration: 0, x: startX, y: centerY },
                 { type: 'pointerDown', button: 0 },
-                { type: 'pointerMove', duration: 600, origin: 'viewport', x: endX, y: centerY },
+                { type: 'pause', duration: 1000},
+                { type: 'pointerMove', duration: 1000, origin: 'viewport', x: endX, y: centerY },
                 { type: 'pointerUp', button: 0 }
             ]
         }]);
