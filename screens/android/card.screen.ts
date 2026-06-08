@@ -9,7 +9,7 @@ class CardAndroid extends BaseScreen {
     }
 
     get card(){
-        return '//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/clBackground"]'
+        return '//*[@resource-id="com.astl.vidalink.beta:id/clBackground"]'
     }
 
     get cardNumber(){
@@ -22,7 +22,7 @@ class CardAndroid extends BaseScreen {
 
     // ======== ACTIONS ========
     async viewCardAndName(name: string) {
-        const cardName = `${this.card}//android.widget.TextView[contains(@text, "${name}")]`
+        const cardName = `${this.card}/*[contains(@text, "${name}")]`
         await expect($(cardName)).toBeDisplayed()
 
         const cardNumber = `${cardName}/..${this.cardNumber}`
@@ -45,9 +45,9 @@ class CardAndroid extends BaseScreen {
 
         await this.waitAndClick($(this.cardTab))
 
-        const numberCardScreen  = `${this.card}//android.widget.TextView[contains(@text, "${cardNumber1}")]`
-        const numberCardScreen2 = `${this.card}//android.widget.TextView[contains(@text, "${cardNumber2}")]`
-        const numberCardScreen3 = `${this.card}//android.widget.TextView[contains(@text, "${cardNumber3}")]`
+        const numberCardScreen  = `${this.card}//*[contains(@text, "${cardNumber1}")]`
+        const numberCardScreen2 = `${this.card}//*[contains(@text, "${cardNumber2}")]`
+        const numberCardScreen3 = `${this.card}//*[contains(@text, "${cardNumber3}")]`
         
         await expect($(numberCardScreen)).toBeDisplayed()
         await expect($(this.btnCopyNumberCard)).toBeEnabled()
