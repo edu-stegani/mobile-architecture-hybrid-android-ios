@@ -34,14 +34,14 @@ class CardAndroid extends BaseScreen {
     async navigationAndViewCards(name1: string, name2: string, name3: string) {
         const cardNumber1 = await this.viewCardAndName(name1)
 
-        await this.SwipeLeftCoordinates(300)
+        await this.SwipeLeftCoordinates(350)
         const cardNumber2 = await this.viewCardAndName(name2)
         
-        await this.SwipeLeftCoordinates(300)
+        await this.SwipeLeftCoordinates(350)
         const cardNumber3 = await this.viewCardAndName(name3)
 
-        await this.SwipeRightCoordinates(300)
-        await this.SwipeRightCoordinates(300)
+        await this.SwipeRightCoordinates(350)
+        await this.SwipeRightCoordinates(350)
 
         await this.waitAndClick($(this.cardTab))
 
@@ -51,10 +51,10 @@ class CardAndroid extends BaseScreen {
         
         await expect($(numberCardScreen)).toBeDisplayed()
         await expect($(this.btnCopyNumberCard)).toBeEnabled()
-        await this.SwipeLeftCoordinates(300)
+        await this.SwipeLeftCoordinates(350)
 
         await expect($(numberCardScreen2)).toBeDisplayed()
-        await this.SwipeLeftCoordinates(300)
+        await this.SwipeLeftCoordinates(350)
         
         await expect($(numberCardScreen3)).toBeDisplayed()
     }
