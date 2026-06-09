@@ -77,7 +77,7 @@ export default class BaseScreen {
             id: 'finger1',
             parameters: { pointerType: 'touch' },
             actions: [
-                { type: 'pointerMove', duration: 0, x: startX, y: centerY },
+                { type: 'pointerMove', duration: 1000, x: startX, y: centerY },
                 { type: 'pointerDown', button: 0 },
                 { type: 'pause', duration: 1000},
                 { type: 'pointerMove', duration: 1000, origin: 'viewport', x: endX, y: centerY },
