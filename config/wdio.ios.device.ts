@@ -12,6 +12,7 @@ export const config = {
   maxInstances: 1,
   waitforTimeout: 30000,
   waitforInterval: 1000,
+  connectionRetryTimeout: 300000,
   services: ['appium'],
   reporters: [
     'spec',
@@ -39,11 +40,12 @@ export const config = {
       'appium:udid': '00008110-000824E63E86201E',
       'appium:platformVersion': '26.5',
       'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5_10_2.ipa'), 
-      'appium:bundleId': 'com.astl.vidalink.beta', 
+      'appium:bundleId': 'br.com.vidalink.beta', 
       'appium:newCommandTimeout': 240,
       'appium:noReset': true,
       'appium:fullReset': false,
       'appium:autoAcceptAlerts': true, 
-      'appium:updatedWDABundleId': 'com.apple.test.WebDriverAgentRunner-Runner' 
+      'appium:updatedWDABundleId': 'com.estegani.WebDriverAgentRunner',
+      'appium:showXcodeLog': true
     }]
 } satisfies Options.Testrunner & { capabilities: WebdriverIO.Capabilities[] }
