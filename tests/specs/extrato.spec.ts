@@ -27,7 +27,7 @@ describe('Validação de tela em Extrato', () => {
 
 })
 
-describe('Validação de tela em Extrato', () => {
+describe('Validação de tela em Extrato para Usuário Pirelli', () => {
 
     before(async () => {
         // preparando massa no banco

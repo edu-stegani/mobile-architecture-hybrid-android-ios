@@ -20,6 +20,10 @@ class HomeAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/tvGreeting')
     }
 
+    get btnNotShowAgain(){
+        return $('//XCUIElementTypeButton[@name="Não exibir novamente"]')
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
         try {
@@ -31,6 +35,9 @@ class HomeAndroid extends BaseScreen {
     }
 
     async checkHomeIcon() {
+        try { 
+            await this.waitAndClick(this.btnNotShowAgain)
+        } catch(e){ console.log('Aviso de manutenções não visível')}
         await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
     }
 

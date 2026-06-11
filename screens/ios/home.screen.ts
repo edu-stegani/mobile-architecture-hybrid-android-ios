@@ -20,6 +20,10 @@ class HomeIOS extends BaseScreen {
         return $('')
     }
 
+    get btnNotShowAgain(){
+        return $('//XCUIElementTypeButton[@name="Não exibir novamente"]')
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
         try {
@@ -32,6 +36,9 @@ class HomeIOS extends BaseScreen {
 
     async checkHomeIcon() {
         await driver.pause(5000);
+        try { 
+            await this.waitAndClick(this.btnNotShowAgain)
+        } catch(e){ console.log('Aviso de manutenções não visível')}
         await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
     }
 
