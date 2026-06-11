@@ -34,11 +34,15 @@ class HomeIOS extends BaseScreen {
         } catch (e) { }
     }
 
+    async maintenanceNotice(){
+        try { 
+            await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
+            await this.btnNotShowAgain.click()
+        } catch(e){ console.log('Aviso de manutenções não visível')}
+    }
+
     async checkHomeIcon() {
         await driver.pause(5000);
-        try { 
-            await this.waitAndClick(this.btnNotShowAgain)
-        } catch(e){ console.log('Aviso de manutenções não visível')}
         await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
     }
 
@@ -52,6 +56,7 @@ class HomeIOS extends BaseScreen {
         await this.acceptFullAccessGalery()
         await this.acceptPermissionAlertLocation()
         await this.closeTutorial()
+        await this.maintenanceNotice()
         await this.checkHomeIcon()
     }
 

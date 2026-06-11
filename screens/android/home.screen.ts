@@ -31,14 +31,18 @@ class HomeAndroid extends BaseScreen {
             const close = this.closeIcon
             await this.waitAndClick(close)
             await close.waitForDisplayed({ reverse: true, timeout: 10000 })
-        } catch (error) { console.log('Tutorial home não exibido') }
+        } catch (error) { }
+    }
+
+    async maintenanceNotice(){
+        try { 
+            await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
+            await this.btnNotShowAgain.click()
+        } catch(e){ console.log('Aviso de manutenções não visível')}
     }
 
     async checkHomeIcon() {
-        try { 
-            await this.waitAndClick(this.btnNotShowAgain)
-        } catch(e){ console.log('Aviso de manutenções não visível')}
-        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
+        await this.homeTab.waitForDisplayed({ timeout: 120000, interval: 2000 })
     }
 
     async helloUser(firstName: string) {
@@ -51,6 +55,7 @@ class HomeAndroid extends BaseScreen {
     // ======== METHODS ========
     async checkDashboard() {
         await this.closeTutorial()
+        await this.maintenanceNotice()
         await this.checkHomeIcon()
     }
 
