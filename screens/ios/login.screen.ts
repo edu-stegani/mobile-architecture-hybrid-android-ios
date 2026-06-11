@@ -62,6 +62,13 @@ class LoginIOS extends BaseScreen {
         return $('~passwordConfirmationTextFieldTextFieldIdentifier')
     }
 
+    get popUpBiometrics() {
+        return $('~subtitleLabelIdentifier')
+    }
+
+    get btnNao() {
+        return $('~Não')
+    }
     // ======== ACTIONS ========
 
     async tapEntrar() {
@@ -81,7 +88,7 @@ class LoginIOS extends BaseScreen {
 
     async fillMatricula(matricula: string) {
         await this.waitAndSetValue(this.inputMatricula, matricula)
-        await this.hideKeyboard() 
+        await this.hideKeyboard()
         await this.waitAndClick(this.btnAcessar)
     }
 
@@ -91,6 +98,14 @@ class LoginIOS extends BaseScreen {
         await this.hideKeyboard()
     }
 
+    async refuseBiometrics() {
+        const popUpBiometrics = this.popUpBiometrics
+        const btnNao = this.btnNao
+
+        await popUpBiometrics.waitForDisplayed({ timeout: 10000, interval: 1000 })
+        await this.waitAndClick(btnNao)
+    }
+
     // ======== METHODS ========
 
     async login(cpf: string, senha: string) {
@@ -98,6 +113,7 @@ class LoginIOS extends BaseScreen {
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
         await this.waitAndClick(this.btnAcessar)
+        await this.refuseBiometrics()
     }
 
     async viewMessageError() {

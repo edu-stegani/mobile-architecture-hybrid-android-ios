@@ -61,6 +61,14 @@ class LoginAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/etSecondField')
     }
 
+    get popUpBiometrics(){
+        return $('subtitleLabelIdentifier')
+    }
+
+    get btnNao(){
+        return $('Não')
+    }
+
     // ======== ACTIONS ========
     async tapEntrar() {
         await this.waitAndClick(this.btnEntrar)
@@ -89,12 +97,21 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndSetValue(inputDateBirth, dateOfBirth)
     }
 
+    async refuseBiometrics(){
+        const popUpBiometrics = this.popUpBiometrics
+        const btnNao = this.btnNao
+
+        await popUpBiometrics.waitForDisplayed({timeout: 10000, interval: 1000})
+        await this.waitAndClick(btnNao)
+    }
+
     // ======== METHODS ========
     async login(cpf: string, senha: string) {
         await this.tapEntrar()
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
         await this.waitAndClick(this.btnAcessar)
+        await this.refuseBiometrics()
     }
 
     async viewMessageError() {
