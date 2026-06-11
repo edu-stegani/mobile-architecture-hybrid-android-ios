@@ -111,7 +111,7 @@ class LoginAndroid extends BaseScreen {
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
         await this.waitAndClick(this.btnAcessar)
-        await this.refuseBiometrics()
+        try { await this.refuseBiometrics()} catch(e) { }
     }
 
     async viewMessageError() {

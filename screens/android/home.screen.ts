@@ -42,7 +42,7 @@ class HomeAndroid extends BaseScreen {
     }
 
     async checkHomeIcon() {
-        await this.homeTab.waitForDisplayed({ timeout: 120000, interval: 2000 })
+        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
     }
 
     async helloUser(firstName: string) {

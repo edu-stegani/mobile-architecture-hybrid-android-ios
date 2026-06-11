@@ -56,11 +56,13 @@ class ExtratoAndroid extends BaseScreen {
         await ultimosMeses.waitForDisplayed({ interval: 1000 })
         await expect(valorEconomizado).toBeDisplayed({ interval: 1000 })
         await expect($(cardReport)).toBeDisplayed({ interval: 1000 })
-        await expect($(cardReportAndName)).toBeDisplayed({ interval: 1000 })
 
         try {
             await dashboardSubsidyBalance.waitForDisplayed({ timeout: 10000, interval: 1000 })
         } catch (e) { console.log('Dashboard saldo subsídio não visível, massa CT Pirelli.') }
+
+        await this.SwipeLeftCoordinates(500)
+        await expect($(cardReportAndName)).toBeDisplayed({ interval: 1000 })
     }
 
     async seePurchases() {
