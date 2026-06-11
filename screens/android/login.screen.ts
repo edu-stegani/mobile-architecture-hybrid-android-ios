@@ -62,11 +62,11 @@ class LoginAndroid extends BaseScreen {
     }
 
     get popUpBiometrics(){
-        return $('subtitleLabelIdentifier')
+        return $('id:com.astl.vidalink.beta:id/tvMessage')
     }
 
     get btnNao(){
-        return $('Não')
+        return $('id:com.astl.vidalink.beta:id/btDecline')
     }
 
     // ======== ACTIONS ========
