@@ -39,7 +39,7 @@ export default class BaseScreen {
 
     // METHODS
     async waitAndClick(element: ChainablePromiseElement) {
-        await element.waitForDisplayed({ timeout: 30000 })
+        await element.waitForDisplayed({ timeout: 10000 })
         await element.click()
     }
 

@@ -20,6 +20,10 @@ class HomeAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/tvGreeting')
     }
 
+    get btnNotShowAgain(){
+        return $('//XCUIElementTypeButton[@name="Não exibir novamente"]')
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
         try {
@@ -27,7 +31,14 @@ class HomeAndroid extends BaseScreen {
             const close = this.closeIcon
             await this.waitAndClick(close)
             await close.waitForDisplayed({ reverse: true, timeout: 10000 })
-        } catch (error) { console.log('Tutorial home não exibido') }
+        } catch (error) { }
+    }
+
+    async maintenanceNotice(){
+        try { 
+            await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
+            await this.btnNotShowAgain.click()
+        } catch(e){ console.log('Aviso de manutenções não visível')}
     }
 
     async checkHomeIcon() {
@@ -44,6 +55,7 @@ class HomeAndroid extends BaseScreen {
     // ======== METHODS ========
     async checkDashboard() {
         await this.closeTutorial()
+        await this.maintenanceNotice()
         await this.checkHomeIcon()
     }
 

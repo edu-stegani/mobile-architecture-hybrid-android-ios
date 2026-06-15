@@ -20,6 +20,10 @@ class HomeIOS extends BaseScreen {
         return $('')
     }
 
+    get btnNotShowAgain(){
+        return $('//XCUIElementTypeButton[@name="Não exibir novamente"]')
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
         try {
@@ -28,6 +32,13 @@ class HomeIOS extends BaseScreen {
             await this.waitAndClick(close)
             await close.waitForDisplayed({ reverse: true, timeout: 10000 });
         } catch (e) { }
+    }
+
+    async maintenanceNotice(){
+        try { 
+            await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
+            await this.btnNotShowAgain.click()
+        } catch(e){ console.log('Aviso de manutenções não visível')}
     }
 
     async checkHomeIcon() {
@@ -45,6 +56,7 @@ class HomeIOS extends BaseScreen {
         await this.acceptFullAccessGalery()
         await this.acceptPermissionAlertLocation()
         await this.closeTutorial()
+        await this.maintenanceNotice()
         await this.checkHomeIcon()
     }
 
