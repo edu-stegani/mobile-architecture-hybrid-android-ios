@@ -5,10 +5,10 @@ class DbHelper {
 
     constructor() {
         this.pool = new Pool({
-            user: 'postgres',
-            host: 'login-psql-dev.vidalink.com.br',
+            user: 'app_login',
+            host: '10.114.0.42',
             database: 'postgres',
-            password: 'pS8WrFMkeyXK',
+            password: 'LoginAppDB03',
             port: 5432,
         });
     }
