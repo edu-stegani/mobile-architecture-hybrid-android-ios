@@ -22,8 +22,7 @@ describe('Realizar logout', () => {
     })
 
     it('Navegação na tela perfil e validação das opções', async () => {
-        await profileScreen.waitAndClick(profileScreen.perfilTab)
-        
+        await profileScreen.navigateMenuProfile(user.clientGroup)
     })
 
 })
