@@ -20,25 +20,31 @@ class HomeAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/tvGreeting')
     }
 
-    get btnNotShowAgain(){
+    get btnNotShowAgain() {
         return $('//XCUIElementTypeButton[@name="Não exibir novamente"]')
+    }
+
+    get btnNoThanks() {
+        return $('id:com.astl.vidalink.beta:id/btDisagree')
     }
 
     // ======== ACTIONS ========
     async closeTutorial() {
-        try {
-            await this.btnPular.waitForDisplayed({ timeout: 20000 })
-            const close = this.closeIcon
-            await this.waitAndClick(close)
-            await close.waitForDisplayed({ reverse: true, timeout: 10000 })
-        } catch (error) { }
+        await this.btnPular.waitForDisplayed({ timeout: 20000 })
+        const close = this.closeIcon
+        await this.waitAndClick(close)
+        await close.waitForDisplayed({ reverse: true, timeout: 10000 })
     }
 
-    async maintenanceNotice(){
-        try { 
-            await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
-            await this.btnNotShowAgain.click()
-        } catch(e){ console.log('Aviso de manutenções não visível')}
+    async maintenanceNotice() {
+        await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
+        await this.btnNotShowAgain.click()
+    }
+
+    async HowAboutEvaluatingUs() {
+        const btnNoThanks = this.btnNoThanks
+        await this.checkpointScreen('Que tal avaliar nosso aplicativo?')
+        await this.waitAndClick(btnNoThanks)
     }
 
     async checkHomeIcon() {
@@ -54,8 +60,9 @@ class HomeAndroid extends BaseScreen {
 
     // ======== METHODS ========
     async checkDashboard() {
-        await this.closeTutorial()
-        await this.maintenanceNotice()
+        try { await this.closeTutorial() } catch(e){ }
+        try { await this.maintenanceNotice() } catch (e) { console.log('Aviso de manutenções não visível') }
+        try { await this.HowAboutEvaluatingUs() } catch (e) { console.log('Solicitação de avaliação não visível.') }
         await this.checkHomeIcon()
     }
 
