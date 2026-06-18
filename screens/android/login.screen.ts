@@ -69,6 +69,10 @@ class LoginAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/btDecline')
     }
 
+    get checkboxKeepConnected(){
+        return $('id:com.astl.vidalink.beta:id/cbNewLogin')
+    }
+
     // ======== ACTIONS ========
     async tapEntrar() {
         await this.waitAndClick(this.btnEntrar)
@@ -110,6 +114,16 @@ class LoginAndroid extends BaseScreen {
         await this.tapEntrar()
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
+        await this.waitAndClick(this.btnAcessar)
+        try { await this.refuseBiometrics()} catch(e) { }
+    }
+
+    async loginKeepConnected(cpf: string, senha: string) {
+        const checkboxManterConectado = this.checkboxKeepConnected
+        await this.tapEntrar()
+        await this.fillCpf(cpf)
+        await this.fillSenha(senha)
+        await this.waitAndClick(checkboxManterConectado)
         await this.waitAndClick(this.btnAcessar)
         try { await this.refuseBiometrics()} catch(e) { }
     }

@@ -69,6 +69,11 @@ class LoginIOS extends BaseScreen {
     get btnNao() {
         return $('~Não')
     }
+
+    get checkboxKeepConnected(){
+        return $('')
+    }
+
     // ======== ACTIONS ========
 
     async tapEntrar() {
@@ -112,6 +117,16 @@ class LoginIOS extends BaseScreen {
         await this.tapEntrar()
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
+        await this.waitAndClick(this.btnAcessar)
+        try { await this.refuseBiometrics()} catch(e) { }
+    }
+
+    async loginKeepConnected(cpf: string, senha: string) {
+        const checkboxManterConectado = this.checkboxKeepConnected
+        await this.tapEntrar()
+        await this.fillCpf(cpf)
+        await this.fillSenha(senha)
+        await this.waitAndClick(checkboxManterConectado)
         await this.waitAndClick(this.btnAcessar)
         try { await this.refuseBiometrics()} catch(e) { }
     }
