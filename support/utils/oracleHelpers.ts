@@ -1,5 +1,13 @@
 import oracledb from 'oracledb'
 
+try {
+  oracledb.initOracleClient({ libDir: 'C:\\oracle\\instantclient_21_22' });
+} catch (err: any) {
+  if (!err.message.includes('NJS-102')) { 
+    console.error('Erro ao inicializar o Oracle Client:', err);
+  }
+}
+
 class OracleHelper {
   async executeQuery(query: string, params: any[] = []) {
     let connection: oracledb.Connection | undefined

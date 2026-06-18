@@ -218,7 +218,7 @@ export default class BaseScreen {
             : `//*[contains(@text, '${textCheckpoint}')]`;
 
         const checkpointText = $(selector);
-        await checkpointText.waitForDisplayed({ timeout: 20000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
+        await checkpointText.waitForDisplayed({ timeout: 10000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
     }
 
     async back() {
