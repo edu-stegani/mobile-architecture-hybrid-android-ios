@@ -8,17 +8,20 @@ const user = data.users.William
 
 before(async () => {
     await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+    await postgresHelper.updatePasswordForStrong(user.cpf)
     await oracleHelpers.acceptTermAndConditions(user.cpf)
-})
-
-beforeEach(async () => {
-    await AppHelper.login(user.cpf, user.password);
 })
 
 describe('Validar cartões titular e dependentes: ', () => {
 
     it('valida cartões na tela Home e Cartão', async () => {
-        await cardScreen.navigationAndViewCards(user.fullName, user.dependents[0].fullName, user.dependents[1].fullName)
+        await AppHelper.login(user.cpf, user.password);
+        await cardScreen.validateInfoCardsOnHomeAndCardScreen(user.fullName, user.dependents[0].fullName, user.dependents[1].fullName)
+    })
+
+    it('validar cartões após fechar e reabrir app', async() => {
+        await AppHelper.loginKeepConnected(user.cpf, user.password)
+        await cardScreen.validateCardsAfterClose(user.fullName, user.dependents[0].fullName, user.dependents[1].fullName) 
     })
 
 })
