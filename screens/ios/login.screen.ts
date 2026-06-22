@@ -71,7 +71,7 @@ class LoginIOS extends BaseScreen {
     }
 
     get checkboxKeepConnected(){
-        return $('')
+        return $('~keepMeConnectedButtonIdentifier')
     }
 
     // ======== ACTIONS ========

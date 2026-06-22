@@ -21,63 +21,55 @@ class ProfileIOS extends BaseScreen {
     }
 
     get optionsProfile(){
-        return ''
+        return '//XCUIElementTypeCollectionView'
     }
 
     get boxEmail(){
-        return $('')
+        return $('~Opção E-mail')
     }
 
     get boxPhone(){
-        return $('')
+        return $('~Opção Número de telefone')
     }
 
     get messageMyData(){
-        return $('')
-    }
-
-    get iconBackTollbar(){
-        return $('')
-    }
-
-    get myPlans(){
-        return ``
+        return $('//XCUIElementTypeCell[@name="Opção "]')
     }
 
     get btnResetPassword(){
-        return $('')
+        return $('//XCUIElementTypeCell[@name="Opção Alterar senha de acesso"]')
     }
 
     get containerWhatsapp(){
-        return $('')
+        return $('~whatsApp')
     }
 
     get containerTelephoneSP(){
-        return $('')
+        return $('~phone_number')
     }
 
     get iconCopyNumber(){
-        return $('')
+        return $('(//XCUIElementTypeImage[@name="copy_fill"])[1]')
     }
 
     get containerOtherRegions(){
-        return $('')
+        return $('~Opção Demais regiões')
     }
 
     get iconCopyOtherRegions(){
-        return $('')
+        return $('(//XCUIElementTypeImage[@name="copy_fill"])[2]')
     }
 
     get containerEmail(){
-        return $('')
+        return $('~email_profile')
     }
 
     get containerDelete(){
-        return $('')
+        return $('~pr-logout')
     }
 
     get containerTerms(){
-        return $('')
+        return $('~term-use-profile')
     }
 
     // ======== ACTIONS ========
@@ -92,8 +84,8 @@ class ProfileIOS extends BaseScreen {
     }
 
     async selectOptionProfileByName(name: string) {
-        const optionProfile = `${this.optionsProfile}//*[contains(@text, "${name}")]`
-        const titleTollbarOption = `${this.tollbar}/../*[contains(@text, "${name}")]`
+        const optionProfile = `${this.optionsProfile}//XCUIElementTypeCell[contains(@name, "${name}")]`
+        const titleTollbarOption = `//XCUIElementTypeOther[@name="Titulo da tela ${name}"]`
 
         await this.waitAndClick($(optionProfile))
         await $(titleTollbarOption).waitForDisplayed({ interval: 1000 })
@@ -108,15 +100,18 @@ class ProfileIOS extends BaseScreen {
         await boxEmail.waitForDisplayed({interval:1000})
         await boxPhone.waitForDisplayed({interval:1000})
         await message.waitForDisplayed({interval:1000})
-        await this.iconBackTollbar.click()
+        await this.back()
     }
 
     async validateMyPlan(myPlan: string){
-        const plan = `${this.myPlans}//*[contains(@text, "${myPlan}")]`
+        const plan = `//*[contains(@name, "${myPlan}")]`
 
-        await this.selectOptionProfileByName('Meus Planos')
-        await $(plan).waitForDisplayed({interval:1000})
-        await this.iconBackTollbar.click()
+        const meusPlanos = process.env.PLATFORM === 'ios'
+            ? `Meus planos`
+            : `Meus Planos`;
+        await this.selectOptionProfileByName(`${meusPlanos}`)
+        await $(plan).waitForDisplayed({interval:2000})
+        await this.back()
     }
 
     async validateSecurity(){
@@ -124,7 +119,7 @@ class ProfileIOS extends BaseScreen {
 
         await this.selectOptionProfileByName('Segurança')
         await btnAlterarSenha.waitForDisplayed({interval:1000})
-        await this.iconBackTollbar.click()
+        await this.back()
     }
 
     async validateTalkToUs(){
@@ -142,7 +137,7 @@ class ProfileIOS extends BaseScreen {
         await otherRegions.waitForDisplayed()
         await this.waitAndClick(copyOtherRegions)
         await emailSuporte.waitForDisplayed()
-        await this.iconBackTollbar.click()
+        await this.back()
     }
 
     async validateManageApp(){

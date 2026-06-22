@@ -33,14 +33,14 @@ class CardIOS extends BaseScreen {
     async captureCardsNumbersOnHome(name1: string, name2: string, name3: string) {
         const cardNumber1 = await this.viewCardAndName(name1) as string;
 
-        await this.SwipeLeftCoordinates(350);
+        await this.SwipeLeftCoordinates(210);
         const cardNumber2 = await this.viewCardAndName(name2) as string;
 
-        await this.SwipeLeftCoordinates(350);
+        await this.SwipeLeftCoordinates(210);
         const cardNumber3 = await this.viewCardAndName(name3) as string;
 
-        await this.SwipeRightCoordinates(350);
-        await this.SwipeRightCoordinates(350);
+        await this.SwipeRightCoordinates(210);
+        await this.SwipeRightCoordinates(210);
 
         return { cardNumber1, cardNumber2, cardNumber3 };
     }
