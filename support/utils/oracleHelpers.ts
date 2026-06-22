@@ -1,10 +1,17 @@
-import oracledb from 'oracledb'
+import oracledb from 'oracledb';
+import os from 'os';
 
 try {
-  oracledb.initOracleClient({ libDir: 'C:\\oracle\\instantclient_21_22' });
+  if (os.platform() === 'win32') {
+    // Windows precisa do caminho explícito
+    oracledb.initOracleClient({ libDir: 'C:\\oracle\\instantclient_21_22' });
+  } else {
+    // macOS e Linux buscam o client automaticamente do sistema
+    oracledb.initOracleClient();
+  }
 } catch (err: any) {
-  if (!err.message.includes('NJS-102')) { 
-    console.error('Erro ao inicializar o Oracle Client:', err);
+  if (!err.message.includes('NJS-102')) {
+    console.error('LOG_ORACLE_ERRO:', err.message);
   }
 }
 
