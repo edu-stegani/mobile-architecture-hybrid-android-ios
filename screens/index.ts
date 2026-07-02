@@ -7,6 +7,7 @@ import ReembolsoAndroid from './android/reembolso.screen.js'
 import BuscarMedicamentoAndroid from './android/products.screen.js'
 import CardAndroid from './android/card.screen.js'
 import ExtratoAndroid from './android/extrato.screen.js'
+import RedeCredenciadaAndroid from './android/redeCredenciada.screen.js'
 
 import LoginIOS from './ios/login.screen.js'
 import HomeIOS from './ios/home.screen.js'
@@ -17,6 +18,7 @@ import ReembolsoIOS from './ios/reembolso.screen.js'
 import BuscarMedicamentoIOS from './ios/products.screen.js'
 import CardIOS from './ios/card.screen.js'
 import ExtratoIOS from './ios/extrato.screen.js'
+import RedeCredenciadaIOS from './ios/redeCredenciada.screen.js'
 
 const platform = process.env.PLATFORM
 
@@ -46,3 +48,6 @@ export const cardScreen =
 
 export const extratoScreen =
   platform === 'ios' ? ExtratoIOS : ExtratoAndroid
+
+export const redeCredenciadaScreen =
+  platform === 'ios' ? RedeCredenciadaIOS : RedeCredenciadaAndroid
