@@ -37,7 +37,7 @@ export const config = {
       'appium:automationName': 'UiAutomator2',
       'appium:deviceName': 'Galaxy_S25',
       'appium:udid': 'RQGL209A1AA',
-      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5_10_1.apk'),
+      'appium:app': path.join(process.cwd(), 'app', 'Vidalink-betaDebug-5_10_5.apk'),
       'appium:appPackage': 'com.astl.vidalink.beta',
       'appium:appWaitActivity': '*',
       'appium:appWaitDuration': 30000,
