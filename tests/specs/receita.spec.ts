@@ -3,12 +3,14 @@ import { homeScreen, receitaScreen, benefitsScreen } from '../../screens/index.j
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
 import { flowSendRecipe } from '../../support/utils/apiHelpers.js'
 import { AppHelper } from '../../support/utils/appHelper.js'
+import postgresHelper from '../../support/utils/postgresHelper.js'
 
 const user = data.users.Eduardo;
 
 before(async () => {
     await flowSendRecipe(user);
     await oracleHelpers.acceptTermAndConditions(user.cpf)
+    await postgresHelper.removeLinkTutorialWithCT('20', user.CT)
 })
 
 beforeEach(async () => {
