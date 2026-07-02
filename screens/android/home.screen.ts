@@ -60,9 +60,9 @@ class HomeAndroid extends BaseScreen {
 
     // ======== METHODS ========
     async checkDashboard() {
-        try { await this.closeTutorial() } catch(e){ }
-        try { await this.maintenanceNotice() } catch (e) { console.log('Aviso de manutenções não visível') }
-        try { await this.HowAboutEvaluatingUs() } catch (e) { console.log('Solicitação de avaliação não visível.') }
+        // try { await this.closeTutorial() } catch(e){ }
+        // try { await this.maintenanceNotice() } catch (e) { console.log('Aviso de manutenções não visível') }
+        // try { await this.HowAboutEvaluatingUs() } catch (e) { console.log('Solicitação de avaliação não visível.') }
         await this.checkHomeIcon()
     }
 
