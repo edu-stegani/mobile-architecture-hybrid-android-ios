@@ -15,6 +15,10 @@ class RedeCredenciadaIOS extends BaseScreen {
         return $('//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/nav_tab"]/*[contains(@text, "Manipulados")]')
     }
 
+    get vaccine() {
+        return $('//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/nav_tab"]/*[contains(@text, "Vacinas")]')
+    }
+
     get iconChangeSearch() {
         return $('id:com.astl.vidalink.beta:id/ivChangeSearchType')
     }
@@ -79,9 +83,14 @@ class RedeCredenciadaIOS extends BaseScreen {
         await this.viewScreenRedeCredenciada()
         await this.waitAndClick(this.iconChangeSearch)
         await this.viewListStores()
+        
         await this.waitAndClick(this.manipulation)
-        await this.increaseSearchRadius()
         await this.viewListStores()
+
+        if (await this.vaccine.isExisting()) {
+            await this.waitAndClick(this.vaccine)
+            await this.viewListStores()
+        }
     }
 
 }

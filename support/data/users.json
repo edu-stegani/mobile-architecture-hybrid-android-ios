@@ -77,7 +77,7 @@
                 }
             ]
         },
-         "Isis": {
+        "Isis": {
             "fullName": "ISIS MOURA LEITE",
             "cpf": "41184422800",
             "password": "A1234567",
@@ -110,6 +110,29 @@
             "miscData": "77230873",
             "birthdate": "16-07-1972",
             "clientGroup": "PIRELLI"
+        },
+        "Roberto": {
+            "fullName": "ROBERTO CANTON",
+            "cpf": "39062392849",
+            "password": "A1234567",
+            "matricula": "10246299",
+            "CT": "CT000691",
+            "cardNumber": "80691009079706",
+            "miscData": "65077840",
+            "birthdate": "06-10-1951",
+            "clientGroup": "NESTLE",
+            "dependents": [
+                {
+                    "fullName": "MARIA DAS GRACAS VILLACA CANTON",
+                    "cpf": "30954789768",
+                    "password": "",
+                    "matricula": "10246299",
+                    "CT": "CT000691",
+                    "cardNumber": "80691009079808",
+                    "miscData": "65077841",
+                    "birthdate": "16-05-1952"
+                }
+            ]
         }
     }
 }

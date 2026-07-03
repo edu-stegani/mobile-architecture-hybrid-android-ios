@@ -4,27 +4,46 @@ import postgresHelper from '../../support/utils/postgresHelper.js'
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
 import { AppHelper } from '../../support/utils/appHelper.js'
 
-const user = data.users.Eduardo
+const userVidalink = data.users.Eduardo
+const userNestle = data.users.Roberto
 
 before(async () => {
-    await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
-    await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
-    await oracleHelpers.acceptTermAndConditions(user.cpf)
-
     await driver.setGeoLocation({
         latitude: -23.615799,
         longitude: -46.570010,
     });
 })
 
-beforeEach(async () => {
-    await AppHelper.login(user.cpf, user.password);
+const performSetup = (user: { cpf: string; password: string; CT: string }) => {
+    beforeEach(async () => {
+        await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+        await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
+        await oracleHelpers.acceptTermAndConditions(user.cpf)
+
+        await AppHelper.login(user.cpf, user.password);
+    });
+};
+
+describe('Navegar por Rede Credenciada - Farmácias e Manipulados', () => {
+    performSetup(userVidalink)
+
+    it('Navegar por Rede Credenciada - Farmácias e Manipulados', async () => {
+        performSetup(userVidalink)
+        await homeScreen.tapPilarByName('Med')
+        await benefitsScreen.clickLinkByText('Rede Credenciada')
+        await redeCredenciadaScreen.navigateToRedeCredenciada()
+    })
+
 })
 
-it('Navegar pela funcionalidade Rede Credenciada - Farmácias', async () => {
+describe('Navegar por Rede Credenciada Nestle - Farmácias, Vacinas e Manipulados', () => {
+    performSetup(userNestle)
 
-    await homeScreen.tapPilarByName('Med')
-    await benefitsScreen.clickLinkByText('Rede Credenciada')
-    await redeCredenciadaScreen.navigateToRedeCredenciada()
-
+    it('Navegar por Rede Credenciada Nestle - Farmácias, Vacinas e Manipulados', async () => {
+        await homeScreen.tapPilarByName('Med')
+        await benefitsScreen.clickLinkByText('Rede Credenciada')
+        await redeCredenciadaScreen.navigateToRedeCredenciada()
+    })
 })
+
+
