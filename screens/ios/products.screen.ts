@@ -1,7 +1,7 @@
 import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
 
-class BuscarMedicamentoIOS extends BaseScreen {
+class ProdutosIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get inputSearch() {
@@ -122,4 +122,4 @@ class BuscarMedicamentoIOS extends BaseScreen {
 
 }
 
-export default new BuscarMedicamentoIOS()
+export default new ProdutosIOS()
