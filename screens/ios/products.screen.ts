@@ -56,6 +56,22 @@ class ProdutosIOS extends BaseScreen {
         return `/XCUIElementTypeStaticText[@name="Ver detalhes da farmácia"]`
     }
 
+    get pharmacyNameRoute() {
+        return $('id:com.astl.vidalink.beta:id/tvName')
+    }
+
+    get pharmacyAddressRoute() {
+        return $('id:com.astl.vidalink.beta:id/tvAddress')
+    }
+
+    get btnRoute() {
+        return $('//android.widget.Button[@text="Traçar Rota"]')
+    }
+
+    get placeCard() {
+        return `//*[@resource-id="com.google.android.apps.maps:id/business_place_card"]`
+    }
+
     // ======== ACTIONS ========
 
     // ======== METHODS ========
@@ -119,6 +135,50 @@ class ProdutosIOS extends BaseScreen {
         await pharmacyPriceMin.waitForDisplayed()
         await pharmacyViewDetails.waitForDisplayed()
     }
+
+    async selectTheFirstPharmacy() {
+        const medicineCard = $(`(${this.cardProduct})[1]`)
+        const firstPharmacy = `(${this.cardPharmacy})[1]`
+        const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
+
+        await medicineCard.waitForDisplayed({ timeout: 30000 })
+        await medicineCard.click()
+        await $(firstPharmacy).waitForDisplayed()
+        await pharmacyViewDetails.waitForDisplayed()
+        await this.waitAndClick(pharmacyViewDetails)
+    }
+
+    async traceRouteToPharmacy() {
+        const pharmacyName = this.pharmacyNameRoute
+        const pharmacyAddress = this.pharmacyAddressRoute
+        const btnRoute = this.btnRoute
+
+        await pharmacyName.waitForDisplayed({ timeout: 10000 })
+        await pharmacyAddress.waitForDisplayed({ timeout: 10000 })
+
+
+        const addressPharmacy = await pharmacyAddress.getText()     // Pega o endereço completo da farmácia.
+        const rawAddress = addressPharmacy.split('-')[0].trim();    // pega apenas a parte antes do hifen, endereço e numero.
+        const addressWithComma = rawAddress.replace(/(\s)(\d+)/, ', $2');    // Coloca uma vírgula antes do número 
+
+        // transformar em Title Case (Primeira Letra Maiúscula)
+        const toTitleCase = (str: string) => {
+            return str
+                .toLowerCase()
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        };
+        const justAdress = toTitleCase(addressWithComma);
+        
+        await this.waitAndClick(btnRoute)
+
+        await $(this.placeCard).waitForDisplayed({ timeout: 50000 })
+
+        const namePLaceCard = `${this.placeCard}//*[contains(@text, "${justAdress}")]`
+        await $(namePLaceCard).waitForDisplayed({ timeout: 10000 })
+    }
+
 
 }
 
