@@ -77,6 +77,26 @@ class CardAndroid extends BaseScreen {
         await this.validateCardsOnCardScreen(cardnumbers)
     }
 
+    async validateCardsMultiplePlans(name: string, ct1: string, ct2: string) {
+        const cardName = `${this.card}/*[contains(@text, "${name}")]`
+        await expect($(cardName)).toBeDisplayed()
+
+        const cardPlan1 = `${cardName}/..//*[contains(@text, "${ct1}")]`
+        await expect($(cardPlan1)).toBeDisplayed()
+
+        const cardPlan2 = `${cardName}/..//*[contains(@text, "${ct2}")]`
+        const maxSwipes = 5
+        for (let swipe = 0; swipe < maxSwipes; swipe++) {
+            const cardPlan2Element = await $(cardPlan2)
+            if (await cardPlan2Element.isDisplayed()) {
+                break
+            }
+            await this.SwipeLeftCoordinates(350)
+        }
+
+        await expect($(cardPlan2)).toBeDisplayed()
+    }
+
 }
 
 export default new CardAndroid()
