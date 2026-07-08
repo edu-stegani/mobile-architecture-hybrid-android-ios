@@ -55,7 +55,7 @@ describe('Traçar rota de rede credenciada através de busca de produtos', () =>
         await benefitsScreen.clickLinkByText('Produtos')
         await produtosScreen.searchProduct('DIPIRONA')
         await produtosScreen.selectTheFirstPharmacy()
-        await produtosScreen.traceRouteToPharmacy()
+        await redeCredenciadaScreen.traceRouteToPharmacy(produtosScreen.pharmacyAddressRoute)
     })
 
 })

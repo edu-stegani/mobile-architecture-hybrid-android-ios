@@ -24,6 +24,14 @@ export default class BaseScreen {
         return '//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/toolbar"]'
     }
 
+    get btnSkipAndroid() {
+        return $('//android.widget.Button[@text="SKIP"]')
+    }
+
+    get placeCardAndroid() {
+        return `//*[@resource-id="com.google.android.apps.maps:id/business_place_card"]`
+    }
+
     // LOCATORS IOS
     get btnDeleteIOS() {
         return $('~ic delete')

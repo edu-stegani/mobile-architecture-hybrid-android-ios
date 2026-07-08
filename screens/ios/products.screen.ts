@@ -72,6 +72,10 @@ class ProdutosIOS extends BaseScreen {
         return `//*[@resource-id="com.google.android.apps.maps:id/business_place_card"]`
     }
 
+    get btnSkip() {
+        return $('//android.widget.Button[@text="SKIP"]')
+    }
+
     // ======== ACTIONS ========
 
     // ======== METHODS ========
@@ -147,38 +151,6 @@ class ProdutosIOS extends BaseScreen {
         await pharmacyViewDetails.waitForDisplayed()
         await this.waitAndClick(pharmacyViewDetails)
     }
-
-    async traceRouteToPharmacy() {
-        const pharmacyName = this.pharmacyNameRoute
-        const pharmacyAddress = this.pharmacyAddressRoute
-        const btnRoute = this.btnRoute
-
-        await pharmacyName.waitForDisplayed({ timeout: 10000 })
-        await pharmacyAddress.waitForDisplayed({ timeout: 10000 })
-
-
-        const addressPharmacy = await pharmacyAddress.getText()     // Pega o endereço completo da farmácia.
-        const rawAddress = addressPharmacy.split('-')[0].trim();    // pega apenas a parte antes do hifen, endereço e numero.
-        const addressWithComma = rawAddress.replace(/(\s)(\d+)/, ', $2');    // Coloca uma vírgula antes do número 
-
-        // transformar em Title Case (Primeira Letra Maiúscula)
-        const toTitleCase = (str: string) => {
-            return str
-                .toLowerCase()
-                .split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-        };
-        const justAdress = toTitleCase(addressWithComma);
-        
-        await this.waitAndClick(btnRoute)
-
-        await $(this.placeCard).waitForDisplayed({ timeout: 50000 })
-
-        const namePLaceCard = `${this.placeCard}//*[contains(@text, "${justAdress}")]`
-        await $(namePLaceCard).waitForDisplayed({ timeout: 10000 })
-    }
-
 
 }
 
