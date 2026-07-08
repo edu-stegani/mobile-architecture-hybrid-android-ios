@@ -40,6 +40,13 @@ describe('Login no App', () => {
     await loginScreen.viewMessageError()
   })
 
+  it('login negando termos e condições', async () => {
+    await oracleHelpers.resetTermAndConditions(user.cpf); // query resetando o aceite do termo
+
+    await loginScreen.login(user.cpf, user.password)
+    await loginScreen.rejectTermsAndConditions()
+  })
+
 })
 
 describe('Esqueci minha senha', () => {

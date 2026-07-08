@@ -56,7 +56,7 @@ export default class BaseScreen {
         await this.waitAndClick($(ok));
     }
 
-    async scrollToElement(selector: string, maxRetries = 10) {
+    async scrollToElement(selector: string, maxRetries = 15) {
         for (let i = 0; i < maxRetries; i++) {
             const el = await $(selector);
 
@@ -121,7 +121,7 @@ export default class BaseScreen {
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;
-        const startY = size.height * 0.5;
+        const startY = size.height * 0.6;
         const endY = size.height * 0.2;
 
         await driver.performActions([{
