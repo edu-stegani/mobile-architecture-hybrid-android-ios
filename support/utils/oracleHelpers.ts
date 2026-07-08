@@ -64,6 +64,12 @@ class OracleHelper {
     return await this.executeQuery(query, [socialId]);
   }
 
+  async resetTermAndConditions(socialId: string) {
+    const query = `UPDATE IIS.RMB_CLIENTE SET TERMO_ADESAO_ACEITO=NULL WHERE CPF=:1`
+
+    return await this.executeQuery(query, [socialId]);
+  }
+
   async resetBankData(socialId: string) {
     const query = `UPDATE IIS.RMB_CLIENTE SET CONTA_CORRENTE=NULL, BANCO=NULL, AGENCIA_DV=NULL WHERE CPF=:1`
 
