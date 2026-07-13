@@ -8,6 +8,7 @@ const user = data.users.Eduardo
 
 before(async () => {
     await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+    await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
     await oracleHelpers.acceptTermAndConditions(user.cpf)
 })
 

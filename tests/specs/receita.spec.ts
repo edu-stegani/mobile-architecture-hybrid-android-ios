@@ -9,6 +9,8 @@ const user = data.users.Eduardo;
 
 before(async () => {
     await flowSendRecipe(user);
+    await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+    await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
     await oracleHelpers.acceptTermAndConditions(user.cpf)
     await postgresHelper.removeLinkTutorialWithCT('20', user.CT)
 })

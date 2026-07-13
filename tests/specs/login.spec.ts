@@ -9,7 +9,11 @@ const userMultiplePlans = data.users.Isis
 
 before(async () => {
   await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+  await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
   await oracleHelpers.acceptTermAndConditions(user.cpf)
+
+  await postgresHelper.updateRecognitionFace('NO_FACE', userMultiplePlans.CT)
+  await oracleHelpers.acceptTermAndConditions(userMultiplePlans.cpf)
 })
 
 beforeEach(async () => {
@@ -19,8 +23,6 @@ beforeEach(async () => {
 describe('Login no App', () => {
 
   it('login com sucesso - com validação matricula', async () => {
-    await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
-    await oracleHelpers.acceptTermAndConditions(user.cpf)
     await postgresHelper.updatePasswordForWeakPass(user.cpf)  // query alterar para senha fraca 6 digitos
 
     await loginScreen.login(user.cpf, '123456')
@@ -29,9 +31,6 @@ describe('Login no App', () => {
   })
 
   it('login com sucesso - sem validação matricula', async () => {
-
-    await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
-    await oracleHelpers.acceptTermAndConditions(user.cpf)
     await postgresHelper.updatePasswordForStrong(user.cpf)  // query alterar para senha forte
 
     await loginScreen.login(user.cpf, user.password)
@@ -39,9 +38,6 @@ describe('Login no App', () => {
   })
 
   it('senha incorreta', async () => {
-
-    await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
-    await oracleHelpers.acceptTermAndConditions(user.cpf)
     await postgresHelper.resetPasswordCount(0, user.cpf); // query resetando a contagem de senha incorreta
 
     await loginScreen.login(user.cpf, 'senha-incorreta')
@@ -49,8 +45,6 @@ describe('Login no App', () => {
   })
 
   it('login negando termos e condições', async () => {
-
-    await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
     await oracleHelpers.resetTermAndConditions(user.cpf); // query resetando o aceite do termo
 
     await loginScreen.login(user.cpf, user.password)
@@ -58,8 +52,6 @@ describe('Login no App', () => {
   })
 
   it('login com usuário em multiplos planos', async () => {
-    await postgresHelper.updateRecognitionFace('NO_FACE', userMultiplePlans.CT)
-    await oracleHelpers.acceptTermAndConditions(userMultiplePlans.cpf)
     await postgresHelper.updatePasswordForStrong(userMultiplePlans.cpf)  // query alterar para senha forte 
 
     await loginScreen.login(userMultiplePlans.cpf, userMultiplePlans.password)
@@ -76,6 +68,8 @@ describe('Esqueci minha senha', () => {
   })
 
   it('esqueci minha senha', async () => {
+    await oracleHelpers.acceptTermAndConditions(user.cpf)
+
     await loginScreen.locateRegistration(user.cpf, user.birthdate, user.matricula)
     await loginScreen.informTokenSMS(user.cpf)
     await loginScreen.informNewPassword('Teste123')

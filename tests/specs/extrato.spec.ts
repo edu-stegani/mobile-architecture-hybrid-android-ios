@@ -10,6 +10,7 @@ const userPirelli = data.users.Edson
 const performSetup = (user:  {cpf: string; password: string; CT: string} ) => {
     beforeEach(async () => {
         await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+        await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
         await oracleHelpers.acceptTermAndConditions(user.cpf)
         await postgresHelper.updatePasswordForStrong(user.cpf)
         await postgresHelper.resetPasswordCount(0, user.cpf);
