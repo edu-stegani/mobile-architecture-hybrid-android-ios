@@ -61,7 +61,7 @@ export default class BaseScreen {
             const el = await $(selector);
 
             const isVisible = await el.waitUntil(async () => {
-                return (await el.isExisting());
+                return (await el.isDisplayed());
             }, { timeout: 1000, interval: 100 }).catch(() => false);
 
             if (isVisible) return;

@@ -53,6 +53,7 @@ describe('Login no App', () => {
 
   it('login com usuário em multiplos planos', async () => {
     await postgresHelper.updatePasswordForStrong(userMultiplePlans.cpf)  // query alterar para senha forte 
+    await postgresHelper.resetPasswordCount(0, userMultiplePlans.cpf);
 
     await loginScreen.login(userMultiplePlans.cpf, userMultiplePlans.password)
     await homeScreen.checkDashboard()

@@ -75,19 +75,27 @@ class LoginIOS extends BaseScreen {
     }
 
     get checkboxAgreeTerm() {
-        return $('')
+        return $('//XCUIElementTypeButton[@name="checkboxUnchecked"]')  
     }
 
     get checkboxAgreeInfo() {
-        return $('')
+        return $('//XCUIElementTypeButton[@name="reciveInfoCheckboxIdentifier"]')   //reciveInfoCheckboxIdentifier
     }
 
     get btnAgreeTerms() {
-        return $('')
+        return $('//XCUIElementTypeButton[@name="continueButtonIdentifier"]')   //~continueButtonIdentifier
     }
 
     get btnNoAgreeTerms() {
-        return ''
+        return '//XCUIElementTypeButton[@name="needToThinkBetterButtonIdentifier"]'
+    }
+
+    get btnWantAccessApp(){
+        return $('//XCUIElementTypeButton[@name="Quero acessar o app"]')
+    }
+
+    get btnNotAccessApp(){
+        return $('//XCUIElementTypeButton[@name="Não acessar o app"]')
     }
 
     // ======== ACTIONS ========
@@ -221,15 +229,19 @@ class LoginIOS extends BaseScreen {
         const btnAceitar = this.btnAgreeTerms
         const btnNegar = this.btnNoAgreeTerms
 
+        await this.acceptFullAccessGalery()
+        await this.acceptPermissionAlertLocation()
+
+        await browser.pause(3000);
         await this.scrollToElement(btnNegar)
         await checkboxAgreeTerm.waitForDisplayed({ timeout: 15000, interval: 1000 })
         await checkboxAgreeInfo.waitForDisplayed({ timeout: 10000, interval: 1000 })
         await btnAceitar.waitForDisplayed({ timeout: 10000, interval: 1000 })
         await this.waitAndClick($(btnNegar))
 
-        await this.checkpointScreen('Ao não consentir com os termos e condições de uso, você não poderá prosseguir no aplicativo.\n\nTem certeza que deseja interromper o acesso ao app da Vidalink?')
-        await this.btnConfirmPopUp.waitForDisplayed({ timeout: 10000, interval: 1000 })
-        await this.waitAndClick(this.btnNao)
+        await this.checkpointScreen('Ao não consentir com os termos e condições de uso, você não poderá prosseguir no aplicativo.')
+        await this.btnWantAccessApp.waitForDisplayed({ timeout: 10000, interval: 1000 })
+        await this.waitAndClick(this.btnNotAccessApp)
     }
 
 }
