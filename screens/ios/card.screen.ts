@@ -76,7 +76,10 @@ class CardIOS extends BaseScreen {
     }
 
     async validateCardsMultiplePlans(name: string, ct1: string, ct2: string) {
-        const cardName = `${this.card}/*[contains(@label, "${name}")]`
+        await $(this.cardTab).waitForDisplayed({ timeout: 60000 })
+        await $(this.cardTab).click()
+        
+        const cardName = `${this.card}//*[contains(@label, "${name}")]`
         await expect($(cardName)).toBeDisplayed()
 
         const cardPlan1 = `${cardName}/..//*[contains(@label, "${ct1}")]`
