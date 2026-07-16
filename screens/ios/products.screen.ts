@@ -147,7 +147,7 @@ class ProdutosIOS extends BaseScreen {
 
         await medicineCard.waitForDisplayed({ timeout: 30000 })
         await medicineCard.click()
-        await $(firstPharmacy).waitForDisplayed()
+        await $(firstPharmacy).waitForDisplayed({timeout: 30000})
         await pharmacyViewDetails.waitForDisplayed()
         await this.waitAndClick(pharmacyViewDetails)
     }

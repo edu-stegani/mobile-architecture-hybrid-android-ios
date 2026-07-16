@@ -20,7 +20,7 @@ describe('Validar cartões titular e dependentes: ', () => {
         await cardScreen.validateInfoCardsOnHomeAndCardScreen(user.fullName, user.dependents[0].fullName, user.dependents[1].fullName)
     })
 
-    it.only('validar cartões após fechar e reabrir app', async() => {
+    it('validar cartões após fechar e reabrir app', async() => {
         await AppHelper.loginKeepConnected(user.cpf, user.password)
         await cardScreen.validateCardsAfterClose(user.fullName, user.dependents[0].fullName, user.dependents[1].fullName) 
     })
