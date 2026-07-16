@@ -24,33 +24,16 @@ const performSetup = (user: { cpf: string; password: string; CT: string }) => {
     });
 };
 
-describe('Navegar por Rede Credenciada - Farmácias e Manipulados', () => {
+describe('Rede Credenciada: Usuário comum', () => {
     performSetup(userVidalink)
 
     it('Navegar por Rede Credenciada - Farmácias e Manipulados', async () => {
-        performSetup(userVidalink)
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Rede Credenciada')
         await redeCredenciadaScreen.navigateToRedeCredenciada()
     })
-
-})
-
-describe('Navegar por Rede Credenciada Nestle - Farmácias, Vacinas e Manipulados', () => {
-    performSetup(userNestle)
-
-    it('Navegar por Rede Credenciada Nestle - Farmácias, Vacinas e Manipulados', async () => {
-        await homeScreen.tapPilarByName('Med')
-        await benefitsScreen.clickLinkByText('Rede Credenciada')
-        await redeCredenciadaScreen.navigateToRedeCredenciada()
-    })
-})
-
-describe('Traçar rota de rede credenciada através de busca de produtos', () => {
-    performSetup(userVidalink)
 
     it('Traçar rota de rede credenciada através de busca de produtos', async () => {
-        performSetup(userVidalink)
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Produtos')
         await produtosScreen.searchProduct('DIPIRONA')
@@ -58,4 +41,14 @@ describe('Traçar rota de rede credenciada através de busca de produtos', () =>
         await redeCredenciadaScreen.traceRouteToPharmacy(produtosScreen.pharmacyAddressRoute)
     })
 
+})
+
+describe('Rede Credenciada: Usuário Nestle', () => {
+    performSetup(userNestle)
+
+    it('Navegar por Rede Credenciada Nestle - Farmácias, Vacinas e Manipulados', async () => {
+        await homeScreen.tapPilarByName('Med')
+        await benefitsScreen.clickLinkByText('Rede Credenciada')
+        await redeCredenciadaScreen.navigateToRedeCredenciada()
+    })
 })
