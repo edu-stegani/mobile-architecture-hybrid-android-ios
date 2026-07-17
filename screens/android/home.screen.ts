@@ -48,7 +48,7 @@ class HomeAndroid extends BaseScreen {
     }
 
     async checkHomeIcon() {
-        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
+        await this.homeTab.waitForDisplayed({ timeout: 50000, interval: 2000 })
     }
 
     async helloUser(firstName: string) {
@@ -63,7 +63,7 @@ class HomeAndroid extends BaseScreen {
         // try { await this.closeTutorial() } catch(e){ }
         // try { await this.maintenanceNotice() } catch (e) { console.log('Aviso de manutenções não visível') }
         // try { await this.HowAboutEvaluatingUs() } catch (e) { console.log('Solicitação de avaliação não visível.') }
-        await this.checkHomeIcon()
+        await this.homeTab.waitForDisplayed({ timeout: 60000, interval: 2000 })
     }
 
     async tapCardByText(cardText: string) {

@@ -80,7 +80,7 @@ class RedeCredenciadaIOS extends BaseScreen {
         }
     }
 
-    async traceRouteToPharmacy(pharmacyAdress: ChainablePromiseElement) {
+    async traceRouteToPharmacy() {
         await this.waitAndClick($(`(${this.btnRoute})[1]`))
 
         const btnMapas = $('//XCUIElementTypeButton[@name="Mapas"]')
@@ -115,7 +115,7 @@ class RedeCredenciadaIOS extends BaseScreen {
             await this.waitAndClick(this.vaccine)
             await this.viewListStores()
         }
-        await this.traceRouteToPharmacy(this.storeAddress)
+        await this.traceRouteToPharmacy()
     }
 
 }

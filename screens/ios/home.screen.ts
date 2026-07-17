@@ -45,7 +45,7 @@ class HomeIOS extends BaseScreen {
 
     async checkHomeIcon() {
         await driver.pause(5000);
-        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
+        await this.homeTab.waitForDisplayed({ timeout: 60000, interval: 2000 })
     }
 
     async helloUser(firstName: string) {

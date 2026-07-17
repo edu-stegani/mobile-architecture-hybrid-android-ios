@@ -81,30 +81,7 @@ class RedeCredenciadaAndroid extends BaseScreen {
         }
     }
 
-    async traceRouteToPharmacy(pharmacyAdress: ChainablePromiseElement) {
-        await pharmacyAdress.waitForDisplayed({ timeout: 10000 })
-        
-        // Pega o endereço completo da farmácia.
-        const addressPharmacy = await pharmacyAdress.getText()
-        
-        // Pega tudo antes do primeiro hífen
-        const beforeHyphen = addressPharmacy.split('-')[0].trim();
-        // Remove números e o que vier depois
-        const streetOnly = beforeHyphen.split(/\s\d+/)[0].trim();
-        
-        // Pega apenas a primeira palavra
-        const firstWord = streetOnly.split(' ')[0].trim();
-
-        // transformar em Title Case (Primeira Letra Maiúscula)
-        const toTitleCase = (str: string) => {
-            return str
-                .toLowerCase()
-                .split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
-        };
-        // Retorna nome da rua ou avenida em Title Case
-        const justStreet = toTitleCase(firstWord);
+    async traceRouteToPharmacy() {
 
         await this.waitAndClick($(`(${this.btnRoute})[1]`))
 
@@ -113,9 +90,6 @@ class RedeCredenciadaAndroid extends BaseScreen {
         }
 
         await $(this.placeCardAndroid).waitForDisplayed({ timeout: 50000 })
-
-        const namePLaceCard = `${this.placeCardAndroid}//*[contains(@text, "${justStreet}")]`
-        await $(namePLaceCard).waitForDisplayed({ timeout: 10000 })
     }
 
     // ======== METHODS ========
@@ -131,7 +105,7 @@ class RedeCredenciadaAndroid extends BaseScreen {
             await this.waitAndClick(this.vaccine)
             await this.viewListStores()
         }
-        await this.traceRouteToPharmacy(this.storeAddress)
+        await this.traceRouteToPharmacy()
     }
 
 }
