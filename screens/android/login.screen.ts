@@ -69,6 +69,26 @@ class LoginAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/btDecline')
     }
 
+    get checkboxKeepConnected(){
+        return $('id:com.astl.vidalink.beta:id/cbNewLogin')
+    }
+
+    get checkboxAgreeTerm(){
+        return $('id:com.astl.vidalink.beta:id/cbAgree')
+    }
+
+    get checkboxAgreeInfo(){
+        return $('id:com.astl.vidalink.beta:id/cbAgreeInfo')
+    }
+
+    get btnAgreeTerms(){
+        return $('id:com.astl.vidalink.beta:id/btAgreeTerms')
+    }
+
+    get btnNoAgreeTerms(){
+        return '//android.widget.Button[@resource-id="com.astl.vidalink.beta:id/btCancel"]'
+    }
+
     // ======== ACTIONS ========
     async tapEntrar() {
         await this.waitAndClick(this.btnEntrar)
@@ -110,6 +130,16 @@ class LoginAndroid extends BaseScreen {
         await this.tapEntrar()
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
+        await this.waitAndClick(this.btnAcessar)
+        try { await this.refuseBiometrics()} catch(e) { }
+    }
+
+    async loginKeepConnected(cpf: string, senha: string) {
+        const checkboxManterConectado = this.checkboxKeepConnected
+        await this.tapEntrar()
+        await this.fillCpf(cpf)
+        await this.fillSenha(senha)
+        await this.waitAndClick(checkboxManterConectado)
         await this.waitAndClick(this.btnAcessar)
         try { await this.refuseBiometrics()} catch(e) { }
     }
@@ -181,6 +211,23 @@ class LoginAndroid extends BaseScreen {
         await this.checkpointScreen('Atenção!')
         await this.checkpointScreen('A nova senha não pode ser igual a senha anterior.')
         await this.waitAndClick(this.btnConfirmPopUp)
+    }
+
+    async rejectTermsAndConditions() {
+        const checkboxAgreeTerm = this.checkboxAgreeTerm
+        const checkboxAgreeInfo = this.checkboxAgreeInfo
+        const btnAceitar = this.btnAgreeTerms
+        const btnNegar = this.btnNoAgreeTerms
+        
+        await this.scrollToElement(btnNegar)
+        await checkboxAgreeTerm.waitForDisplayed({timeout: 15000, interval: 1000})
+        await checkboxAgreeInfo.waitForDisplayed({timeout: 10000, interval: 1000})
+        await btnAceitar.waitForDisplayed({timeout: 10000, interval: 1000})
+        await this.waitAndClick($(btnNegar))
+    
+        await this.checkpointScreen('Ao não consentir com os termos e condições de uso, você não poderá prosseguir no aplicativo.\n\nTem certeza que deseja interromper o acesso ao app da Vidalink?')
+        await this.btnConfirmPopUp.waitForDisplayed({timeout: 10000, interval: 1000})
+        await this.waitAndClick(this.btnNao)
     }
 
 }

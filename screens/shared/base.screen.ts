@@ -24,6 +24,14 @@ export default class BaseScreen {
         return '//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/toolbar"]'
     }
 
+    get btnSkipAndroid() {
+        return $('//android.widget.Button[@text="SKIP"]')
+    }
+
+    get placeCardAndroid() {
+        return `//*[@resource-id="com.google.android.apps.maps:id/business_place_card"]`
+    }
+
     // LOCATORS IOS
     get btnDeleteIOS() {
         return $('~ic delete')
@@ -48,12 +56,12 @@ export default class BaseScreen {
         await this.waitAndClick($(ok));
     }
 
-    async scrollToElement(selector: string, maxRetries = 10) {
+    async scrollToElement(selector: string, maxRetries = 15) {
         for (let i = 0; i < maxRetries; i++) {
             const el = await $(selector);
 
             const isVisible = await el.waitUntil(async () => {
-                return (await el.isExisting());
+                return (await el.isDisplayed());
             }, { timeout: 1000, interval: 100 }).catch(() => false);
 
             if (isVisible) return;
@@ -113,7 +121,7 @@ export default class BaseScreen {
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;
-        const startY = size.height * 0.5;
+        const startY = size.height * 0.6;
         const endY = size.height * 0.2;
 
         await driver.performActions([{
@@ -218,7 +226,7 @@ export default class BaseScreen {
             : `//*[contains(@text, '${textCheckpoint}')]`;
 
         const checkpointText = $(selector);
-        await checkpointText.waitForDisplayed({ timeout: 20000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
+        await checkpointText.waitForDisplayed({ timeout: 10000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
     }
 
     async back() {

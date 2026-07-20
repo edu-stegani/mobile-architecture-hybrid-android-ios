@@ -39,7 +39,7 @@ export const config = {
       'appium:deviceName': 'iPhone 13', 
       'appium:udid': '00008110-000824E63E86201E',
       'appium:platformVersion': '26.5',
-      'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5_10_2.ipa'), 
+      'appium:app': path.join(process.cwd(), 'app', 'VidalinkBeta_v5_10_5.ipa'), 
       'appium:bundleId': 'br.com.vidalink.beta', 
       'appium:newCommandTimeout': 240,
       'appium:noReset': true,

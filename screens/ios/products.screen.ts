@@ -1,7 +1,7 @@
 import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
 
-class BuscarMedicamentoIOS extends BaseScreen {
+class ProdutosIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get inputSearch() {
@@ -54,6 +54,26 @@ class BuscarMedicamentoIOS extends BaseScreen {
 
     get pharmacyViewDetails() {
         return `/XCUIElementTypeStaticText[@name="Ver detalhes da farmácia"]`
+    }
+
+    get pharmacyNameRoute() {
+        return $('id:com.astl.vidalink.beta:id/tvName')
+    }
+
+    get pharmacyAddressRoute() {
+        return $('id:com.astl.vidalink.beta:id/tvAddress')
+    }
+
+    get btnRoute() {
+        return $('//android.widget.Button[@text="Traçar Rota"]')
+    }
+
+    get placeCard() {
+        return `//*[@resource-id="com.google.android.apps.maps:id/business_place_card"]`
+    }
+
+    get btnSkip() {
+        return $('//android.widget.Button[@text="SKIP"]')
     }
 
     // ======== ACTIONS ========
@@ -120,6 +140,18 @@ class BuscarMedicamentoIOS extends BaseScreen {
         await pharmacyViewDetails.waitForDisplayed()
     }
 
+    async selectTheFirstPharmacy() {
+        const medicineCard = $(`(${this.cardProduct})[1]`)
+        const firstPharmacy = `(${this.cardPharmacy})[1]`
+        const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
+
+        await medicineCard.waitForDisplayed({ timeout: 30000 })
+        await medicineCard.click()
+        await $(firstPharmacy).waitForDisplayed({timeout: 30000})
+        await pharmacyViewDetails.waitForDisplayed()
+        await this.waitAndClick(pharmacyViewDetails)
+    }
+
 }
 
-export default new BuscarMedicamentoIOS()
+export default new ProdutosIOS()

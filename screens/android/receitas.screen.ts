@@ -46,9 +46,9 @@ class ReceitaAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/tvSecondOption')
     }
 
-    get btnDeleteSim() {
-        return $('id:com.astl.vidalink.beta:id/btConfirm')
-    }
+    // get btnDeleteSim() {
+    //     return $('id:com.astl.vidalink.beta:id/btConfirm')
+    // }
 
     get btnFinish() {
         return $('id:com.astl.vidalink.beta:id/btnFinish')
@@ -208,7 +208,7 @@ class ReceitaAndroid extends BaseScreen {
 
     async deleteRecipe() {
         await this.checkpointScreen('Tem certeza que deseja apagar essa receita?')
-        await this.waitAndClick(this.btnDeleteSim)
+        await this.waitAndClick(this.btnConfirmPopUp)
         await this.btnNewRecipe.waitForDisplayed()
     }
 

@@ -16,14 +16,15 @@
     "test:browserstack:android": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts",
     "test:browserstack:ios": "cross-env PLATFORM=ios npx wdio run config/wdio.ios.browserstack.ts",
 
-    "temp:local": "cross-env PLATFORM=android npx wdio run config/wdio.android.emulator.ts --spec produtos",
-    "temp:device": "cross-env PLATFORM=android npx wdio run config/wdio.android.device.ts --spec produtos",
-    "temp:bstack": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts --spec produtos",
+    "temp:local": "cross-env PLATFORM=android npx wdio run config/wdio.android.emulator.ts --spec card",
+    "temp:device": "cross-env PLATFORM=android npx wdio run config/wdio.android.device.ts --spec card",
+    "temp:bstack": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts --spec card",
 
     "report:generate": "npx allure generate -o allure-report allure-results",
     "report:open": "npx allure open allure-report",
     "report:serve": "npx allure serve allure-results",
-    "clean:allure": "rimraf allure-results"
+    "clean:allure": "rimraf allure-results",
+    "clean:screenshots": "rimraf screenshots"
   },
   "keywords": [],
   "author": "",

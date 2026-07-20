@@ -1,5 +1,6 @@
 import { $, expect } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
+import { AppHelper } from '../../support/utils/appHelper.js'
 
 class CardAndroid extends BaseScreen {
 
@@ -8,15 +9,15 @@ class CardAndroid extends BaseScreen {
         return '//android.widget.TextView[@text="Cartão"]'
     }
 
-    get card(){
+    get card() {
         return '//*[@resource-id="com.astl.vidalink.beta:id/clBackground"]'
     }
 
-    get cardNumber(){
+    get cardNumber() {
         return '//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvCardNumber"]'
     }
 
-    get btnCopyNumberCard(){
+    get btnCopyNumberCard() {
         return '//android.widget.Button[@resource-id="com.astl.vidalink.beta:id/btnCopyNumber"]'
     }
 
@@ -30,33 +31,73 @@ class CardAndroid extends BaseScreen {
         return number
     }
 
+    async captureCardsNumbersOnHome(name1: string, name2: string, name3: string) {
+        const cardNumber1 = await this.viewCardAndName(name1) as string;
+
+        await this.SwipeLeftCoordinates(350);
+        const cardNumber2 = await this.viewCardAndName(name2) as string;
+
+        await this.SwipeLeftCoordinates(350);
+        const cardNumber3 = await this.viewCardAndName(name3) as string;
+
+        await this.SwipeRightCoordinates(350);
+        await this.SwipeRightCoordinates(350);
+
+        return { cardNumber1, cardNumber2, cardNumber3 };
+    }
+
+    async validateCardsOnCardScreen(cardNumbers: { cardNumber1: string, cardNumber2: string, cardNumber3: string }) {
+        const { cardNumber1, cardNumber2, cardNumber3 } = cardNumbers;
+        const numberCardScreen1 = `${this.card}//*[contains(@text, "${cardNumber1}")]`;
+        const numberCardScreen2 = `${this.card}//*[contains(@text, "${cardNumber2}")]`;
+        const numberCardScreen3 = `${this.card}//*[contains(@text, "${cardNumber3}")]`;
+
+        await $(this.cardTab).waitForDisplayed({ timeout: 60000 })
+        await $(this.cardTab).click()
+
+        await expect($(numberCardScreen1)).toBeDisplayed();
+        await expect($(this.btnCopyNumberCard)).toBeEnabled();
+        await this.SwipeLeftCoordinates(350);
+
+        await expect($(numberCardScreen2)).toBeDisplayed();
+        await this.SwipeLeftCoordinates(350);
+
+        await expect($(numberCardScreen3)).toBeDisplayed();
+    }
+
     // ======== METHODS ========
-    async navigationAndViewCards(name1: string, name2: string, name3: string) {
-        const cardNumber1 = await this.viewCardAndName(name1)
+    async validateInfoCardsOnHomeAndCardScreen(name1: string, name2: string, name3: string) {
+        const cardnumbers = await this.captureCardsNumbersOnHome(name1, name2, name3)
+        await this.validateCardsOnCardScreen(cardnumbers)
+    }
 
-        await this.SwipeLeftCoordinates(350)
-        const cardNumber2 = await this.viewCardAndName(name2)
+    async validateCardsAfterClose(name1: string, name2: string, name3: string) {
+        const cardnumbers = await this.captureCardsNumbersOnHome(name1, name2, name3)
+        await AppHelper.resetApp()
+        await this.validateCardsOnCardScreen(cardnumbers)
+    }
+
+    async validateCardsMultiplePlans(name: string, ct1: string, ct2: string) {
+        await $(this.cardTab).waitForDisplayed({ timeout: 60000 })
+        await $(this.cardTab).click()
         
-        await this.SwipeLeftCoordinates(350)
-        const cardNumber3 = await this.viewCardAndName(name3)
+        const cardName = `${this.card}//*[contains(@text, "${name}")]`
+        await expect($(cardName)).toBeDisplayed()
 
-        await this.SwipeRightCoordinates(350)
-        await this.SwipeRightCoordinates(350)
+        const cardPlan1 = `${cardName}/..//*[contains(@text, "${ct1}")]`
+        await expect($(cardPlan1)).toBeDisplayed()
 
-        await this.waitAndClick($(this.cardTab))
+        const cardPlan2 = `${cardName}/..//*[contains(@text, "${ct2}")]`
+        const maxSwipes = 5
+        for (let swipe = 0; swipe < maxSwipes; swipe++) {
+            const cardPlan2Element = await $(cardPlan2)
+            if (await cardPlan2Element.isDisplayed()) {
+                break
+            }
+            await this.SwipeLeftCoordinates(350)
+        }
 
-        const numberCardScreen  = `${this.card}//*[contains(@text, "${cardNumber1}")]`
-        const numberCardScreen2 = `${this.card}//*[contains(@text, "${cardNumber2}")]`
-        const numberCardScreen3 = `${this.card}//*[contains(@text, "${cardNumber3}")]`
-        
-        await expect($(numberCardScreen)).toBeDisplayed()
-        await expect($(this.btnCopyNumberCard)).toBeEnabled()
-        await this.SwipeLeftCoordinates(350)
-
-        await expect($(numberCardScreen2)).toBeDisplayed()
-        await this.SwipeLeftCoordinates(350)
-        
-        await expect($(numberCardScreen3)).toBeDisplayed()
+        await expect($(cardPlan2)).toBeDisplayed()
     }
 
 }

@@ -4,9 +4,10 @@ import ReceitaAndroid from './android/receitas.screen.js'
 import ProfileAndroid from './android/profile.screen.js'
 import BenefitAndroid from './android/benefits.screen.js'
 import ReembolsoAndroid from './android/reembolso.screen.js'
-import BuscarMedicamentoAndroid from './android/products.screen.js'
+import ProdutosAndroid from './android/products.screen.js'
 import CardAndroid from './android/card.screen.js'
 import ExtratoAndroid from './android/extrato.screen.js'
+import RedeCredenciadaAndroid from './android/redeCredenciada.screen.js'
 
 import LoginIOS from './ios/login.screen.js'
 import HomeIOS from './ios/home.screen.js'
@@ -14,9 +15,10 @@ import ReceitaIOS from './ios/receitas.screen.js'
 import ProfileIOS from './ios/profile.screen.js'
 import BenefitIOS from './ios/benefits.screen.js'
 import ReembolsoIOS from './ios/reembolso.screen.js'
-import BuscarMedicamentoIOS from './ios/products.screen.js'
+import ProdutosIOS from './ios/products.screen.js'
 import CardIOS from './ios/card.screen.js'
 import ExtratoIOS from './ios/extrato.screen.js'
+import RedeCredenciadaIOS from './ios/redeCredenciada.screen.js'
 
 const platform = process.env.PLATFORM
 
@@ -38,11 +40,14 @@ export const benefitsScreen =
 export const reembolsoScreen =
   platform === 'ios' ? ReembolsoIOS : ReembolsoAndroid
 
-export const buscarMedicamentoScreen =
-  platform === 'ios' ? BuscarMedicamentoIOS : BuscarMedicamentoAndroid
+export const produtosScreen =
+  platform === 'ios' ? ProdutosIOS : ProdutosAndroid
 
 export const cardScreen =
   platform === 'ios' ? CardIOS : CardAndroid
 
 export const extratoScreen =
   platform === 'ios' ? ExtratoIOS : ExtratoAndroid
+
+export const redeCredenciadaScreen =
+  platform === 'ios' ? RedeCredenciadaIOS : RedeCredenciadaAndroid

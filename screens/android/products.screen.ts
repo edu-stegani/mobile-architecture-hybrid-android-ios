@@ -1,7 +1,8 @@
 import { $ } from '@wdio/globals'
+import { Key } from 'webdriverio';
 import BaseScreen from '../shared/base.screen.js'
 
-class BuscarMedicamentoAndroid extends BaseScreen {
+class ProdutosAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
     get inputSearch() {
@@ -44,16 +45,24 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         return `//*[@resource-id="com.astl.vidalink.beta:id/tvDistance"]`
     }
 
-    get priceMax(){
+    get priceMax() {
         return `//*[@resource-id="com.astl.vidalink.beta:id/tvMaximumPrice"]`
     }
 
-    get priceMin(){
+    get priceMin() {
         return `//*[@resource-id="com.astl.vidalink.beta:id/tvFromPrice"]`
     }
 
     get pharmacyViewDetails() {
         return `//*[@resource-id="com.astl.vidalink.beta:id/tvVizualizar"]`
+    }
+
+    get pharmacyNameRoute() {
+        return $('id:com.astl.vidalink.beta:id/tvName')
+    }
+
+    get pharmacyAddressRoute() {
+        return $('id:com.astl.vidalink.beta:id/tvAddress')
     }
 
     // ======== ACTIONS ========
@@ -69,8 +78,8 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         const inputSearch = this.inputSearch
         await this.waitAndClick(inputSearch)
         await inputSearch.setValue(name)
-        await driver.execute('mobile: performEditorAction', { action: 'search' });
-        try { await driver.hideKeyboard(); } catch (error) { }
+        await browser.keys(Key.Enter);
+        await driver.hideKeyboard();
     }
 
     async viewProductDetails(index: string, name: string) {
@@ -79,7 +88,7 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         const fullPrice = $(`${cardMedicine}${this.priceProduct}`)
         const discountMedicine = $(`${cardMedicine}${this.discountProduct}`)
         const discountedPrice = $(`${cardMedicine}${this.discountedPrice}`)
-        
+
         await $(cardMedicine).waitForDisplayed({ timeout: 30000 })
         await nameMedicine.waitForDisplayed()
         await fullPrice.waitForDisplayed()
@@ -91,11 +100,11 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         const cardMedicine = `(${this.cardProduct})[1]`
         const filter = this.filterButton
         const options = this.optionsFilter
-        
+
         const selectedOption = $(`//*[contains(@text, "${option}")]`)   //android.widget.TextView
 
         const firstPharmacy = `(${this.cardPharmacy})[1]`
-        
+
         const pharmacyDistance = $(`${firstPharmacy}${this.pharmacyDistance}`)
         const pharmacyName = $(`${firstPharmacy}${this.pharmacyName}`)
         const pharmacyPriceMax = $(`${firstPharmacy}${this.priceMax}`)
@@ -106,7 +115,7 @@ class BuscarMedicamentoAndroid extends BaseScreen {
 
         await this.waitAndClick(filter)
         await options.waitForDisplayed()
-        await this.waitAndClick(selectedOption) 
+        await this.waitAndClick(selectedOption)
 
         await $(firstPharmacy).waitForDisplayed()
         await pharmacyName.waitForDisplayed()
@@ -116,6 +125,18 @@ class BuscarMedicamentoAndroid extends BaseScreen {
         await pharmacyViewDetails.waitForDisplayed()
     }
 
+    async selectTheFirstPharmacy() {
+        const medicineCard = $(`(${this.cardProduct})[1]`)
+        const firstPharmacy = `(${this.cardPharmacy})[1]`
+        const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
+
+        await medicineCard.waitForDisplayed({ timeout: 30000 })
+        await medicineCard.click()
+        await $(firstPharmacy).waitForDisplayed({ timeout: 30000 })
+        await pharmacyViewDetails.waitForDisplayed()
+        await this.waitAndClick(pharmacyViewDetails)
+    }
+
 }
 
-export default new BuscarMedicamentoAndroid()
+export default new ProdutosAndroid()

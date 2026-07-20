@@ -15,5 +15,12 @@ export class AppHelper {
         await this.resetApp();
         await loginScreen.login(cpf, password);
         await homeScreen.checkDashboard();
-    }    
+    }   
+
+    static async loginKeepConnected(cpf: string, password: string ) {
+        await this.resetApp();
+        await loginScreen.loginKeepConnected(cpf, password);
+        await homeScreen.checkDashboard();
+    }   
+    
 }

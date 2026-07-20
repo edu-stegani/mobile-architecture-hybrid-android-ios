@@ -69,6 +69,35 @@ class LoginIOS extends BaseScreen {
     get btnNao() {
         return $('~Não')
     }
+
+    get checkboxKeepConnected() {
+        return $('~keepMeConnectedButtonIdentifier')
+    }
+
+    get checkboxAgreeTerm() {
+        return $('//XCUIElementTypeButton[@name="checkboxUnchecked"]')  
+    }
+
+    get checkboxAgreeInfo() {
+        return $('//XCUIElementTypeButton[@name="reciveInfoCheckboxIdentifier"]')   //reciveInfoCheckboxIdentifier
+    }
+
+    get btnAgreeTerms() {
+        return $('//XCUIElementTypeButton[@name="continueButtonIdentifier"]')   //~continueButtonIdentifier
+    }
+
+    get btnNoAgreeTerms() {
+        return '//XCUIElementTypeButton[@name="needToThinkBetterButtonIdentifier"]'
+    }
+
+    get btnWantAccessApp(){
+        return $('//XCUIElementTypeButton[@name="Quero acessar o app"]')
+    }
+
+    get btnNotAccessApp(){
+        return $('//XCUIElementTypeButton[@name="Não acessar o app"]')
+    }
+
     // ======== ACTIONS ========
 
     async tapEntrar() {
@@ -113,7 +142,17 @@ class LoginIOS extends BaseScreen {
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
         await this.waitAndClick(this.btnAcessar)
-        try { await this.refuseBiometrics()} catch(e) { }
+        try { await this.refuseBiometrics() } catch (e) { }
+    }
+
+    async loginKeepConnected(cpf: string, senha: string) {
+        const checkboxManterConectado = this.checkboxKeepConnected
+        await this.tapEntrar()
+        await this.fillCpf(cpf)
+        await this.fillSenha(senha)
+        await this.waitAndClick(checkboxManterConectado)
+        await this.waitAndClick(this.btnAcessar)
+        try { await this.refuseBiometrics() } catch (e) { }
     }
 
     async viewMessageError() {
@@ -182,6 +221,27 @@ class LoginIOS extends BaseScreen {
     async passwordCantBeEqualPrevious() {
         await this.checkpointScreen('Atenção! A nova senha não pode ser igual a senha anterior.')
         await this.waitAndClick($('~primaryButtonIdentifier'))
+    }
+
+    async rejectTermsAndConditions() {
+        const checkboxAgreeTerm = this.checkboxAgreeTerm
+        const checkboxAgreeInfo = this.checkboxAgreeInfo
+        const btnAceitar = this.btnAgreeTerms
+        const btnNegar = this.btnNoAgreeTerms
+
+        await this.acceptFullAccessGalery()
+        await this.acceptPermissionAlertLocation()
+
+        await browser.pause(3000);
+        await this.scrollToElement(btnNegar)
+        await checkboxAgreeTerm.waitForDisplayed({ timeout: 15000, interval: 1000 })
+        await checkboxAgreeInfo.waitForDisplayed({ timeout: 10000, interval: 1000 })
+        await btnAceitar.waitForDisplayed({ timeout: 10000, interval: 1000 })
+        await this.waitAndClick($(btnNegar))
+
+        await this.checkpointScreen('Ao não consentir com os termos e condições de uso, você não poderá prosseguir no aplicativo.')
+        await this.btnWantAccessApp.waitForDisplayed({ timeout: 10000, interval: 1000 })
+        await this.waitAndClick(this.btnNotAccessApp)
     }
 
 }

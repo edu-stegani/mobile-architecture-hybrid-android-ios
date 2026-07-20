@@ -4,40 +4,34 @@ import postgresHelper from '../../support/utils/postgresHelper.js'
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
 import { AppHelper } from '../../support/utils/appHelper.js'
 
-const user = data.users.Marcia
+const userWithDependents = data.users.Marcia
 const userPirelli = data.users.Edson
 
-describe('Validação de tela em Extrato', () => {
-
-    before(async () => {
-        // preparando massa no banco
+const performSetup = (user:  {cpf: string; password: string; CT: string} ) => {
+    beforeEach(async () => {
         await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+        await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
         await oracleHelpers.acceptTermAndConditions(user.cpf)
         await postgresHelper.updatePasswordForStrong(user.cpf)
+        await postgresHelper.resetPasswordCount(0, user.cpf);
 
-        //login
         await AppHelper.login(user.cpf, user.password);
-    })
+    });
+};
+
+describe('Validação de tela em Extrato', () => {
+    performSetup(userWithDependents)
 
     it('visualizar extrato de titular e dependentes', async () => {
         await homeScreen.tapPilarByName('Med')
         await benefitsScreen.clickLinkByText('Extrato')
-        await extratoScreen.validationScreenExtrato(user.fullName)
+        await extratoScreen.validationScreenExtrato(userWithDependents.fullName)
     })
 
 })
 
 describe('Validação de tela em Extrato para Usuário Pirelli', () => {
-
-    before(async () => {
-        // preparando massa no banco
-        await postgresHelper.updateRecognitionFace('NO_FACE', userPirelli.CT)
-        await oracleHelpers.acceptTermAndConditions(userPirelli.cpf)
-        await postgresHelper.updatePasswordForStrong(userPirelli.cpf)
-
-        // login
-        await AppHelper.login(userPirelli.cpf, userPirelli.password);
-    })
+    performSetup(userPirelli)
 
     it('visualizar extrato de usuário Pirelli', async () => {
         await homeScreen.tapPilarByName('Med')

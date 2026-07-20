@@ -1,4 +1,19 @@
-import oracledb from 'oracledb'
+import oracledb from 'oracledb';
+import os from 'os';
+
+try {
+  if (os.platform() === 'win32') {
+    // Windows precisa do caminho explícito
+    oracledb.initOracleClient({ libDir: 'C:\\oracle\\instantclient_21_22' });
+  } else {
+    // macOS e Linux buscam o client automaticamente do sistema
+    oracledb.initOracleClient();
+  }
+} catch (err: any) {
+  if (!err.message.includes('NJS-102')) {
+    console.error('LOG_ORACLE_ERRO:', err.message);
+  }
+}
 
 class OracleHelper {
   async executeQuery(query: string, params: any[] = []) {
@@ -45,6 +60,12 @@ class OracleHelper {
 
   async acceptTermAndConditions(socialId: string) {
     const query = `UPDATE IIS.RMB_CLIENTE SET TERMO_ADESAO_ACEITO=6 WHERE CPF=:1`
+
+    return await this.executeQuery(query, [socialId]);
+  }
+
+  async resetTermAndConditions(socialId: string) {
+    const query = `UPDATE IIS.RMB_CLIENTE SET TERMO_ADESAO_ACEITO=NULL WHERE CPF=:1`
 
     return await this.executeQuery(query, [socialId]);
   }

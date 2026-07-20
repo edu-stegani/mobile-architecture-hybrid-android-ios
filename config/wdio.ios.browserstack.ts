@@ -49,7 +49,7 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
     'platformName': 'iOS',
     'appium:automationName': 'XCUITest',
     'appium:bundleId': 'br.com.vidalink.beta',
-    'appium:app': 'bs://26a5a4c8546f7aa1770c4b82d40471ea94870bea', //v5.10.2
+    'appium:app': 'bs://1a7edcb17cec4c736f90c65ac7dc48fa0f9e432e', //v5.10.5
     'appium:includeSafariInWebviews': true,
 
     'bstack:options': {

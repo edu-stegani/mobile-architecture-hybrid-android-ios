@@ -9,7 +9,7 @@
             "cardNumber": "80409003022302",
             "miscData": "78929495",
             "birthdate": "08-12-2000",
-            "clientGroup": "VIDALINK AMIL"
+            "clientGroup": "VIDALINK PLANO BEM-ESTAR"
         },
         "William": {
             "fullName": "WILLIAM FERREIRA",
@@ -20,7 +20,7 @@
             "cardNumber": "81000000002905",
             "miscData": "79271403",
             "birthdate": "01-01-1995",
-            "clientGroup": "MILENAR PJ",
+            "clientGroup": "MILENAR PBM",
             "dependents": [
                 {
                     "fullName": "VIVIAN FERREIRA",
@@ -77,7 +77,7 @@
                 }
             ]
         },
-         "Isis": {
+        "Isis": {
             "fullName": "ISIS MOURA LEITE",
             "cpf": "41184422800",
             "password": "A1234567",
@@ -87,6 +87,7 @@
             "miscData": "2721419",
             "birthdate": "06-05-1992",
             "clientGroup": "VIDALINK PLANO BEM-ESTAR",
+            "clientGroup2": "TESTE AFINIDADE QA",
             "dependents": [
                 {
                     "fullName": "FRANCISCO FABIO JUNIOR LEITE",
@@ -110,6 +111,29 @@
             "miscData": "77230873",
             "birthdate": "16-07-1972",
             "clientGroup": "PIRELLI"
+        },
+        "Roberto": {
+            "fullName": "ROBERTO CANTON",
+            "cpf": "39062392849",
+            "password": "A1234567",
+            "matricula": "10246299",
+            "CT": "CT000691",
+            "cardNumber": "80691009079706",
+            "miscData": "65077840",
+            "birthdate": "06-10-1951",
+            "clientGroup": "NESTLE",
+            "dependents": [
+                {
+                    "fullName": "MARIA DAS GRACAS VILLACA CANTON",
+                    "cpf": "30954789768",
+                    "password": "",
+                    "matricula": "10246299",
+                    "CT": "CT000691",
+                    "cardNumber": "80691009079808",
+                    "miscData": "65077841",
+                    "birthdate": "16-05-1952"
+                }
+            ]
         }
     }
 }
