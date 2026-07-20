@@ -155,8 +155,8 @@ class LoginIOS extends BaseScreen {
         try { await this.refuseBiometrics() } catch (e) { }
     }
 
-    async viewMessageError() {
-        await this.checkpointScreen('Senha incorreta')
+    async viewMessageError(message: string) {
+        await this.checkpointScreen(message)
     }
 
     async clickForgotPassword() {

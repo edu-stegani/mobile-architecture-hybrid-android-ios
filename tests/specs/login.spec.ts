@@ -41,7 +41,7 @@ describe('Login no App', () => {
     await postgresHelper.resetPasswordCount(0, user.cpf); // query resetando a contagem de senha incorreta
 
     await loginScreen.login(user.cpf, 'senha-incorreta')
-    await loginScreen.viewMessageError()
+    await loginScreen.viewMessageError('Senha incorreta')
   })
 
   it('login negando termos e condições', async () => {
@@ -60,6 +60,13 @@ describe('Login no App', () => {
     await cardScreen.validateCardsMultiplePlans(userMultiplePlans.fullName, userMultiplePlans.clientGroup, userMultiplePlans.clientGroup2)
 
   })
+
+  it('login com cpf inválido', async () => {
+    await loginScreen.tapEntrar()
+    await loginScreen.fillCpf('00000000000')
+    await loginScreen.viewMessageError('CPF inválido')
+  })
+
 })
 
 describe('Esqueci minha senha', () => {
