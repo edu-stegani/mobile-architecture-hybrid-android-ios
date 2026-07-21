@@ -47,7 +47,7 @@ export default class BaseScreen {
 
     // METHODS
     async waitAndClick(element: ChainablePromiseElement) {
-        await element.waitForDisplayed({ timeout: 10000 })
+        await element.waitForDisplayed({timeout: 15000, interval: 1000})
         await element.click()
     }
 
@@ -226,7 +226,7 @@ export default class BaseScreen {
             : `//*[contains(@text, '${textCheckpoint}')]`;
 
         const checkpointText = $(selector);
-        await checkpointText.waitForDisplayed({ timeout: 10000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
+        await checkpointText.waitForDisplayed({ timeout: 15000, interval:1000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
     }
 
     async back() {

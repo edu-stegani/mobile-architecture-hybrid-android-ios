@@ -1,6 +1,7 @@
 import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
+import { faker } from '@faker-js/faker'
 
 class LoginAndroid extends BaseScreen {
 
@@ -107,7 +108,7 @@ class LoginAndroid extends BaseScreen {
     async fillMatricula(matricula: string) {
         const inputMatricula = this.inputMatricula
 
-        await this.checkpointScreen('Matricula do titular')
+        await this.checkpointScreen('Matrícula do titular')
         await this.waitAndSetValue(inputMatricula, matricula)
         await this.waitAndClick(this.btnAcessar)
     }
@@ -191,11 +192,12 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndClick(btnConfirmRegister)
     }
 
-    async informNewPassword(newPassword: string) {
+    async informNewPassword(password?: string) {
         const btnOk = this.btnOk
         const iconLock = this.iconLock
         const inputNewPassword = this.inputNewPassword
         const inputConfirmPassword = this.inputConfirmPassword
+        const newPassword = password ?? `${faker.string.alpha({ casing: 'upper' })}${faker.string.numeric(7)}`
 
         await this.checkpointScreen('Tenha uma senha segura')
         await this.waitAndClick(btnOk)
