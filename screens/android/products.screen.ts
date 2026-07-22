@@ -5,6 +5,9 @@ import BaseScreen from '../shared/base.screen.js'
 class ProdutosAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
+    get produtosTab(){
+        return $(`//android.widget.TextView[@text="Produtos"]`)
+    }
     get inputSearch() {
         return $(`id:com.astl.vidalink.beta:id/etSearch`)
     }

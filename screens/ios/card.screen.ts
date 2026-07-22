@@ -98,6 +98,12 @@ class CardIOS extends BaseScreen {
         await expect($(cardPlan2)).toBeDisplayed()
     }
 
+    async validateCardAfinidade(name:string, cardNumber: string){
+        await this.waitAndClick(this.cardTab)
+        await $(`${this.card}//*[contains(@text, "${name}")]`).waitForDisplayed()
+        await $(`${this.card}//*[contains(@text, "${cardNumber}")]`).waitForDisplayed()
+    }
+
 }
 
 export default new CardIOS()

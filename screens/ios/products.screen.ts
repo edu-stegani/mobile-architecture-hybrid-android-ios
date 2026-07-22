@@ -4,6 +4,10 @@ import BaseScreen from '../shared/base.screen.js'
 class ProdutosIOS extends BaseScreen {
 
     // ====== SELECTORS ======
+    get produtosTab(){
+        return $(``)
+    }
+    
     get inputSearch() {
         return $(`//XCUIElementTypeTextField[@value="Buscar..."]`)
     }
@@ -56,32 +60,13 @@ class ProdutosIOS extends BaseScreen {
         return `/XCUIElementTypeStaticText[@name="Ver detalhes da farmácia"]`
     }
 
-    get pharmacyNameRoute() {
-        return $('id:com.astl.vidalink.beta:id/tvName')
-    }
-
-    get pharmacyAddressRoute() {
-        return $('id:com.astl.vidalink.beta:id/tvAddress')
-    }
-
-    get btnRoute() {
-        return $('//android.widget.Button[@text="Traçar Rota"]')
-    }
-
-    get placeCard() {
-        return `//*[@resource-id="com.google.android.apps.maps:id/business_place_card"]`
-    }
-
-    get btnSkip() {
-        return $('//android.widget.Button[@text="SKIP"]')
-    }
-
     // ======== ACTIONS ========
+    async viewTollbarBuscarMedicamentos() {
+        await this.checkpointScreen('Buscar medicamentos')
+    }
 
     // ======== METHODS ========
     async searchProduct(name: string) {
-        await this.checkpointScreen('Buscar medicamentos')
-
         const inputSearch = this.inputSearch
         await this.waitAndClick(inputSearch)
         await inputSearch.setValue(name)

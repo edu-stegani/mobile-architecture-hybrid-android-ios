@@ -46,9 +46,10 @@ export default class BaseScreen {
     }
 
     // METHODS
-    async waitAndClick(element: ChainablePromiseElement) {
-        await element.waitForDisplayed({timeout: 15000, interval: 1000})
-        await element.click()
+    async waitAndClick(elementOrSelector: ChainablePromiseElement | string) {
+        const element = typeof elementOrSelector === 'string' ? $(elementOrSelector) : elementOrSelector;
+        await element.waitForDisplayed({ timeout: 15000, interval: 1000 });
+        await element.click();
     }
 
     async hideKeyboard() {

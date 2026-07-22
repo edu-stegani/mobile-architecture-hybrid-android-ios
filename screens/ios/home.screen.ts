@@ -24,6 +24,14 @@ class HomeIOS extends BaseScreen {
         return $('~btnNotNow')
     }
 
+    get homeCard(){
+        return $('')
+    }
+
+    get iconConfiguration(){
+        return $('')
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
         await this.btnPular.waitForDisplayed({ timeout: 10000 });
@@ -73,6 +81,11 @@ class HomeIOS extends BaseScreen {
         const pilarSelector = `//XCUIElementTypeStaticText[@label="${pilarName}. Botão."]/..//XCUIElementTypeOther`
         await this.scrollToElement(pilarSelector)
         await this.waitAndClick($(pilarSelector))
+    }
+
+    async validateHomeAfinidade(){
+        await this.homeCard.waitForDisplayed()
+        await this.iconConfiguration.waitForDisplayed()
     }
 }
 

@@ -158,8 +158,6 @@ class ProfileAndroid extends BaseScreen {
 
     async logout() {
         const logoutIcon = this.logoutIcon
-        const perfil = this.perfilTab
-        await this.waitAndClick(perfil)
         await this.waitAndClick(logoutIcon)
         await this.confirmLogout()
     }

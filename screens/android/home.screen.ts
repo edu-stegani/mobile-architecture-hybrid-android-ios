@@ -28,6 +28,14 @@ class HomeAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/btDisagree')
     }
 
+    get homeCard(){
+        return $('id:com.astl.vidalink.beta:id/cvHomeCard')
+    }
+
+    get iconConfiguration(){
+        return $('id:com.astl.vidalink.beta:id/ibConfiguration')
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
         await this.btnPular.waitForDisplayed({ timeout: 20000 })
@@ -76,6 +84,11 @@ class HomeAndroid extends BaseScreen {
         const pilarSelector = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName" and @text="${pilarName}"]`
         await this.scrollToElement(pilarSelector)
         await this.waitAndClick($(pilarSelector))
+    }
+
+    async validateHomeAfinidade(){
+        await this.homeCard.waitForDisplayed()
+        await this.iconConfiguration.waitForDisplayed()
     }
 
 }

@@ -4,6 +4,10 @@ import { ChainablePromiseElement } from 'webdriverio'
 
 class RedeCredenciadaAndroid extends BaseScreen {
     // ====== SELECTORS ======
+    get redeTab(){
+        return $('//android.widget.TextView[@text="Rede"]')
+    }
+
     get inputSearch() {
         return $('id:com.astl.vidalink.beta:id/btSearchLocal')
     }
@@ -106,6 +110,15 @@ class RedeCredenciadaAndroid extends BaseScreen {
             await this.viewListStores()
         }
         await this.traceRouteToPharmacy()
+    }
+
+    async validateRedeAfinidade() {
+        await this.redeTab.click()
+        await this.inputSearch.waitForDisplayed({ timeout: 10000 })
+        await this.pharmacy.waitForDisplayed({ timeout: 10000 })
+        await this.iconChangeSearch.waitForDisplayed({ timeout: 20000 })
+        await this.waitAndClick(this.iconChangeSearch)
+        await this.viewListStores()
     }
 
 }

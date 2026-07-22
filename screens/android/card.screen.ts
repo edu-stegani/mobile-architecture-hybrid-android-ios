@@ -10,7 +10,7 @@ class CardAndroid extends BaseScreen {
     }
 
     get card() {
-        return '//*[@resource-id="com.astl.vidalink.beta:id/clBackground"]'
+        return '//androidx.cardview.widget.CardView'    //*[@resource-id="com.astl.vidalink.beta:id/clBackground"]
     }
 
     get cardNumber() {
@@ -23,7 +23,7 @@ class CardAndroid extends BaseScreen {
 
     // ======== ACTIONS ========
     async viewCardAndName(name: string) {
-        const cardName = `${this.card}/*[contains(@text, "${name}")]`
+        const cardName = `${this.card}//*[contains(@text, "${name}")]`
         await expect($(cardName)).toBeDisplayed()
 
         const cardNumber = `${cardName}/..${this.cardNumber}`
@@ -98,6 +98,12 @@ class CardAndroid extends BaseScreen {
         }
 
         await expect($(cardPlan2)).toBeDisplayed()
+    }
+
+    async validateCardAfinidade(name:string, cardNumber: string){
+        await this.waitAndClick(this.cardTab)
+        await $(`${this.card}//*[contains(@text, "${name}")]`).waitForDisplayed()
+        await $(`${this.card}//*[contains(@text, "${cardNumber}")]`).waitForDisplayed()
     }
 
 }

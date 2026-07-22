@@ -134,6 +134,18 @@
                     "birthdate": "16-05-1952"
                 }
             ]
+        },
+        "Paulo": {
+            "fullName": "PAULO EDUARDO LEAO VIEIRA ROCHA",
+            "cpf": "11678022764",
+            "password": "A123456",
+            "matricula": "5558880101196335",
+            "CT": "CT000644",
+            "cardNumber": "5558 8801 0119 6335",
+            "miscData": "75795364",
+            "birthdate": "01-01-1990",
+            "clientGroup": "CLUDE",
+            "dependents": []
         }
     }
 }

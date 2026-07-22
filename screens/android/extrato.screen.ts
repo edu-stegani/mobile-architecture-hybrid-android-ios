@@ -3,6 +3,10 @@ import BaseScreen from '../shared/base.screen.js'
 
 class ExtratoAndroid extends BaseScreen {
     // ====== SELECTORS ======
+    get extratoTab(){
+        return $(`//android.widget.TextView[@text="Extrato"]`)
+    }
+    
     get tittleSaved() {
         return $('id:com.astl.vidalink.beta:id/tvSubTitle')
     }
