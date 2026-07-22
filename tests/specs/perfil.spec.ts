@@ -16,6 +16,11 @@ before(async () => {
     await postgresHelper.updateRecognitionFace('NO_FACE', userAfinidade.CT)
     await postgresHelper.removeLinkTutorialWithCT('2', userAfinidade.CT)
     await oracleHelpers.acceptTermAndConditions(userAfinidade.cpf)
+    
+    await driver.setGeoLocation({
+        latitude: -23.615799,
+        longitude: -46.570010,
+    });
 })
 
 describe('Realizar logout', () => {

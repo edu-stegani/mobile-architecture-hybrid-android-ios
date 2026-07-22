@@ -157,6 +157,10 @@ class ProfileAndroid extends BaseScreen {
     // ======== METHODS ========
 
     async logout() {
+        const btnOK = $(`id:com.astl.vidalink.beta:id/btConfirmOption`)
+        if (await btnOK.isDisplayed()) {
+            await btnOK.click()
+        }
         const logoutIcon = this.logoutIcon
         await this.waitAndClick(logoutIcon)
         await this.confirmLogout()
