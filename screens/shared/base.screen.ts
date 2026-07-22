@@ -57,10 +57,10 @@ export default class BaseScreen {
         await this.waitAndClick($(ok));
     }
 
-    async scrollToElement(selector: string, maxRetries = 15) {
-        for (let i = 0; i < maxRetries; i++) {
-            const el = await $(selector);
+    async scrollToElement(elementOrSelector: ChainablePromiseElement | string, maxRetries = 15) {
+        const el = typeof elementOrSelector === 'string' ? $(elementOrSelector) : elementOrSelector;
 
+        for (let i = 0; i < maxRetries; i++) {
             const isVisible = await el.waitUntil(async () => {
                 return (await el.isDisplayed());
             }, { timeout: 1000, interval: 100 }).catch(() => false);
@@ -70,7 +70,7 @@ export default class BaseScreen {
             console.log(`Tentando swipe ${i + 1}...`);
             await this.performSwipeUp();
         }
-        throw new Error(`Elemento não encontrado: ${selector}`);
+        throw new Error(`Elemento não encontrado: ${elementOrSelector.toString()}`);
     }
 
     async SwipeLeftCoordinates(coordinateY: number) {

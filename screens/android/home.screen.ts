@@ -28,12 +28,16 @@ class HomeAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/btDisagree')
     }
 
-    get homeCard(){
+    get homeCard() {
         return $('id:com.astl.vidalink.beta:id/cvHomeCard')
     }
 
-    get iconConfiguration(){
+    get iconConfiguration() {
         return $('id:com.astl.vidalink.beta:id/ibConfiguration')
+    }
+
+    get pillars360(){
+        return $(`id:com.astl.vidalink.beta:id/tvPillarsLabel`)
     }
 
     // ======== ACTIONS ========
@@ -86,9 +90,18 @@ class HomeAndroid extends BaseScreen {
         await this.waitAndClick($(pilarSelector))
     }
 
-    async validateHomeAfinidade(){
+    async validateHomeAfinidade() {
         await this.homeCard.waitForDisplayed()
         await this.iconConfiguration.waitForDisplayed()
+    }
+
+    async onlyOnePillarOn360(name: string) {
+        const onlyOnePillar = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName"]`
+        const pilarMed = `${onlyOnePillar} and @text="${name}}"]`
+        await this.scrollToElement(pilarMed)
+        await this.pillars360.waitForDisplayed()
+
+        await $(onlyOnePillar).waitForDisplayed()
     }
 
 }

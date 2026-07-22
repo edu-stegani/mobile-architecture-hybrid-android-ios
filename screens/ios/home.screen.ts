@@ -32,6 +32,10 @@ class HomeIOS extends BaseScreen {
         return $('')
     }
 
+    get pillars360(){
+        return $(``)
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
         await this.btnPular.waitForDisplayed({ timeout: 10000 });
@@ -86,6 +90,15 @@ class HomeIOS extends BaseScreen {
     async validateHomeAfinidade(){
         await this.homeCard.waitForDisplayed()
         await this.iconConfiguration.waitForDisplayed()
+    }
+
+    async onlyOnePillarOn360(name: string) {
+        const onlyOnePillar = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName"]`
+        const pilarMed = `${onlyOnePillar} and @text="${name}}"]`
+        await this.scrollToElement(pilarMed)
+        await this.pillars360.waitForDisplayed()
+
+        await $(onlyOnePillar).waitForDisplayed()
     }
 }
 
