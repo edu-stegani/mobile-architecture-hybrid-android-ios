@@ -93,12 +93,12 @@ class HomeIOS extends BaseScreen {
     }
 
     async onlyOnePillarOn360(name: string) {
-        const onlyOnePillar = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName"]`
-        const pilarMed = `${onlyOnePillar} and @text="${name}}"]`
+        const onlyOnePillar = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName"`
+        const pilarMed = `${onlyOnePillar} and @text="${name}"]`
         await this.scrollToElement(pilarMed)
         await this.pillars360.waitForDisplayed()
 
-        await $(onlyOnePillar).waitForDisplayed()
+        await $(`${onlyOnePillar}]`).waitForDisplayed()
     }
 }
 
