@@ -4,7 +4,7 @@ import BaseScreen from '../shared/base.screen.js'
 class RedeCredenciadaIOS extends BaseScreen {
     // ====== SELECTORS ======
     get redeTab(){
-        return $('')
+        return $('//XCUIElementTypeButton[@name="Rede"]')
     }
 
     get inputSearch() {

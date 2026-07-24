@@ -132,7 +132,7 @@ class ProfileIOS extends BaseScreen {
 
         await this.selectOptionProfileByName('Fale conosco')
         await whatsapp.waitForDisplayed()
-        await numberTelephoneSP.waitForDisplayed()
+        await numberTelephoneSP.waitForDisplayed({timeout: 10000, interval: 1000})
         await this.waitAndClick(copyNumberSP)
         await otherRegions.waitForDisplayed()
         await this.waitAndClick(copyOtherRegions)
@@ -151,10 +151,8 @@ class ProfileIOS extends BaseScreen {
 
     // ======== METHODS ========
 
-    async logout(){
+    async logout() {
         const logoutIcon = this.logoutIcon
-        const perfil = this.perfilTab
-        await this.waitAndClick(perfil)
         await this.waitAndClick(logoutIcon)
         await this.confirmLogout()
     }

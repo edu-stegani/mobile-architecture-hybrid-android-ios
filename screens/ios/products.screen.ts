@@ -5,7 +5,7 @@ class ProdutosIOS extends BaseScreen {
 
     // ====== SELECTORS ======
     get produtosTab(){
-        return $(``)
+        return $(`//XCUIElementTypeButton[@name="Produtos"]`)
     }
     
     get inputSearch() {

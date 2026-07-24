@@ -22,7 +22,7 @@ class BenefitIOS extends BaseScreen {
     
     async viewLinkByText(linkText: string) {
         await this.checkBenefitScreen()
-        const linkSelector = `(//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvTitle"][@text="${linkText}"])[1]`
+        const linkSelector = `//XCUIElementTypeTable//XCUIElementTypeStaticText[@label="${linkText}"]`
         await this.scrollToElement(linkSelector)
         await $(linkSelector).waitForDisplayed({ timeout: 10000, interval: 1000 })
     }

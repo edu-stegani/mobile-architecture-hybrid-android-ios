@@ -42,21 +42,25 @@ class HomeAndroid extends BaseScreen {
 
     // ======== ACTIONS ========
     async closeTutorial() {
-        await this.btnPular.waitForDisplayed({ timeout: 20000 })
-        const close = this.closeIcon
-        await this.waitAndClick(close)
-        await close.waitForDisplayed({ reverse: true, timeout: 10000 })
+        if (await this.btnPular.isDisplayed()) {
+            const close = this.closeIcon
+            await this.waitAndClick(close)
+            await close.waitForDisplayed({ reverse: true, timeout: 10000 });
+        }
     }
 
     async maintenanceNotice() {
-        await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
-        await this.btnNotShowAgain.click()
+        if (await this.btnNotShowAgain.isDisplayed()) {
+            await this.btnNotShowAgain.click()
+        }
     }
 
     async HowAboutEvaluatingUs() {
         const btnNoThanks = this.btnNoThanks
-        await this.checkpointScreen('Que tal avaliar nosso aplicativo?')
-        await this.waitAndClick(btnNoThanks)
+        if (await btnNoThanks.isDisplayed()) {
+            await this.checkpointScreen('Que tal avaliar nosso aplicativo?')
+            await this.waitAndClick(btnNoThanks)
+        }
     }
 
     async checkHomeIcon() {
@@ -72,9 +76,9 @@ class HomeAndroid extends BaseScreen {
 
     // ======== METHODS ========
     async checkDashboard() {
-        // try { await this.closeTutorial() } catch(e){ }
-        // try { await this.maintenanceNotice() } catch (e) { console.log('Aviso de manutenções não visível') }
-        // try { await this.HowAboutEvaluatingUs() } catch (e) { console.log('Solicitação de avaliação não visível.') }
+        // await this.closeTutorial()
+        // await this.maintenanceNotice()
+        await this.HowAboutEvaluatingUs()
         await this.homeTab.waitForDisplayed({ timeout: 60000, interval: 2000 })
     }
 

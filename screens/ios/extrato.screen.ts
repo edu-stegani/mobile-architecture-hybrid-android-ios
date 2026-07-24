@@ -4,7 +4,7 @@ import BaseScreen from '../shared/base.screen.js'
 class ExtratoIOS extends BaseScreen {
     // ====== SELECTORS ======
     get extratoTab(){
-        return $(``)
+        return $(`//XCUIElementTypeButton[@name="Extrato"]`)
     }
 
     get tittleSaved() {
