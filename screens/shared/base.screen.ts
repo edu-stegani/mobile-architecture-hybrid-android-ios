@@ -46,9 +46,10 @@ export default class BaseScreen {
     }
 
     // METHODS
-    async waitAndClick(element: ChainablePromiseElement) {
-        await element.waitForDisplayed({ timeout: 10000 })
-        await element.click()
+    async waitAndClick(elementOrSelector: ChainablePromiseElement | string) {
+        const element = typeof elementOrSelector === 'string' ? $(elementOrSelector) : elementOrSelector;
+        await element.waitForDisplayed({ timeout: 15000, interval: 1000 });
+        await element.click();
     }
 
     async hideKeyboard() {
@@ -56,10 +57,10 @@ export default class BaseScreen {
         await this.waitAndClick($(ok));
     }
 
-    async scrollToElement(selector: string, maxRetries = 15) {
-        for (let i = 0; i < maxRetries; i++) {
-            const el = await $(selector);
+    async scrollToElement(elementOrSelector: ChainablePromiseElement | string, maxRetries = 15) {
+        const el = typeof elementOrSelector === 'string' ? $(elementOrSelector) : elementOrSelector;
 
+        for (let i = 0; i < maxRetries; i++) {
             const isVisible = await el.waitUntil(async () => {
                 return (await el.isDisplayed());
             }, { timeout: 1000, interval: 100 }).catch(() => false);
@@ -69,7 +70,7 @@ export default class BaseScreen {
             console.log(`Tentando swipe ${i + 1}...`);
             await this.performSwipeUp();
         }
-        throw new Error(`Elemento não encontrado: ${selector}`);
+        throw new Error(`Elemento não encontrado: ${elementOrSelector.toString()}`);
     }
 
     async SwipeLeftCoordinates(coordinateY: number) {
@@ -226,7 +227,7 @@ export default class BaseScreen {
             : `//*[contains(@text, '${textCheckpoint}')]`;
 
         const checkpointText = $(selector);
-        await checkpointText.waitForDisplayed({ timeout: 10000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
+        await checkpointText.waitForDisplayed({ timeout: 15000, interval:1000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
     }
 
     async back() {

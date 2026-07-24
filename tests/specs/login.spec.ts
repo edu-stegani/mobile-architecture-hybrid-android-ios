@@ -6,6 +6,7 @@ import { AppHelper } from '../../support/utils/appHelper.js'
 
 const user = data.users.Eduardo
 const userMultiplePlans = data.users.Isis
+const userCT580 = data.users.Marcia
 
 before(async () => {
   await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
@@ -14,6 +15,11 @@ before(async () => {
 
   await postgresHelper.updateRecognitionFace('NO_FACE', userMultiplePlans.CT)
   await oracleHelpers.acceptTermAndConditions(userMultiplePlans.cpf)
+
+  await postgresHelper.updateRecognitionFace('NO_FACE', userCT580.CT)
+  await postgresHelper.updatePasswordForStrong(userCT580.cpf)  // query alterar para senha forte
+  await postgresHelper.removeLinkTutorialWithCT('2', userCT580.CT)
+  await oracleHelpers.acceptTermAndConditions(userCT580.cpf)
 })
 
 beforeEach(async () => {
@@ -41,7 +47,7 @@ describe('Login no App', () => {
     await postgresHelper.resetPasswordCount(0, user.cpf); // query resetando a contagem de senha incorreta
 
     await loginScreen.login(user.cpf, 'senha-incorreta')
-    await loginScreen.viewMessageError()
+    await loginScreen.viewMessageError('Senha incorreta')
   })
 
   it('login negando termos e condições', async () => {
@@ -60,28 +66,45 @@ describe('Login no App', () => {
     await cardScreen.validateCardsMultiplePlans(userMultiplePlans.fullName, userMultiplePlans.clientGroup, userMultiplePlans.clientGroup2)
 
   })
+
+  it('login com cpf inválido', async () => {
+    await loginScreen.tapEntrar()
+    await loginScreen.fillCpf('00000000000')
+    await loginScreen.viewMessageError('CPF inválido')
+  })
+
+  it('senha bloqueada', async () => {
+    await postgresHelper.resetPasswordCount(3, userCT580.cpf);
+
+    await loginScreen.tapEntrar()
+    await loginScreen.fillCpf(userCT580.cpf)
+    await loginScreen.fillSenha(userCT580.password)
+    await loginScreen.waitAndClick(loginScreen.btnAcessar)
+    await loginScreen.viewMessageError('Atenção')
+    await loginScreen.viewMessageError('Sua senha foi bloqueada, gostaria de fazer uma nova?')
+  })
+
 })
 
 describe('Esqueci minha senha', () => {
 
-  beforeEach(async () => {
-    await postgresHelper.updatePasswordForStrong(user.cpf)
-  })
-
   it('esqueci minha senha', async () => {
+    await postgresHelper.updatePasswordForStrong(user.cpf)
     await oracleHelpers.acceptTermAndConditions(user.cpf)
 
     await loginScreen.locateRegistration(user.cpf, user.birthdate, user.matricula)
     await loginScreen.informTokenSMS(user.cpf)
-    await loginScreen.informNewPassword('Teste123')
+    await loginScreen.informNewPassword()
     await loginScreen.checkpointScreen('SUCESSO')
     await homeScreen.checkDashboard()
   })
 
   it('senha igual a anterior', async () => {
+    await postgresHelper.updatePasswordForStrong(user.cpf)
+
     await loginScreen.locateRegistration(user.cpf, user.birthdate, user.matricula)
     await loginScreen.informTokenSMS(user.cpf)
-    await loginScreen.informNewPassword(user.password)
+    await loginScreen.informNewPassword(user.password) 
     await loginScreen.passwordCantBeEqualPrevious()
   })
 

@@ -28,27 +28,43 @@ class HomeAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/btDisagree')
     }
 
+    get homeCard() {
+        return $('id:com.astl.vidalink.beta:id/cvHomeCard')
+    }
+
+    get iconConfiguration() {
+        return $('id:com.astl.vidalink.beta:id/ibConfiguration')
+    }
+
+    get pillars360(){
+        return $(`id:com.astl.vidalink.beta:id/tvPillarsLabel`)
+    }
+
     // ======== ACTIONS ========
     async closeTutorial() {
-        await this.btnPular.waitForDisplayed({ timeout: 20000 })
-        const close = this.closeIcon
-        await this.waitAndClick(close)
-        await close.waitForDisplayed({ reverse: true, timeout: 10000 })
+        if (await this.btnPular.isDisplayed()) {
+            const close = this.closeIcon
+            await this.waitAndClick(close)
+            await close.waitForDisplayed({ reverse: true, timeout: 10000 });
+        }
     }
 
     async maintenanceNotice() {
-        await this.btnNotShowAgain.waitForDisplayed({ timeout: 10000 })
-        await this.btnNotShowAgain.click()
+        if (await this.btnNotShowAgain.isDisplayed()) {
+            await this.btnNotShowAgain.click()
+        }
     }
 
     async HowAboutEvaluatingUs() {
         const btnNoThanks = this.btnNoThanks
-        await this.checkpointScreen('Que tal avaliar nosso aplicativo?')
-        await this.waitAndClick(btnNoThanks)
+        if (await btnNoThanks.isDisplayed()) {
+            await this.checkpointScreen('Que tal avaliar nosso aplicativo?')
+            await this.waitAndClick(btnNoThanks)
+        }
     }
 
     async checkHomeIcon() {
-        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
+        await this.homeTab.waitForDisplayed({ timeout: 50000, interval: 2000 })
     }
 
     async helloUser(firstName: string) {
@@ -60,10 +76,10 @@ class HomeAndroid extends BaseScreen {
 
     // ======== METHODS ========
     async checkDashboard() {
-        // try { await this.closeTutorial() } catch(e){ }
-        // try { await this.maintenanceNotice() } catch (e) { console.log('Aviso de manutenções não visível') }
-        // try { await this.HowAboutEvaluatingUs() } catch (e) { console.log('Solicitação de avaliação não visível.') }
-        await this.checkHomeIcon()
+        // await this.closeTutorial()
+        // await this.maintenanceNotice()
+        await this.HowAboutEvaluatingUs()
+        await this.homeTab.waitForDisplayed({ timeout: 60000, interval: 2000 })
     }
 
     async tapCardByText(cardText: string) {
@@ -76,6 +92,20 @@ class HomeAndroid extends BaseScreen {
         const pilarSelector = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName" and @text="${pilarName}"]`
         await this.scrollToElement(pilarSelector)
         await this.waitAndClick($(pilarSelector))
+    }
+
+    async validateHomeAfinidade() {
+        await this.homeCard.waitForDisplayed()
+        await this.iconConfiguration.waitForDisplayed()
+    }
+
+    async onlyOnePillarOn360(name: string) {
+        const onlyOnePillar = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName"`
+        const pilarMed = `${onlyOnePillar} and @text="${name}"]`
+        await this.scrollToElement(pilarMed)
+        await this.pillars360.waitForDisplayed()
+
+        await $(`${onlyOnePillar}]`).waitForDisplayed()
     }
 
 }

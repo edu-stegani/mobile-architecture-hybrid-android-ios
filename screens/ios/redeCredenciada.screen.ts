@@ -3,6 +3,10 @@ import BaseScreen from '../shared/base.screen.js'
 
 class RedeCredenciadaIOS extends BaseScreen {
     // ====== SELECTORS ======
+    get redeTab(){
+        return $('//XCUIElementTypeButton[@name="Rede"]')
+    }
+
     get inputSearch() {
         return $('//XCUIElementTypeTextField[@value="Buscar..."]')
     }
@@ -80,7 +84,7 @@ class RedeCredenciadaIOS extends BaseScreen {
         }
     }
 
-    async traceRouteToPharmacy(pharmacyAdress: ChainablePromiseElement) {
+    async traceRouteToPharmacy() {
         await this.waitAndClick($(`(${this.btnRoute})[1]`))
 
         const btnMapas = $('//XCUIElementTypeButton[@name="Mapas"]')
@@ -115,7 +119,16 @@ class RedeCredenciadaIOS extends BaseScreen {
             await this.waitAndClick(this.vaccine)
             await this.viewListStores()
         }
-        await this.traceRouteToPharmacy(this.storeAddress)
+        await this.traceRouteToPharmacy()
+    }
+
+    async validateRedeAfinidade() {
+        await this.redeTab.click()
+        await this.inputSearch.waitForDisplayed({ timeout: 10000 })
+        await this.pharmacy.waitForDisplayed({ timeout: 10000 })
+        await this.iconChangeSearch.waitForDisplayed({ timeout: 20000 })
+        await this.waitAndClick(this.iconChangeSearch)
+        await this.viewListStores()
     }
 
 }

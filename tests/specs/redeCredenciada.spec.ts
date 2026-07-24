@@ -15,40 +15,39 @@ before(async () => {
 })
 
 const performSetup = (user: { cpf: string; password: string; CT: string }) => {
-    beforeEach(async () => {
-        await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
-        await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
-        await oracleHelpers.acceptTermAndConditions(user.cpf)
+    return async function (this: any) {
+        await postgresHelper.updateRecognitionFace('NO_FACE', user.CT);
+        await postgresHelper.removeLinkTutorialWithCT('2', user.CT);
+        await oracleHelpers.acceptTermAndConditions(user.cpf);
 
         await AppHelper.login(user.cpf, user.password);
-    });
+    };
 };
 
 describe('Rede Credenciada: Usuário comum', () => {
-    performSetup(userVidalink)
+    beforeEach(performSetup(userVidalink));
 
     it('Navegar por Rede Credenciada - Farmácias e Manipulados', async () => {
-        await homeScreen.tapPilarByName('Med')
-        await benefitsScreen.clickLinkByText('Rede Credenciada')
-        await redeCredenciadaScreen.navigateToRedeCredenciada()
-    })
+        await homeScreen.tapPilarByName('Med');
+        await benefitsScreen.clickLinkByText('Rede Credenciada');
+        await redeCredenciadaScreen.navigateToRedeCredenciada();
+    });
 
     it('Traçar rota de rede credenciada através de busca de produtos', async () => {
-        await homeScreen.tapPilarByName('Med')
-        await benefitsScreen.clickLinkByText('Produtos')
-        await produtosScreen.searchProduct('DIPIRONA')
-        await produtosScreen.selectTheFirstPharmacy()
-        await redeCredenciadaScreen.traceRouteToPharmacy(produtosScreen.pharmacyAddressRoute)
-    })
-
-})
+        await homeScreen.tapPilarByName('Med');
+        await benefitsScreen.clickLinkByText('Produtos');
+        await produtosScreen.searchProduct('DIPIRONA');
+        await produtosScreen.selectTheFirstPharmacy();
+        await redeCredenciadaScreen.traceRouteToPharmacy();
+    });
+});
 
 describe('Rede Credenciada: Usuário Nestle', () => {
-    performSetup(userNestle)
+    beforeEach(performSetup(userNestle));
 
     it('Navegar por Rede Credenciada Nestle - Farmácias, Vacinas e Manipulados', async () => {
-        await homeScreen.tapPilarByName('Med')
-        await benefitsScreen.clickLinkByText('Rede Credenciada')
-        await redeCredenciadaScreen.navigateToRedeCredenciada()
-    })
-})
+        await homeScreen.tapPilarByName('Med');
+        await benefitsScreen.clickLinkByText('Rede Credenciada');
+        await redeCredenciadaScreen.navigateToRedeCredenciada();
+    });
+});
