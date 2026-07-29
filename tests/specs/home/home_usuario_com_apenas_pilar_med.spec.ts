@@ -1,8 +1,8 @@
-import data from '../../support/data/users.json' with { type: 'json' };
-import { homeScreen, benefitsScreen } from '../../screens/index.js'
-import postgresHelper from '../../support/utils/postgresHelper.js'
-import oracleHelpers from '../../support/utils/oracleHelpers.js'
-import { AppHelper } from '../../support/utils/appHelper.js'
+import data from '../../../support/data/users.json' with { type: 'json' };
+import { homeScreen, benefitsScreen } from '../../../screens/index.js'
+import postgresHelper from '../../../support/utils/postgresHelper.js'
+import oracleHelpers from '../../../support/utils/oracleHelpers.js'
+import { AppHelper } from '../../../support/utils/appHelper.js'
 
 const userNestle = data.users.Roberto
 
@@ -11,9 +11,7 @@ before(async () => {
     await postgresHelper.removeLinkTutorialWithCT('2', userNestle.CT)
     await postgresHelper.updatePasswordForStrong(userNestle.cpf)
     await oracleHelpers.acceptTermAndConditions(userNestle.cpf)
-})
 
-beforeEach(async () => {
     await AppHelper.login(userNestle.cpf, userNestle.password);
 })
 
