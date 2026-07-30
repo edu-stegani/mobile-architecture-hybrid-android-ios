@@ -8,6 +8,8 @@ const userAfinidade = data.users.Paulo
 
 before(async () => {
     await postgresHelper.updateRecognitionFace('NO_FACE', userAfinidade.CT)
+    await postgresHelper.resetPasswordCount(0, userAfinidade.cpf)
+    await postgresHelper.updatePasswordForStrong(userAfinidade.cpf)
     await postgresHelper.removeLinkTutorialWithCT('2', userAfinidade.CT)
     await oracleHelpers.acceptTermAndConditions(userAfinidade.cpf)
 

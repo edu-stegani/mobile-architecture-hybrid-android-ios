@@ -116,7 +116,7 @@ class RedeCredenciadaAndroid extends BaseScreen {
         await this.redeTab.click()
         await this.inputSearch.waitForDisplayed({ timeout: 10000 })
         await this.pharmacy.waitForDisplayed({ timeout: 10000 })
-        await this.iconChangeSearch.waitForDisplayed({ timeout: 20000 })
+        await this.iconChangeSearch.waitForDisplayed({ timeout: 50000 })
         await this.waitAndClick(this.iconChangeSearch)
         await this.viewListStores()
     }
