@@ -11,6 +11,10 @@ class LoginIOS extends BaseScreen {
         return $('~enterButtonIdentifier')
     }
 
+    get btnFirstAccess() {
+        return $('id:com.astl.vidalink.beta:id/tvNewUserPassword')
+    }
+
     get inputCpf() {
         return $('~cpfTextFieldTextFieldIdentifier')
     }
@@ -97,6 +101,14 @@ class LoginIOS extends BaseScreen {
 
     get btnNotAccessApp(){
         return $('//XCUIElementTypeButton[@name="Não acessar o app"]')
+    }
+
+    get inputEmailPrimeiroAcesso() {
+        return $('//android.widget.EditText[@text="email@email.com.br"]')
+    }
+
+    get inputCellphonePrimeiroAcesso() {
+        return $('//android.widget.EditText[@text="XX X XXXX-XXXX"]')
     }
 
     // ======== ACTIONS ========
@@ -218,6 +230,30 @@ class LoginIOS extends BaseScreen {
         await this.hideKeyboard()
 
         await this.waitAndClick(this.btnProximoIOS)
+    }
+
+    async firstAccess(cpf: string, birthdate: string, matricula: string) {
+        await this.waitAndClick(this.btnFirstAccess)
+        await this.fillCpf(cpf)
+        await this.fillDateOfBirth(birthdate)
+        await this.waitAndClick(this.btnLocateRegister)
+        await this.fillMatricula(matricula)
+    }
+
+    async informEmailAndCellphone(email: string, cellphone: string) {
+        await this.checkpointScreen('Agora vamos completar o seu cadastro')
+        await this.waitAndSetValue(this.inputEmailPrimeiroAcesso, email)
+        await this.waitAndClick(this.inputCellphonePrimeiroAcesso)
+        await this.waitAndSetValue(this.inputCellphonePrimeiroAcesso, cellphone)
+        try { await browser.hideKeyboard() } catch (e) { }
+        await this.waitAndClick(this.btnLocateRegister)
+    }
+
+    async validatingData(cpf: string, password: string) {
+        await this.checkpointScreen('Como gostaria de confirmar seu cadastro?')
+        await this.waitAndClick($('id:com.astl.vidalink.beta:id/tvSmsValidation'))
+        await this.informTokenSMS(cpf)
+        await this.informNewPassword(password)
     }
 
     async passwordCantBeEqualPrevious() {
