@@ -70,6 +70,12 @@ class DbHelper {
         return await this.executeQuery('login', query, [facerecognitiontype, CT]);
     }
 
+    async deleteUserBySocialId(socialId: string) {
+        const query = `DELETE FROM login.users WHERE socialid = $1`;
+
+        return await this.executeQuery('login', query, [socialId]);
+    }
+
     async removeLinkTutorialWithCT(cd_tutorial: string, ct: string) {
         const query = `DELETE FROM public.tutorial_ct WHERE cd_tutorial= $1 AND ct= $2;`;
 
