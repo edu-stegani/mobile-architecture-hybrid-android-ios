@@ -45,7 +45,7 @@ class ProfileIOS extends BaseScreen {
     }
 
     get containerTelephoneSP(){
-        return $('~phone_number')
+        return $('//XCUIElementTypeCell[@name="Opção São Paulo"]')  //~phone_number
     }
 
     get iconCopyNumber(){

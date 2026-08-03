@@ -113,7 +113,8 @@ class ProdutosIOS extends BaseScreen {
 
         await this.waitAndClick($(cardMedicine))
 
-        await this.waitAndClick(filter)
+        await filter.waitForDisplayed({timeout:30000, interval:1000})
+        await filter.click()
         await options.waitForDisplayed()
         await this.waitAndClick(selectedOption)
 

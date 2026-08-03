@@ -232,17 +232,19 @@ class LoginAndroid extends BaseScreen {
     async informEmailAndCellphone(email: string, cellphone: string) {
         await this.checkpointScreen('Agora vamos completar o seu cadastro')
         await this.waitAndSetValue(this.inputEmailPrimeiroAcesso, email)
+        await driver.keys(['Tab']);
         await this.waitAndClick(this.inputCellphonePrimeiroAcesso)
         await this.waitAndSetValue(this.inputCellphonePrimeiroAcesso, cellphone)
-        try { await browser.hideKeyboard() } catch (e) { }
+        await driver.keys(['Tab']);
+        // try { await browser.hideKeyboard() } catch (e) { } 
         await this.waitAndClick(this.btnLocateRegister)
     }
 
-    async validatingData(cpf: string, password: string) {
+    async validatingData(cpf: string) {
         await this.checkpointScreen('Como gostaria de confirmar seu cadastro?')
         await this.waitAndClick($('id:com.astl.vidalink.beta:id/tvSmsValidation'))
         await this.informTokenSMS(cpf)
-        await this.informNewPassword(password)
+        await this.informNewPassword()
     }
 
     async passwordCantBeEqualPrevious() {
@@ -266,6 +268,22 @@ class LoginAndroid extends BaseScreen {
         await this.checkpointScreen('Ao não consentir com os termos e condições de uso, você não poderá prosseguir no aplicativo.\n\nTem certeza que deseja interromper o acesso ao app da Vidalink?')
         await this.btnConfirmPopUp.waitForDisplayed({timeout: 10000, interval: 1000})
         await this.waitAndClick(this.btnNao)
+    }
+
+    async agreeWithTermsAndConditions() {
+        const checkboxAgreeTerm = this.checkboxAgreeTerm
+        const checkboxAgreeInfo = this.checkboxAgreeInfo
+        const btnAceitar = this.btnAgreeTerms
+        const btnNegar = this.btnNoAgreeTerms
+
+        await this.acceptFullAccessGalery()
+        await this.acceptPermissionAlertLocation()
+
+        await browser.pause(3000);
+        await this.scrollToElement(btnNegar)
+        await this.waitAndClick(checkboxAgreeTerm)
+        await this.waitAndClick(checkboxAgreeInfo)
+        await this.waitAndClick(btnAceitar)
     }
 
 }
