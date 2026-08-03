@@ -10,7 +10,8 @@ before(async () => {
     await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
     await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
     await postgresHelper.deleteUserBySocialId(user.cpf)
-    await oracleHelpers.acceptTermAndConditions(user.cpf)
+    await postgresHelper.freeUpPhoneNumber()
+    await oracleHelpers.resetTermAndConditions(user.cpf)
 
     await AppHelper.resetApp();
 })
@@ -19,8 +20,9 @@ it('primeiro acesso sem facial', async () => {
 
     await loginScreen.firstAccess(user.cpf, user.birthdate, user.matricula)
     await loginScreen.informEmailAndCellphone('primeiro@acesso.com.br', '11958048513')
-    await loginScreen.validatingData(user.cpf, user.password)
+    await loginScreen.validatingData(user.cpf)
     await loginScreen.checkpointScreen('SUCESSO')
+    await loginScreen.agreeWithTermsAndConditions()
     await homeScreen.checkDashboard()
 
 })

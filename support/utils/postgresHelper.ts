@@ -76,6 +76,22 @@ class DbHelper {
         return await this.executeQuery('login', query, [socialId]);
     }
 
+    async freeUpPhoneNumber(phoneNumber: string = '11958048513'): Promise<void> {
+        
+        const selectQuery = `SELECT socialid FROM login.users WHERE phonenumber = $1;`;
+        const rows = await this.executeQuery('login', selectQuery, [phoneNumber]);
+
+        if (rows && rows.length > 0) {
+            const randomPhone = `119${Math.floor(10000000 + Math.random() * 90000000)}`;
+            const userToUpdate = rows[0];
+
+            const updateQuery = `UPDATE login.users SET phonenumber = $1 WHERE socialid = $2;`;
+
+            await this.executeQuery('login', updateQuery, [randomPhone, userToUpdate.socialid]);
+            console.log(`[DB] Telefone ${phoneNumber} liberado! O CPF ${userToUpdate.socialid} agora usa ${randomPhone}.`);
+        }
+    }
+
     async removeLinkTutorialWithCT(cd_tutorial: string, ct: string) {
         const query = `DELETE FROM public.tutorial_ct WHERE cd_tutorial= $1 AND ct= $2;`;
 
