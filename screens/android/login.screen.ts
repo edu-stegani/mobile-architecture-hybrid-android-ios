@@ -232,10 +232,10 @@ class LoginAndroid extends BaseScreen {
     async informEmailAndCellphone(email: string, cellphone: string) {
         await this.checkpointScreen('Agora vamos completar o seu cadastro')
         await this.waitAndSetValue(this.inputEmailPrimeiroAcesso, email)
-        await driver.keys(['Tab']);
+        await driver.keys(['Tab']); 
         await this.waitAndClick(this.inputCellphonePrimeiroAcesso)
         await this.waitAndSetValue(this.inputCellphonePrimeiroAcesso, cellphone)
-        await driver.keys(['Tab']);
+        await driver.keys(['Tab']); 
         // try { await browser.hideKeyboard() } catch (e) { } 
         await this.waitAndClick(this.btnLocateRegister)
     }
@@ -275,9 +275,6 @@ class LoginAndroid extends BaseScreen {
         const checkboxAgreeInfo = this.checkboxAgreeInfo
         const btnAceitar = this.btnAgreeTerms
         const btnNegar = this.btnNoAgreeTerms
-
-        await this.acceptFullAccessGalery()
-        await this.acceptPermissionAlertLocation()
 
         await browser.pause(3000);
         await this.scrollToElement(btnNegar)
