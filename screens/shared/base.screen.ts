@@ -265,4 +265,11 @@ export default class BaseScreen {
         await picker.setValue(value);
         await picker.click();
     }
+
+    async confirmAlert() {
+        const btnOK = $(`id:com.astl.vidalink.beta:id/btConfirmOption`)
+        if (await btnOK.isDisplayed()) {
+            await btnOK.click()
+        }
+    }
 }

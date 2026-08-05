@@ -60,6 +60,10 @@ class ProdutosIOS extends BaseScreen {
         return `/XCUIElementTypeStaticText[@name="Ver detalhes da farmácia"]`
     }
 
+    get modalProductNoSubsidy() {
+        return $('id:com.astl.vidalink.beta:id/tvDialogDescription')
+    }
+
     // ======== ACTIONS ========
     async viewTollbarBuscarMedicamentos() {
         await this.checkpointScreen('Buscar medicamentos')
@@ -111,7 +115,8 @@ class ProdutosIOS extends BaseScreen {
         const pharmacyPriceMin = $(`${firstPharmacy}${this.priceMin}`)
         const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
 
-        await this.waitAndClick($(cardMedicine))
+        await $(cardMedicine).waitForDisplayed({ timeout: 60000 })
+        await $(cardMedicine).click()
 
         await filter.waitForDisplayed({timeout:30000, interval:1000})
         await filter.click()
@@ -136,6 +141,18 @@ class ProdutosIOS extends BaseScreen {
         await $(firstPharmacy).waitForDisplayed({timeout: 60000})
         await pharmacyViewDetails.waitForDisplayed()
         await this.waitAndClick(pharmacyViewDetails)
+    }
+
+    async productNoSubsidy(){
+        const cardMedicine = `(${this.cardProduct})[1]`
+        const noSubsidyText = $(`${cardMedicine}//android.widget.TextView[@text="Não subsidiado"]`)
+
+        await $(cardMedicine).waitForDisplayed({ timeout: 60000 })
+        await noSubsidyText.waitForDisplayed()
+
+        await $(cardMedicine).click()
+        await this.modalProductNoSubsidy.waitForDisplayed({ timeout: 60000 })
+        await this.confirmAlert()
     }
 
 }
