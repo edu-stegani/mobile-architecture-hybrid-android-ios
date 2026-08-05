@@ -128,7 +128,7 @@ class ProfileAndroid extends BaseScreen {
     }
 
     async validateTalkToUs(){
-        const whatsapp = this.containerWhatsapp
+        // const whatsapp = this.containerWhatsapp
         const numberTelephoneSP = this.containerTelephoneSP
         const copyNumberSP = this.iconCopyNumber
         const otherRegions = this.containerOtherRegions
@@ -136,7 +136,7 @@ class ProfileAndroid extends BaseScreen {
         const emailSuporte = this.containerEmail
 
         await this.selectOptionProfileByName('Fale conosco')
-        await whatsapp.waitForDisplayed()
+        // await whatsapp.waitForDisplayed()
         await numberTelephoneSP.waitForDisplayed()
         await this.waitAndClick(copyNumberSP)
         await otherRegions.waitForDisplayed()

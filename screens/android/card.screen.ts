@@ -9,6 +9,10 @@ class CardAndroid extends BaseScreen {
         return '//android.widget.TextView[@text="Cartão"]'
     }
 
+    get homeTab() {
+        return '//android.widget.TextView[@text="Home"]'
+    }
+
     get card() {
         return '//androidx.cardview.widget.CardView'    //*[@resource-id="com.astl.vidalink.beta:id/clBackground"]
     }
@@ -67,11 +71,15 @@ class CardAndroid extends BaseScreen {
 
     // ======== METHODS ========
     async validateInfoCardsOnHomeAndCardScreen(name1: string, name2: string, name3: string) {
+        await this.waitAndClick(this.cardTab)
+        await this.waitAndClick(this.homeTab)
         const cardnumbers = await this.captureCardsNumbersOnHome(name1, name2, name3)
         await this.validateCardsOnCardScreen(cardnumbers)
     }
 
     async validateCardsAfterClose(name1: string, name2: string, name3: string) {
+        await this.waitAndClick(this.cardTab)
+        await this.waitAndClick(this.homeTab)
         const cardnumbers = await this.captureCardsNumbersOnHome(name1, name2, name3)
         await AppHelper.resetApp()
         await this.validateCardsOnCardScreen(cardnumbers)
@@ -80,7 +88,7 @@ class CardAndroid extends BaseScreen {
     async validateCardsMultiplePlans(name: string, ct1: string, ct2: string) {
         await $(this.cardTab).waitForDisplayed({ timeout: 60000 })
         await $(this.cardTab).click()
-        
+
         const cardName = `${this.card}//*[contains(@text, "${name}")]`
         await expect($(cardName)).toBeDisplayed()
 
@@ -100,7 +108,7 @@ class CardAndroid extends BaseScreen {
         await expect($(cardPlan2)).toBeDisplayed()
     }
 
-    async validateCardAfinidade(name:string, cardNumber: string){
+    async validateCardAfinidade(name: string, cardNumber: string) {
         await this.waitAndClick(this.cardTab)
         await $(`${this.card}//*[contains(@text, "${name}")]`).waitForDisplayed()
         await $(`${this.card}//*[contains(@text, "${cardNumber}")]`).waitForDisplayed()

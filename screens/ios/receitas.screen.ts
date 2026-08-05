@@ -7,7 +7,7 @@ const RecipeLocators = {
         image: 'XCUIElementTypeButton[@name="ic photo receita"]',
         delete: 'XCUIElementTypeButton[@name="ic trash"]',
         status: 'XCUIElementTypeStaticText[7]',
-        details: 'XCUIElementTypeStaticText[@name="Detalhes por itens (1)"]'
+        details: 'XCUIElementTypeStaticText[contains(@name, "Detalhes por itens")]'
     }
 };
 

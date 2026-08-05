@@ -14,7 +14,7 @@ class CardIOS extends BaseScreen {
     }
 
     get cardNumber() {
-        return '//XCUIElementTypeStaticText[@name="lblNumber"]'
+        return '//XCUIElementTypeStaticText[3]'
     }
 
     get btnCopyNumberCard() {
@@ -65,11 +65,13 @@ class CardIOS extends BaseScreen {
 
     // ======== METHODS ========
     async validateInfoCardsOnHomeAndCardScreen(name1: string, name2: string, name3: string) {
+        await this.waitAndClick(this.cardTab)
         const cardnumbers = await this.captureCardsNumbersOnHome(name1, name2, name3)
         await this.validateCardsOnCardScreen(cardnumbers)
     }
 
     async validateCardsAfterClose(name1: string, name2: string, name3: string) {
+        await this.waitAndClick(this.cardTab)
         const cardnumbers = await this.captureCardsNumbersOnHome(name1, name2, name3)
         await AppHelper.resetApp()
         await this.validateCardsOnCardScreen(cardnumbers)

@@ -15,7 +15,8 @@ class BenefitIOS extends BaseScreen {
 
     async clickLinkByText(linkText: string) {
         await this.checkBenefitScreen()
-        const linkSelector = `//XCUIElementTypeTable//XCUIElementTypeStaticText[@label="${linkText}"]` 
+        const linkSelector = `//XCUIElementTypeTable//XCUIElementTypeStaticText[contains(@label, "${linkText}")]` 
+        await browser.pause(5000)
         await this.scrollToElement(linkSelector)
         await this.waitAndClick($(linkSelector))
     }

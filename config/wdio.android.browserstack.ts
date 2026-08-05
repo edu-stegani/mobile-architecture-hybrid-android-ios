@@ -1,7 +1,7 @@
 import type { Options } from '@wdio/types'
 import 'dotenv/config'
 import path from 'node:path'
-import { setBSName, setBSTestAnnotation, setBSTestResult } from '../support/hooks/global.hooks.js'
+import { setBSSessionName, setBSTestAnnotation, setBSTestResult } from '../support/hooks/global.hooks.js'
 
 const buildName = `Android_Build_${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
 
@@ -21,6 +21,8 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
     waitforTimeout: 60000,
 
     specs: ['../tests/specs/**/*.ts'],
+
+    maxInstances: 1,
 
     framework: 'mocha',
     logLevel: 'silent',
@@ -42,12 +44,9 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
         timeout: 600000
     },
 
-    before: async function (capabilities, specs) {
-        await setBSName(specs); 
-    },
-
     beforeTest: async function (test) {
-        await setBSTestAnnotation(test); 
+        await setBSSessionName(test.title);
+        await setBSTestAnnotation(test);
     },
 
     afterTest: async function (test, context, result) {

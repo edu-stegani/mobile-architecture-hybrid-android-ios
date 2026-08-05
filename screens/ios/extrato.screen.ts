@@ -52,9 +52,9 @@ class ExtratoIOS extends BaseScreen {
         const dashboardSubsidy = this.dashboardSubsidy
         const dashboardSaldo = `(${this.dashboardValueDisponible})[2]`
 
-        await tituloEconomizei.waitForDisplayed({ interval: 1000 })
-        await ultimosMeses.waitForDisplayed({ interval: 1000 })
-        await expect($(cardReport)).toBeDisplayed({ interval: 1000 })
+        await tituloEconomizei.waitForDisplayed({ interval: 10000 })
+        await ultimosMeses.waitForDisplayed({ interval: 10000 })
+        await expect($(cardReport)).toBeDisplayed({ interval: 10000 })
 
         try {
             await dashboardSubsidy.waitForDisplayed({ timeout: 10000, interval: 1000 })

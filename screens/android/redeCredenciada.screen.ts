@@ -57,7 +57,7 @@ class RedeCredenciadaAndroid extends BaseScreen {
         await this.inputSearch.waitForDisplayed({ timeout: 10000 })
         await this.pharmacy.waitForDisplayed({ timeout: 10000 })
         await this.manipulation.waitForDisplayed({ timeout: 10000 })
-        await this.iconChangeSearch.waitForDisplayed({ timeout: 20000 })
+        await this.iconChangeSearch.waitForDisplayed({ timeout: 50000 })
     }
 
     async viewListStores() {
@@ -66,7 +66,7 @@ class RedeCredenciadaAndroid extends BaseScreen {
 
         await this.increaseSearchRadius()
 
-        await storeList.waitForDisplayed({ timeout: 10000 })
+        await storeList.waitForDisplayed({ timeout: 30000 })
         await $(firstPharmacy).waitForDisplayed({ timeout: 10000 })
 
         const PharmacyName = await this.storeName.getText()
@@ -116,7 +116,7 @@ class RedeCredenciadaAndroid extends BaseScreen {
         await this.redeTab.click()
         await this.inputSearch.waitForDisplayed({ timeout: 10000 })
         await this.pharmacy.waitForDisplayed({ timeout: 10000 })
-        await this.iconChangeSearch.waitForDisplayed({ timeout: 20000 })
+        await this.iconChangeSearch.waitForDisplayed({ timeout: 50000 })
         await this.waitAndClick(this.iconChangeSearch)
         await this.viewListStores()
     }

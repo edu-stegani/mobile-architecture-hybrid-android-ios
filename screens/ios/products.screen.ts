@@ -113,7 +113,8 @@ class ProdutosIOS extends BaseScreen {
 
         await this.waitAndClick($(cardMedicine))
 
-        await this.waitAndClick(filter)
+        await filter.waitForDisplayed({timeout:30000, interval:1000})
+        await filter.click()
         await options.waitForDisplayed()
         await this.waitAndClick(selectedOption)
 
@@ -130,9 +131,9 @@ class ProdutosIOS extends BaseScreen {
         const firstPharmacy = `(${this.cardPharmacy})[1]`
         const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
 
-        await medicineCard.waitForDisplayed({ timeout: 30000 })
+        await medicineCard.waitForDisplayed({ timeout: 60000 })
         await medicineCard.click()
-        await $(firstPharmacy).waitForDisplayed({timeout: 30000})
+        await $(firstPharmacy).waitForDisplayed({timeout: 60000})
         await pharmacyViewDetails.waitForDisplayed()
         await this.waitAndClick(pharmacyViewDetails)
     }

@@ -11,6 +11,10 @@ class LoginIOS extends BaseScreen {
         return $('~enterButtonIdentifier')
     }
 
+    get btnFirstAccess() {
+        return $('~signupButtonIdentifier')
+    }
+
     get inputCpf() {
         return $('~cpfTextFieldTextFieldIdentifier')
     }
@@ -97,6 +101,14 @@ class LoginIOS extends BaseScreen {
 
     get btnNotAccessApp(){
         return $('//XCUIElementTypeButton[@name="Não acessar o app"]')
+    }
+
+    get inputEmailPrimeiroAcesso() {
+        return $('~emailTextFieldTextFieldIdentifier')
+    }
+
+    get inputCellphonePrimeiroAcesso() {
+        return $('~phoneTextFieldTextFieldIdentifier')
     }
 
     // ======== ACTIONS ========
@@ -220,6 +232,32 @@ class LoginIOS extends BaseScreen {
         await this.waitAndClick(this.btnProximoIOS)
     }
 
+    async firstAccess(cpf: string, birthdate: string, matricula: string) {
+        await this.acceptNotifications()
+        await this.waitAndClick(this.btnFirstAccess)
+        await this.fillCpf(cpf)
+        await this.fillDateOfBirth(birthdate)
+        await this.waitAndClick(this.btnAgreeTerms)
+        await this.fillMatricula(matricula)
+    }
+
+    async informEmailAndCellphone(email: string, cellphone: string) {
+        await this.checkpointScreen('Agora vamos completar o seu cadastro')
+        await this.waitAndSetValue(this.inputEmailPrimeiroAcesso, email)
+        await this.hideKeyboard()
+        await this.waitAndClick(this.inputCellphonePrimeiroAcesso)
+        await this.waitAndSetValue(this.inputCellphonePrimeiroAcesso, cellphone)
+        await this.hideKeyboard()
+        await this.waitAndClick(this.btnAgreeTerms)
+    }
+
+    async validatingData(cpf: string) {
+        await this.checkpointScreen('Como gostaria de confirmar seu cadastro?')
+        await this.waitAndClick($('//XCUIElementTypeStaticText[@name="Validando por SMS"]'))
+        await this.informTokenSMS(cpf)
+        await this.informNewPassword()
+    }
+
     async passwordCantBeEqualPrevious() {
         await this.checkpointScreen('Atenção! A nova senha não pode ser igual a senha anterior.')
         await this.waitAndClick($('~primaryButtonIdentifier'))
@@ -244,6 +282,22 @@ class LoginIOS extends BaseScreen {
         await this.checkpointScreen('Ao não consentir com os termos e condições de uso, você não poderá prosseguir no aplicativo.')
         await this.btnWantAccessApp.waitForDisplayed({ timeout: 10000, interval: 1000 })
         await this.waitAndClick(this.btnNotAccessApp)
+    }
+
+    async agreeWithTermsAndConditions() {
+        const checkboxAgreeTerm = this.checkboxAgreeTerm
+        const checkboxAgreeInfo = this.checkboxAgreeInfo
+        const btnAceitar = this.btnAgreeTerms
+        const btnNegar = this.btnNoAgreeTerms
+
+        await this.acceptFullAccessGalery()
+        await this.acceptPermissionAlertLocation()
+
+        await browser.pause(3000);
+        await this.scrollToElement(btnNegar)
+        await this.waitAndClick(checkboxAgreeTerm)
+        await this.waitAndClick(checkboxAgreeInfo)
+        await this.waitAndClick(btnAceitar)
     }
 
 }

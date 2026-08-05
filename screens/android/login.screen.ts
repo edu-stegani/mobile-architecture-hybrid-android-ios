@@ -10,6 +10,10 @@ class LoginAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/btnHave')
     }
 
+    get btnFirstAccess() {
+        return $('id:com.astl.vidalink.beta:id/tvNewUserPassword')
+    }
+
     get inputCpf() {
         return $('id=com.astl.vidalink.beta:id/etFirstField')
     }
@@ -88,6 +92,14 @@ class LoginAndroid extends BaseScreen {
 
     get btnNoAgreeTerms(){
         return '//android.widget.Button[@resource-id="com.astl.vidalink.beta:id/btCancel"]'
+    }
+
+    get inputEmailPrimeiroAcesso() {
+        return $('//android.widget.EditText[@text="email@email.com.br"]')
+    }
+
+    get inputCellphonePrimeiroAcesso() {
+        return $('//android.widget.EditText[@text="XX X XXXX-XXXX"]')
     }
 
     // ======== ACTIONS ========
@@ -209,6 +221,32 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndClick(this.btnAcessar)
     }
 
+    async firstAccess(cpf: string, birthdate: string, matricula: string) {
+        await this.waitAndClick(this.btnFirstAccess)
+        await this.fillCpf(cpf)
+        await this.fillDateOfBirth(birthdate)
+        await this.waitAndClick(this.btnLocateRegister)
+        await this.fillMatricula(matricula)
+    }
+
+    async informEmailAndCellphone(email: string, cellphone: string) {
+        await this.checkpointScreen('Agora vamos completar o seu cadastro')
+        await this.waitAndSetValue(this.inputEmailPrimeiroAcesso, email)
+        await driver.keys(['Tab']); 
+        await this.waitAndClick(this.inputCellphonePrimeiroAcesso)
+        await this.waitAndSetValue(this.inputCellphonePrimeiroAcesso, cellphone)
+        await driver.keys(['Tab']); 
+        // try { await browser.hideKeyboard() } catch (e) { } 
+        await this.waitAndClick(this.btnLocateRegister)
+    }
+
+    async validatingData(cpf: string) {
+        await this.checkpointScreen('Como gostaria de confirmar seu cadastro?')
+        await this.waitAndClick($('id:com.astl.vidalink.beta:id/tvSmsValidation'))
+        await this.informTokenSMS(cpf)
+        await this.informNewPassword()
+    }
+
     async passwordCantBeEqualPrevious() {
         await this.checkpointScreen('Atenção!')
         await this.checkpointScreen('A nova senha não pode ser igual a senha anterior.')
@@ -230,6 +268,19 @@ class LoginAndroid extends BaseScreen {
         await this.checkpointScreen('Ao não consentir com os termos e condições de uso, você não poderá prosseguir no aplicativo.\n\nTem certeza que deseja interromper o acesso ao app da Vidalink?')
         await this.btnConfirmPopUp.waitForDisplayed({timeout: 10000, interval: 1000})
         await this.waitAndClick(this.btnNao)
+    }
+
+    async agreeWithTermsAndConditions() {
+        const checkboxAgreeTerm = this.checkboxAgreeTerm
+        const checkboxAgreeInfo = this.checkboxAgreeInfo
+        const btnAceitar = this.btnAgreeTerms
+        const btnNegar = this.btnNoAgreeTerms
+
+        await browser.pause(3000);
+        await this.scrollToElement(btnNegar)
+        await this.waitAndClick(checkboxAgreeTerm)
+        await this.waitAndClick(checkboxAgreeInfo)
+        await this.waitAndClick(btnAceitar)
     }
 
 }

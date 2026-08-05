@@ -1,5 +1,6 @@
 import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
+import { log } from 'console'
 
 class ReembolsoAndroid extends BaseScreen {
 
@@ -24,11 +25,11 @@ class ReembolsoAndroid extends BaseScreen {
         return $('//android.widget.Button[@content-desc="receitamedica"]')    //android=new UiSelector().resourceId("com.astl.vidalink.beta:id/btnNextFile").text("Enviar receita")
     }
 
-    get labelSuccess(){
+    get labelSuccess() {
         return $(`//*[@resource-id="com.astl.vidalink.beta:id/tvLabel"][@text="SUCESSO"]`)
     }
 
-    get labelDataSended(){
+    get labelDataSended() {
         return $('//*[@resource-id="com.astl.vidalink.beta:id/tvMessage"][@text="Dados enviados."]')
     }
 
@@ -41,7 +42,7 @@ class ReembolsoAndroid extends BaseScreen {
     }
 
     get selectBank() {
-        return $('id:com.astl.vidalink.beta:id/etBank')
+        return $('//android.widget.AutoCompleteTextView[@resource-id="com.astl.vidalink.beta:id/etBank"]/..//android.widget.ImageButton')
     }
 
     get optionBank() {
@@ -118,15 +119,18 @@ class ReembolsoAndroid extends BaseScreen {
 
     async reportBankForRefund(bankName: string) {
         const selectBank = this.selectBank
-        const optionBank = $(`${this.optionBank}//*[contains(@text,"${bankName}")]`)
         const inputAgency = this.inputAgency
         const inputAccount = this.inputAccount
         const inputDigit = this.inputDigit
         const btnConfirmDataBankPopUp = this.btnConfirmPopUp
 
         await this.checkpointScreen('Agora é só conferir ou alterar seus dados bancários cadastrados')
-        await this.waitAndClick(selectBank)
-        await this.waitAndClick(optionBank)
+        await selectBank.waitForDisplayed({ timeout: 30000 })
+        await selectBank.click()
+        const optionBank = $(`${this.optionBank}//*[contains(@text,"${bankName}")]`)
+        await optionBank.waitForDisplayed({ timeout: 30000 })
+        await optionBank.click()
+
         await this.waitAndSetValue(inputAgency, '12345')
         await this.waitAndSetValue(inputAccount, '12345678')
         await this.waitAndSetValue(inputDigit, '9')
@@ -161,14 +165,12 @@ class ReembolsoAndroid extends BaseScreen {
         await this.sendInvoicePhoto()
         await this.sendRecipePhoto()
         try {
-            await this.reportBankForRefund('Banco do Brasil')
+        await this.reportBankForRefund('Banco do Brasil')
         } catch (error) { console.log('Fluxo sem preenchimento de dados bancários.') }
         await labelSuccess.waitForDisplayed({ timeout: 20000 })
         await labelDataSended.waitForDisplayed({ timeout: 10000 })
         await this.waitAndClick(btnConcluir)
         await this.viewCardRefundAndGetProtocol()
-
-
     }
 
 }

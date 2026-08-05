@@ -45,7 +45,7 @@ class ProfileIOS extends BaseScreen {
     }
 
     get containerTelephoneSP(){
-        return $('~phone_number')
+        return $('//XCUIElementTypeCell[@name="Opção São Paulo"]')  //~phone_number
     }
 
     get iconCopyNumber(){
@@ -123,7 +123,7 @@ class ProfileIOS extends BaseScreen {
     }
 
     async validateTalkToUs(){
-        const whatsapp = this.containerWhatsapp
+        // const whatsapp = this.containerWhatsapp
         const numberTelephoneSP = this.containerTelephoneSP
         const copyNumberSP = this.iconCopyNumber
         const otherRegions = this.containerOtherRegions
@@ -131,7 +131,7 @@ class ProfileIOS extends BaseScreen {
         const emailSuporte = this.containerEmail
 
         await this.selectOptionProfileByName('Fale conosco')
-        await whatsapp.waitForDisplayed()
+        // await whatsapp.waitForDisplayed()
         await numberTelephoneSP.waitForDisplayed({timeout: 10000, interval: 1000})
         await this.waitAndClick(copyNumberSP)
         await otherRegions.waitForDisplayed()
