@@ -88,6 +88,8 @@ class HomeIOS extends BaseScreen {
     }
 
     async validateHomeAfinidade() {
+        await this.acceptFullAccessGalery()
+        await this.acceptPermissionAlertLocation()
         await this.iconConfiguration.waitForDisplayed()
     }
 

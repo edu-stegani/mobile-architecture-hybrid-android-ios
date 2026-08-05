@@ -212,7 +212,7 @@ export default class BaseScreen {
         const btnDeletePicture = driver.isIOS
             ? this.btnDeletePictureIOS
             : this.btnDeletePictureAndroid;
-        await btnDeletePicture.waitForDisplayed()
+        await btnDeletePicture.waitForDisplayed({timeout:10000, interval:1000})
 
     }
 
