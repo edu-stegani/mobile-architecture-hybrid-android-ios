@@ -65,6 +65,10 @@ class ReembolsoAndroid extends BaseScreen {
         return $(`//android.widget.Button[@resource-id="com.astl.vidalink.beta:id/btnNextFile"]`)
     }
 
+    get refundStatus() {
+        return `(${this.cardRefund})[1]//*[@resource-id="com.astl.vidalink.beta:id/tvMedicineRefundStatus"]`
+    }
+
     // ======== ACTIONS ========
     async viewTollbarReembolso() {
         const tollbarReembolso = $(`${this.tollbar}//android.widget.TextView[@text="Reembolso"]`)
@@ -171,6 +175,18 @@ class ReembolsoAndroid extends BaseScreen {
         await labelDataSended.waitForDisplayed({ timeout: 10000 })
         await this.waitAndClick(btnConcluir)
         await this.viewCardRefundAndGetProtocol()
+    }
+
+    async validateRefundStatusApproved() {
+        await this.viewTollbarReembolso()
+        const cardRefund = $(`(${this.cardRefund})[1]`)
+        await cardRefund.waitForDisplayed({ timeout: 30000 })   
+
+        const statusRefund = $(this.refundStatus)
+        await statusRefund.waitForDisplayed()
+
+        const statusRefundText = await statusRefund.getText()
+        await $(`(${this.cardRefund})[1]//*[@text="${statusRefundText}"]`).waitForDisplayed()
     }
 
 }

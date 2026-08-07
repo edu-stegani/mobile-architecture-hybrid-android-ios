@@ -57,11 +57,15 @@ class ReembolsoIOS extends BaseScreen {
     }
 
     get inputDigit() {
-        return  $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[4]')
+        return $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[4]')
     }
 
     get btnConfirmDataBankPopUp() {
         return $(`//XCUIElementTypeButton[@label="Confirmar dados"]`)
+    }
+
+    get refundStatus() {
+        return $(`(${this.cardRefund})[1]//*[@resource-id="com.astl.vidalink.beta:id/tvMedicineRefundStatus"]`)
     }
 
     // ======== ACTIONS ========
@@ -118,9 +122,9 @@ class ReembolsoIOS extends BaseScreen {
     async reportBankForRefund(bankName: string) {
         const optionBank = $(`//XCUIElementTypeCell[.//XCUIElementTypeStaticText[contains(@label, "${bankName}")]]`)
         const inputBank = this.selectBank
-        const inputAgency =  this.inputAgency
+        const inputAgency = this.inputAgency
         const inputAccount = this.inputAccount
-        const inputDigit =  this.inputDigit
+        const inputDigit = this.inputDigit
         const btnConfirmDataBankPopUp = this.btnConfirmDataBankPopUp
 
         await this.checkpointScreen('Agora é só conferir ou alterar seus dados bancários cadastrados')
@@ -165,12 +169,24 @@ class ReembolsoIOS extends BaseScreen {
         await this.sendInvoicePhoto()
         await this.sendRecipePhoto()
         try {
-        await this.reportBankForRefund('Banco do Brasil')
+            await this.reportBankForRefund('Banco do Brasil')
         } catch (error) { console.log('Fluxo sem preenchimento de dados bancários.') }
         await labelSuccess.waitForDisplayed({ timeout: 20000 })
         await labelDataSended.waitForDisplayed({ timeout: 10000 })
         await this.waitAndClick(btnConcluir)
         await this.viewCardRefundAndGetProtocol()
+    }
+
+    async validateRefundStatusApproved() {
+        await this.viewTollbarReembolso()
+        const cardRefund = $(`(${this.cardRefund})[1]`)
+        await cardRefund.waitForDisplayed({ timeout: 30000 })
+
+        const statusRefund = $(this.refundStatus)
+        await statusRefund.waitForDisplayed()
+
+        const statusRefundText = await statusRefund.getText()
+        await $(`(${this.cardRefund})[1]//*[@text="${statusRefundText}"]`).waitForDisplayed()
     }
 
 }
