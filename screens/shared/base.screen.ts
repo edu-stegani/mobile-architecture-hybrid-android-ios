@@ -13,7 +13,7 @@ export default class BaseScreen {
     }
 
     get btnDeletePictureAndroid() {
-        return $('id:com.astl.vidalink.beta:id/btDeletePicture')
+        return '//android.widget.ImageView[@resource-id="com.astl.vidalink.beta:id/btDeletePicture"]'
     }
 
     get btnConfirmPopUp() {
@@ -38,7 +38,7 @@ export default class BaseScreen {
     }
 
     get btnDeletePictureIOS() {
-        return $('~ic trash')
+        return '~ic trash'
     }
 
     get btnProximoIOS() {
@@ -212,7 +212,7 @@ export default class BaseScreen {
         const btnDeletePicture = driver.isIOS
             ? this.btnDeletePictureIOS
             : this.btnDeletePictureAndroid;
-        await btnDeletePicture.waitForDisplayed({timeout:10000, interval:1000})
+        await $(btnDeletePicture).waitForDisplayed({timeout:10000, interval:1000})
 
     }
 

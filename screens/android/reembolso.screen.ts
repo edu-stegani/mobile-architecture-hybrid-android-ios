@@ -115,6 +115,20 @@ class ReembolsoAndroid extends BaseScreen {
         await this.waitAndClick(this.btnSendInvoice)
     }
 
+    async takePhoto(indexPhoto: number) {
+        const btnAddImageSelector = $(`id:com.astl.vidalink.beta:id/text_input_end_icon`);
+        await this.waitAndClick(btnAddImageSelector)
+
+        const btnCamera = $(`id:com.astl.vidalink.beta:id/tvFirstOption`);
+        await this.waitAndClick(btnCamera)
+
+        const btnPhoto = $(`id:com.astl.vidalink.beta:id/fab_camera`)
+        await this.waitAndClick(btnPhoto)
+
+        const btnDeletePicture = `(${this.btnDeletePictureAndroid})[${indexPhoto}}]`;
+        await $(btnDeletePicture).waitForDisplayed({timeout:10000, interval:1000})
+    }
+
     async sendRecipePhoto() {
         await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
         await this.addPhoto('recipe.jpg')
@@ -174,6 +188,31 @@ class ReembolsoAndroid extends BaseScreen {
         await labelSuccess.waitForDisplayed({ timeout: 20000 })
         await labelDataSended.waitForDisplayed({ timeout: 10000 })
         await this.waitAndClick(btnConcluir)
+        await this.viewCardRefundAndGetProtocol()
+    }
+
+    async newRefundUsingCamera(medicineName: string, userName: string, reason: string) {
+        const btnSolicitarReembolso = this.btnRequestRefund
+
+        await this.viewTollbarReembolso()
+        await this.waitAndClick(btnSolicitarReembolso)
+        await this.fillAndSelectMedicineName(medicineName)
+        await this.whoIsTheRefundFor(userName)
+        await this.whatIsReasonRefund(reason)
+        
+        await this.checkpointScreen('Envie a foto da nota fiscal')
+        await this.takePhoto(1)
+        await this.takePhoto(2)
+        await this.waitAndClick(this.btnSendInvoice)
+
+        await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
+        await this.takePhoto(1)
+        await this.takePhoto(2)
+        await this.waitAndClick(this.btnSendRecipe)
+
+        await this.labelSuccess.waitForDisplayed({ timeout: 20000 })
+        await this.labelDataSended.waitForDisplayed({ timeout: 10000 })
+        await this.waitAndClick(this.btnFinish)
         await this.viewCardRefundAndGetProtocol()
     }
 

@@ -177,6 +177,31 @@ class ReembolsoIOS extends BaseScreen {
         await this.viewCardRefundAndGetProtocol()
     }
 
+    async newRefundUsingCamera(medicineName: string, userName: string, reason: string) {
+        const btnSolicitarReembolso = this.btnRequestRefund
+
+        await this.viewTollbarReembolso()
+        await this.waitAndClick(btnSolicitarReembolso)
+        await this.fillAndSelectMedicineName(medicineName)
+        await this.whoIsTheRefundFor(userName)
+        await this.whatIsReasonRefund(reason)
+        
+        await this.checkpointScreen('Envie a foto da nota fiscal')
+        // await this.takePhoto()
+        // await this.takePhoto()
+        await this.waitAndClick(this.btnSendInvoice)
+
+        await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
+        // await this.takePhoto()
+        // await this.takePhoto()
+        await this.waitAndClick(this.btnSendRecipe)
+
+        await this.labelSuccess.waitForDisplayed({ timeout: 20000 })
+        await this.labelDataSended.waitForDisplayed({ timeout: 10000 })
+        await this.waitAndClick(this.btnFinish)
+        await this.viewCardRefundAndGetProtocol()
+    }
+
     async validateRefundStatus(status: string) {
         await this.viewTollbarReembolso()
         const cardRefund = $(`(${this.cardRefund})[1]`)
