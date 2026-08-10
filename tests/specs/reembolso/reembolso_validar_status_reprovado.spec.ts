@@ -9,8 +9,8 @@ import * as apiHelpers from '../../../support/utils/apiHelpers.js'
 const user = data.users.Eduardo
 
 before(async () => {
-    await oracleHelpers.resetBankData(user.cpf)
     await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)
+    await postgresHelper.updatePasswordForStrong(user.cpf)
     await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
     await oracleHelpers.acceptTermAndConditions(user.cpf)
 
