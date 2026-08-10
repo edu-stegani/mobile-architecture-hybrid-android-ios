@@ -14,13 +14,13 @@ before(async () => {
     await postgresHelper.removeLinkTutorialWithCT('2', user.CT)
     await oracleHelpers.acceptTermAndConditions(user.cpf)
 
-    await apiHelpers.sendRefundAndApprove(user);
+    await apiHelpers.sendRefundAndReprove(user);
 
     await AppHelper.login(user.cpf, user.password)
 })
 
-it('validar reembolso com status aprovado', async () => {
+it('validar reembolso com status reprovado', async () => {
     await homeScreen.tapPilarByName('Med')
     await benefitsScreen.clickLinkByText('Reembolso')
-    await reembolsoScreen.validateRefundStatus('Aprovado')
+    await reembolsoScreen.validateRefundStatus('Reprovada')
 })

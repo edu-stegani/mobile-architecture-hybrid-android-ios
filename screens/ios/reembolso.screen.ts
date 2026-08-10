@@ -177,16 +177,17 @@ class ReembolsoIOS extends BaseScreen {
         await this.viewCardRefundAndGetProtocol()
     }
 
-    async validateRefundStatusApproved() {
+    async validateRefundStatus(status: string) {
         await this.viewTollbarReembolso()
         const cardRefund = $(`(${this.cardRefund})[1]`)
-        await cardRefund.waitForDisplayed({ timeout: 30000 })
+        await cardRefund.waitForDisplayed({ timeout: 30000 })   
 
-        const statusRefund = $(this.refundStatus)
-        await statusRefund.waitForDisplayed()
+        const statusElement = $(this.refundStatus)
+        await statusElement.waitForDisplayed()
 
-        const statusRefundText = await statusRefund.getText()
-        await $(`(${this.cardRefund})[1]//*[@text="${statusRefundText}"]`).waitForDisplayed()
+        const statusAtual = await statusElement.getText()
+        // console.log(`Status recebido na tela: ${statusAtual}`)
+        await expect(statusAtual).toEqual(status)
     }
 
 }
