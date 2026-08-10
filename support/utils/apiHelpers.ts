@@ -185,7 +185,7 @@ export async function validateRequest(token: string, refundId: number, protocol:
     return response.data;
 }
 
-export async function quotation(token: string, refundId: number, massa: any, invoiceFileId: number, purchaseDate: string): Promise<string> {
+export async function quotation(token: string, refundId: number, massa: any, invoiceFileId: number, purchaseDate: string, dailyAmount: string): Promise<string> {
     const url = `${baseUrl}/v1.1/authorization/refund/quotation`;
     const payload = {
         "operationType": 1,
@@ -205,7 +205,7 @@ export async function quotation(token: string, refundId: number, massa: any, inv
         "prescription": {
             "products": [{
                 "conselhoRegional": "M", "ufConselho": "SP", "numeroDoMedico": "123456",
-                "ean": "7891058002602", "quantidadeDeCaixa": "1", "quantidadeDiaria": "10",
+                "ean": "7891058002602", "quantidadeDeCaixa": "1", "quantidadeDiaria": dailyAmount,
                 "pmc": 12.40, "precoFarmacia": 12.40, "dataDaReceita": purchaseDate // DD/MM/YYYY
             }],
             "dataDaVenda": purchaseDate // DD/MM/YYYY
@@ -283,7 +283,7 @@ export async function sendRefundAndApprove(massa: any): Promise<void> {
     const purchaseDate = new Date();
     purchaseDate.setDate(purchaseDate.getDate() - 30);
     const formattedPurchaseDate = `${String(purchaseDate.getDate()).padStart(2, '0')}/${String(purchaseDate.getMonth() + 1).padStart(2, '0')}/${purchaseDate.getFullYear()}`;
-    
+
     // Criar solicitação de reembolso
     const { id: refundId, protocol } = await createRequestRefund(token, massa.CT, massa.cardNumber);
     // console.log(`[API] Solicitação de reembolso criada: ID ${refundId}, Protocolo ${protocol}`);
@@ -299,11 +299,27 @@ export async function sendRefundAndApprove(massa: any): Promise<void> {
     // console.log(`[API] Validação da solicitação concluída.`);
 
     // Fazer a cotação
-    const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, formattedPurchaseDate);
+    const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, formattedPurchaseDate, '10');
     // console.log(`[API] Cotação realizada. Código de autorização: ${authorizationCode}`);
 
     // Confirmar a venda e processar o reembolso
     await authorizeConfirmSales(token, authorizationCode);
     await processRefund(token, refundId, authorizationCode);
     // console.log(`[API] Reembolso processado e aprovado com sucesso!`);
+}
+
+export async function sendRefundAndReprove(massa: any): Promise<void> {
+    const token = await createToken();
+
+    const purchaseDate = new Date();
+    const formattedPurchaseDate = `${String(purchaseDate.getDate()).padStart(2, '0')}/${String(purchaseDate.getMonth() + 1).padStart(2, '0')}/${purchaseDate.getFullYear()}`;
+
+    const { id: refundId, protocol } = await createRequestRefund(token, massa.CT, massa.cardNumber);
+    const invoiceFileId = await uploadRefundFile(token, refundId, 'invoice');
+    await uploadRefundFile(token, refundId, 'prescription');
+    await validateRequest(token, refundId, protocol, massa.cardNumber, formattedPurchaseDate);
+    const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, formattedPurchaseDate, '20');
+
+    await authorizeConfirmSales(token, authorizationCode);
+    await processRefund(token, refundId, authorizationCode);
 }
