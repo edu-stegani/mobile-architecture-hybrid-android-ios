@@ -276,15 +276,22 @@ export async function processRefund(token: string, refundId: number, authorizati
     return response.data;
 }
 
-export async function cancelRefund(token: string, authorizationCodeInternal: string) {
-    const url = `${baseUrl}/v1.1/authorization/store/${authorizationCodeInternal}/cancel`;
+export async function reproveRefund(token: string, refundId: number, authorizationCode: string) {
+    const url = `${baseUrl}/v2/refund/set-authorization`;
 
-    const params = {
+    const config = {
         headers: {
             'Authorization': `Bearer ${token}`
         },
+        data: {
+            "refundId": refundId,
+            "authorizationCode": authorizationCode,
+            "userOperatorRefundId": "5946"
+        }
     };
-    const response = await axios.delete(url, params);
+
+    const response = await axios.delete(url, config);
+
     if (response.status !== 200) {
         console.log(response.data);
         throw new Error(`Falha no cancelamento do reembolso: Status ${response.status}`);
@@ -335,5 +342,5 @@ export async function sendRefundAndReprove(massa: any): Promise<void> {
     await uploadRefundFile(token, refundId, 'prescription');
     await validateRequest(token, refundId, protocol, massa.cardNumber, formattedPurchaseDate);
     const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, formattedPurchaseDate);
-    await cancelRefund(token, authorizationCode);
+    await reproveRefund(token, refundId, authorizationCode);
 }
