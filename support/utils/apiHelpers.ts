@@ -281,15 +281,13 @@ export async function cancelRefund(token: string, authorizationCodeInternal: str
 
     const params = {
         headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-            'Vidalink-Session-Id': 'a01170e8-4481-40b6-b970-7184195f25de',
-            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
     };
     const response = await axios.delete(url, params);
     if (response.status !== 200) {
-        throw new Error(`Falha na cotação de reembolso: Status ${response.status}`);
+        console.log(response.data);
+        throw new Error(`Falha no cancelamento do reembolso: Status ${response.status}`);
     }
 }
 
@@ -328,17 +326,14 @@ export async function sendRefundAndApprove(massa: any): Promise<void> {
 export async function sendRefundAndReprove(massa: any): Promise<void> {
     const token = await createToken();
 
-    // const purchaseDate = new Date();
-    // const formattedPurchaseDate = `${String(purchaseDate.getDate()).padStart(2, '0')}/${String(purchaseDate.getMonth() + 1).padStart(2, '0')}/${purchaseDate.getFullYear()}`;
+    const purchaseDate = new Date();
+    purchaseDate.setDate(purchaseDate.getDate() - 180);
+    const formattedPurchaseDate = `${String(purchaseDate.getDate()).padStart(2, '0')}/${String(purchaseDate.getMonth() + 1).padStart(2, '0')}/${purchaseDate.getFullYear()}`;
 
     const { id: refundId, protocol } = await createRequestRefund(token, massa.CT, massa.cardNumber);
     const invoiceFileId = await uploadRefundFile(token, refundId, 'invoice');
     await uploadRefundFile(token, refundId, 'prescription');
-    await validateRequest(token, refundId, protocol, massa.cardNumber, "01,20,3000");
-    const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, "01,20,3000");
+    await validateRequest(token, refundId, protocol, massa.cardNumber, formattedPurchaseDate);
+    const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, formattedPurchaseDate);
     await cancelRefund(token, authorizationCode);
-    // await authorizeConfirmSales(token, authorizationCode);
-    // await processRefund(token, refundId, authorizationCode);
-
-
 }
