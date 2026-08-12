@@ -19,9 +19,9 @@
     "retest:browserstack:android": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts --mochaOpts.grep=@reteste",
     "retest:browserstack:ios": "cross-env PLATFORM=ios npx wdio run config/wdio.ios.browserstack.ts --mochaOpts.grep=@reteste",
 
-    "temp:local": "cross-env PLATFORM=android wdio run config/wdio.android.emulator.ts --spec tests/specs/reembolso/reembolso_solicitar_reembolso_informando_dados_bancarios.spec.ts",
-    "temp:device": "cross-env PLATFORM=android npx wdio run config/wdio.android.device.ts --spec tests/specs/reembolso/reembolso_solicitar_reembolso_informando_dados_bancarios.spec.ts",
-    "temp:bstack": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts --spec tests/specs/reembolso/reembolso_solicitar_reembolso_informando_dados_bancarios.spec.ts",
+    "temp:local": "cross-env PLATFORM=android wdio run config/wdio.android.emulator.ts --spec reembolso_solicitar_reembolso_multiplas_imagens.spec.ts",
+    "temp:device": "cross-env PLATFORM=android npx wdio run config/wdio.android.device.ts --spec reembolso_validar_status_reprovado.spec.ts",
+    "temp:bstack": "cross-env PLATFORM=android npx wdio run config/wdio.android.browserstack.ts --spec reembolso_validar_status_reprovado.spec.ts",
 
     "report:generate": "npx allure-commandline generate allure-results --clean -o ./allure-report",
     "report:open": "npx allure open allure-report",

@@ -276,25 +276,35 @@ export async function processRefund(token: string, refundId: number, authorizati
     return response.data;
 }
 
-export async function reproveRefund(token: string, refundId: number, authorizationCode: string) {
-    const url = `${baseUrl}/v2/refund/set-authorization`;
+export async function reproveRefund(token: string, refundId: number, protocol: string) {
+    const url = `${baseUrl}/v2/refund/disapprove`;
 
-    const config = {
+    const params = {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
         },
-        data: {
-            "refundId": refundId,
-            "authorizationCode": authorizationCode,
-            "userOperatorRefundId": "5946"
-        }
     };
 
-    const response = await axios.delete(url, config);
+    const payload = {
+        "emailTo": "teste@vidalink.com.br",
+        "protocol": protocol,
+        "refundId": refundId,
+        "userId": "5946",
+        "observation": "teste automatizado",
+        "selectedMotives": [
+            {
+                "documentoId": 43,
+                "resultadoId": 19
+            }
+        ]
+    }
+
+    const response = await axios.post(url, payload, params);
 
     if (response.status !== 200) {
-        console.log(response.data);
-        throw new Error(`Falha no cancelamento do reembolso: Status ${response.status}`);
+        throw new Error(`Falha na reprovação do reembolso: Status ${response.status}`);
     }
 }
 
@@ -338,9 +348,8 @@ export async function sendRefundAndReprove(massa: any): Promise<void> {
     const formattedPurchaseDate = `${String(purchaseDate.getDate()).padStart(2, '0')}/${String(purchaseDate.getMonth() + 1).padStart(2, '0')}/${purchaseDate.getFullYear()}`;
 
     const { id: refundId, protocol } = await createRequestRefund(token, massa.CT, massa.cardNumber);
-    const invoiceFileId = await uploadRefundFile(token, refundId, 'invoice');
+    await uploadRefundFile(token, refundId, 'invoice');
     await uploadRefundFile(token, refundId, 'prescription');
     await validateRequest(token, refundId, protocol, massa.cardNumber, formattedPurchaseDate);
-    const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, formattedPurchaseDate);
-    await reproveRefund(token, refundId, authorizationCode);
+    await reproveRefund(token, refundId, protocol);
 }
