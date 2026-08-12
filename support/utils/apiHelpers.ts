@@ -276,6 +276,23 @@ export async function processRefund(token: string, refundId: number, authorizati
     return response.data;
 }
 
+export async function cancelRefund(token: string, authorizationCodeInternal: string) {
+    const url = `${baseUrl}/v1.1/authorization/store/${authorizationCodeInternal}/cancel`;
+
+    const params = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Vidalink-Session-Id': 'a01170e8-4481-40b6-b970-7184195f25de',
+            'Content-Type': 'application/json',
+        },
+    };
+    const response = await axios.delete(url, params);
+    if (response.status !== 200) {
+        throw new Error(`Falha na cotação de reembolso: Status ${response.status}`);
+    }
+}
+
 export async function sendRefundAndApprove(massa: any): Promise<void> {
     // console.log(`[API] Iniciando fluxo de aprovação de reembolso para ${massa.fullName}`);
     const token = await createToken();
@@ -319,7 +336,9 @@ export async function sendRefundAndReprove(massa: any): Promise<void> {
     await uploadRefundFile(token, refundId, 'prescription');
     await validateRequest(token, refundId, protocol, massa.cardNumber, "01,20,3000");
     const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, "01,20,3000");
+    await cancelRefund(token, authorizationCode);
+    // await authorizeConfirmSales(token, authorizationCode);
+    // await processRefund(token, refundId, authorizationCode);
 
-    await authorizeConfirmSales(token, authorizationCode);
-    await processRefund(token, refundId, authorizationCode);
+
 }
