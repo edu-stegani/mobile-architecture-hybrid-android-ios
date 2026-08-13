@@ -224,6 +224,10 @@ class ReembolsoAndroid extends BaseScreen {
         const statusElement = $(this.refundStatus)
         await statusElement.waitForDisplayed()
 
+        if (status === 'Reprovado') {
+            status = 'Reprovada';
+        }
+
         const statusAtual = await statusElement.getText()
         // console.log(`Status recebido na tela: ${statusAtual}`)
         await expect(statusAtual).toEqual(status)

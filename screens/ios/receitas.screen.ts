@@ -38,10 +38,6 @@ class ReceitaIOS extends BaseScreen {
         return $('//XCUIElementTypeButton[@label="Finalizar"]')
     }
 
-    get btnDeleteSim() {
-        return $('~primaryButtonIdentifier')
-    }
-
     get inputRecipeName() {
         return $('//XCUIElementTypeTextField[@value="Nome da receita"]')
     }
@@ -155,7 +151,7 @@ class ReceitaIOS extends BaseScreen {
         const item = $(`-ios predicate string:type == "XCUIElementTypeStaticText" AND name == "${medicineName}"`);
         await this.waitAndClick(item);
         await this.hideKeyboard();
-        await this.btnDeletePictureIOS.waitForDisplayed()
+        await this.btnPrimary.waitForDisplayed()
         await this.waitAndClick(this.btnProximoIOS)
     }
 
@@ -201,13 +197,13 @@ class ReceitaIOS extends BaseScreen {
 
     async viewDetailsRecipe() {
         // await this.checkpointScreen('Itens da receita')
-        await this.btnDeletePictureIOS.waitForDisplayed()
+        await this.btnPrimary.waitForDisplayed()
         await this.back()
     }
 
     async deleteRecipe() {
         await this.checkpointScreen('Tem certeza que deseja apagar essa receita?')
-        await this.waitAndClick(this.btnDeleteSim)
+        await this.waitAndClick(this.btnPrimary)
         await this.btnNewRecipe.waitForDisplayed()
     }
 }

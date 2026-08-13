@@ -22,5 +22,5 @@ before(async () => {
 it('validar reembolso com status reprovado', async () => {
     await homeScreen.tapPilarByName('Med')
     await benefitsScreen.clickLinkByText('Reembolso')
-    await reembolsoScreen.validateRefundStatus('Reprovada')
+    await reembolsoScreen.validateRefundStatus('Reprovado')
 })

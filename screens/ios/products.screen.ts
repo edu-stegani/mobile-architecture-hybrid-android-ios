@@ -61,15 +61,15 @@ class ProdutosIOS extends BaseScreen {
     }
 
     get modalProductNoSubsidy() {
-        return $('id:com.astl.vidalink.beta:id/tvDialogDescription')
+        return $('')
     }
 
     get iconDoubtProduct() {
-        return ``
+        return `//XCUIElementTypeButton[@name="infoButtonIdentifier"]`
     }
 
     get labelDiscountPaper(){
-        return $('')
+        return $('//XCUIElementTypeStaticText[@name="Desconto em folha"]')
     }
 
     // ======== ACTIONS ========
@@ -88,7 +88,6 @@ class ProdutosIOS extends BaseScreen {
         await doubtProduct.waitForDisplayed({ timeout: 60000 })
         await doubtProduct.click()
         await this.checkpointScreen('Características do medicamento')
-        await this.scrollToElement(this.labelDiscountPaper)
     }
 
     async filterPharmacyByOption(option: string) {
@@ -163,17 +162,17 @@ class ProdutosIOS extends BaseScreen {
     }
 
     async productNoSubsidy(){
-        const noSubsidyText = $(`(${this.cardProduct})[1]//android.widget.TextView[@text="Não subsidiado"]`)
+        const noSubsidyText = $(`(${this.cardProduct})[1]//*[@name="Não subsidiado"]`)
 
         await noSubsidyText.waitForDisplayed()
         await this.selectFirstProduct()
-        await this.modalProductNoSubsidy.waitForDisplayed({ timeout: 60000 })
+        await this.checkpointScreen('Este produto não faz parte do grupo de medicamentos liberado para uso no seu benefício/plano.')
         await this.confirmAlert()
     }
 
     async productDiscountInSheet(){
-        const discountInSheet = $(`(${this.cardProduct})[1]//*[contains(@text, "Desconto em folha")]`)
-        const subsidyProduct = $(`(${this.cardProduct})[1]//*[contains(@text, "Subsidiado")]`)
+        const discountInSheet = $(`(${this.cardProduct})[1]//*[contains(@name, "Desconto em folha")]`)
+        const subsidyProduct = $(`(${this.cardProduct})[1]//*[contains(@name, "Subsidiado")]`)
 
         await discountInSheet.waitForDisplayed({ timeout: 60000 })
         await subsidyProduct.waitForDisplayed()

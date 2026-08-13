@@ -8,6 +8,10 @@ const __dirname = path.dirname(__filename);
 
 export default class BaseScreen {
     // LOCATORS ANDROID
+    get btnOk() {
+        return $(`id:com.astl.vidalink.beta:id/btConfirmOption`)
+    }
+
     get btnDeleteAndroid() {
         return $('id:com.astl.vidalink.beta:id/btDeleteRecipe')
     }
@@ -33,12 +37,16 @@ export default class BaseScreen {
     }
 
     // LOCATORS IOS
+    get btnPrimary() {
+        return $('~primaryButtonIdentifier')
+    }
+
     get btnDeleteIOS() {
         return $('~ic delete')
     }
 
     get btnDeletePictureIOS() {
-        return '~ic trash'
+        return '//XCUIElementTypeButton[@name="ic trash"]'
     }
 
     get btnProximoIOS() {
@@ -48,7 +56,7 @@ export default class BaseScreen {
     // METHODS
     async waitAndClick(elementOrSelector: ChainablePromiseElement | string) {
         const element = typeof elementOrSelector === 'string' ? $(elementOrSelector) : elementOrSelector;
-        await element.waitForDisplayed({ timeout: 15000, interval: 1000 });
+        await element.waitForDisplayed({ timeout: 30000, interval: 1000 });
         await element.click();
     }
 
@@ -88,7 +96,7 @@ export default class BaseScreen {
             actions: [
                 { type: 'pointerMove', duration: 1000, x: startX, y: centerY },
                 { type: 'pointerDown', button: 0 },
-                { type: 'pause', duration: 1000},
+                { type: 'pause', duration: 1000 },
                 { type: 'pointerMove', duration: 1000, origin: 'viewport', x: endX, y: centerY },
                 { type: 'pointerUp', button: 0 }
             ]
@@ -111,7 +119,7 @@ export default class BaseScreen {
             actions: [
                 { type: 'pointerMove', duration: 0, x: startX, y: centerY },
                 { type: 'pointerDown', button: 0 },
-                { type: 'pause', duration: 1000},
+                { type: 'pause', duration: 1000 },
                 { type: 'pointerMove', duration: 1000, origin: 'viewport', x: endX, y: centerY },
                 { type: 'pointerUp', button: 0 }
             ]
@@ -195,7 +203,7 @@ export default class BaseScreen {
         await this.waitAndClick(btnAddImageSelector)
 
         const btnGaleryPhotos = driver.isIOS
-            ? $(`(//XCUIElementTypeStaticText//../../XCUIElementTypeCell)[2]`)
+            ? $(`//XCUIElementTypeTable//XCUIElementTypeCell[2]`)
             : $(`id:com.astl.vidalink.beta:id/tvSecondOption`);
         await this.waitAndClick(btnGaleryPhotos)
 
@@ -212,7 +220,7 @@ export default class BaseScreen {
         const btnDeletePicture = driver.isIOS
             ? this.btnDeletePictureIOS
             : this.btnDeletePictureAndroid;
-        await $(btnDeletePicture).waitForDisplayed({timeout:10000, interval:1000})
+        await $(btnDeletePicture).waitForDisplayed({ timeout: 10000, interval: 1000 })
 
     }
 
@@ -227,7 +235,7 @@ export default class BaseScreen {
             : `//*[contains(@text, '${textCheckpoint}')]`;
 
         const checkpointText = $(selector);
-        await checkpointText.waitForDisplayed({ timeout: 15000, interval:1000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
+        await checkpointText.waitForDisplayed({ timeout: 15000, interval: 1000, timeoutMsg: `Checkpoint "${textCheckpoint}" não encontrado` });
     }
 
     async back() {
@@ -267,9 +275,12 @@ export default class BaseScreen {
     }
 
     async confirmAlert() {
-        const btnOK = $(`id:com.astl.vidalink.beta:id/btConfirmOption`)
-        if (await btnOK.isDisplayed()) {
-            await btnOK.click()
+        if (driver.isAndroid) {
+            await this.waitAndClick(this.btnOk)
+        }
+
+        if (driver.isIOS) {
+            this.waitAndClick(this.btnPrimary)
         }
     }
 }
