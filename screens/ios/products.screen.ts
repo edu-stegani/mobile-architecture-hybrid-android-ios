@@ -60,9 +60,49 @@ class ProdutosIOS extends BaseScreen {
         return `/XCUIElementTypeStaticText[@name="Ver detalhes da farmácia"]`
     }
 
+    get modalProductNoSubsidy() {
+        return $('')
+    }
+
+    get iconDoubtProduct() {
+        return `//XCUIElementTypeButton[@name="infoButtonIdentifier"]`
+    }
+
+    get labelDiscountPaper(){
+        return $('//XCUIElementTypeStaticText[@name="Desconto em folha"]')
+    }
+
     // ======== ACTIONS ========
     async viewTollbarBuscarMedicamentos() {
         await this.checkpointScreen('Buscar medicamentos')
+    }
+
+    async selectFirstProduct() {
+        const cardMedicine = `(${this.cardProduct})[1]`
+        await $(cardMedicine).waitForDisplayed({ timeout: 60000 })
+        await $(cardMedicine).click()
+    }
+
+    async checkDoubtProduct() { 
+        const doubtProduct = $(`(${this.iconDoubtProduct})[1]`)
+        await doubtProduct.waitForDisplayed({ timeout: 60000 })
+        await doubtProduct.click()
+        await this.checkpointScreen('Características do medicamento')
+    }
+
+    async filterPharmacyByOption(option: string) {
+        const filter = this.filterButton
+        const options = this.optionsFilter
+        let filterText = option;
+        if (option === 'Menor Preço') {
+            filterText = 'Menor preço';
+        }
+        const selectedOption = $(`//XCUIElementTypeTable//XCUIElementTypeStaticText[@name="${filterText}"]`)
+
+        await filter.waitForDisplayed({ timeout: 30000, interval: 1000 })
+        await filter.click()
+        await options.waitForDisplayed()
+        await this.waitAndClick(selectedOption)
     }
 
     // ======== METHODS ========
@@ -93,17 +133,6 @@ class ProdutosIOS extends BaseScreen {
     }
 
     async selectProductAndFilterByOption(option: string) {
-        const cardMedicine = `(${this.cardProduct})[1]`
-        const filter = this.filterButton
-        const options = this.optionsFilter
-
-        let filterText = option;
-        if (driver.isIOS && option === 'Menor Preço') {
-            filterText = 'Menor preço';
-        }
-
-        const selectedOption = $(`//XCUIElementTypeTable//XCUIElementTypeStaticText[@name="${filterText}"]`)
-
         const firstPharmacy = `(${this.cardPharmacy})[1]`
         const pharmacyName = $(`${firstPharmacy}${this.pharmacyName}`)
         const pharmacyDistance = $(`${firstPharmacy}${this.pharmacyDistance}`)
@@ -111,12 +140,8 @@ class ProdutosIOS extends BaseScreen {
         const pharmacyPriceMin = $(`${firstPharmacy}${this.priceMin}`)
         const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
 
-        await this.waitAndClick($(cardMedicine))
-
-        await filter.waitForDisplayed({timeout:30000, interval:1000})
-        await filter.click()
-        await options.waitForDisplayed()
-        await this.waitAndClick(selectedOption)
+        await this.selectFirstProduct()
+        await this.filterPharmacyByOption(option)
 
         await $(firstPharmacy).waitForDisplayed()
         await pharmacyName.waitForDisplayed()
@@ -127,15 +152,32 @@ class ProdutosIOS extends BaseScreen {
     }
 
     async selectTheFirstPharmacy() {
-        const medicineCard = $(`(${this.cardProduct})[1]`)
         const firstPharmacy = `(${this.cardPharmacy})[1]`
         const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
 
-        await medicineCard.waitForDisplayed({ timeout: 60000 })
-        await medicineCard.click()
+        await this.selectFirstProduct()
         await $(firstPharmacy).waitForDisplayed({timeout: 60000})
         await pharmacyViewDetails.waitForDisplayed()
         await this.waitAndClick(pharmacyViewDetails)
+    }
+
+    async productNoSubsidy(){
+        const noSubsidyText = $(`(${this.cardProduct})[1]//*[@name="Não subsidiado"]`)
+
+        await noSubsidyText.waitForDisplayed()
+        await this.selectFirstProduct()
+        await this.checkpointScreen('Este produto não faz parte do grupo de medicamentos liberado para uso no seu benefício/plano.')
+        await this.confirmAlert()
+    }
+
+    async productDiscountInSheet(){
+        const discountInSheet = $(`(${this.cardProduct})[1]//*[contains(@name, "Desconto em folha")]`)
+        const subsidyProduct = $(`(${this.cardProduct})[1]//*[contains(@name, "Subsidiado")]`)
+
+        await discountInSheet.waitForDisplayed({ timeout: 60000 })
+        await subsidyProduct.waitForDisplayed()
+        await this.selectFirstProduct()
+        await this.checkDoubtProduct()
     }
 
 }

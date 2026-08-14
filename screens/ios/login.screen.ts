@@ -260,7 +260,7 @@ class LoginIOS extends BaseScreen {
 
     async passwordCantBeEqualPrevious() {
         await this.checkpointScreen('Atenção! A nova senha não pode ser igual a senha anterior.')
-        await this.waitAndClick($('~primaryButtonIdentifier'))
+        await this.waitAndClick(this.btnPrimary)
     }
 
     async rejectTermsAndConditions() {

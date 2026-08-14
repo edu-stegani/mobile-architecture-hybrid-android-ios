@@ -57,17 +57,21 @@ class ReembolsoIOS extends BaseScreen {
     }
 
     get inputDigit() {
-        return  $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[4]')
+        return $('(//XCUIElementTypeOther//XCUIElementTypeTextField)[4]')
     }
 
     get btnConfirmDataBankPopUp() {
         return $(`//XCUIElementTypeButton[@label="Confirmar dados"]`)
     }
 
+    get refundStatus() {
+        return `(${this.cardRefund})[1]//XCUIElementTypeStaticText[4]`
+    }
+
     // ======== ACTIONS ========
     async viewTollbarReembolso() {
         const tollbarReembolso = this.tollbarReembolso
-        await tollbarReembolso.waitForDisplayed({ timeout: 10000 })
+        await tollbarReembolso.waitForDisplayed({ timeout: 20000 })
     }
 
     async fillAndSelectMedicineName(medicineName: string) {
@@ -115,12 +119,34 @@ class ReembolsoIOS extends BaseScreen {
         await this.waitAndClick(this.btnSendRecipe)
     }
 
+    async takePhoto(indexPhoto: number) {
+        const btnAddImageSelector = $(`(//XCUIElementTypeTextField/../../..//XCUIElementTypeButton)[2]`);
+        await this.waitAndClick(btnAddImageSelector)
+
+        const btnCamera = $(`//XCUIElementTypeStaticText[contains(@name, "Abrir Câmera")]/../..//XCUIElementTypeCell[1]`);
+        await this.waitAndClick(btnCamera)
+
+        await this.acceptNotifications()
+        const btnPhoto = $(`//XCUIElementTypeButton[@name="PhotoCapture"]`)
+        await this.waitAndClick(btnPhoto)
+        const usePhoto = $('//XCUIElementTypeStaticText[@name="Use Photo"]')
+        await this.waitAndClick(usePhoto)
+
+        const btnDone = $('//XCUIElementTypeButton[@label="Done"]')
+        if (await btnDone.isDisplayed()) {
+            await this.waitAndClick(btnDone)
+        }
+
+        const btnDeletePicture = `(${this.btnDeletePictureIOS})[${indexPhoto}]`;
+        await $(btnDeletePicture).waitForDisplayed({timeout:10000, interval:1000})
+    }
+
     async reportBankForRefund(bankName: string) {
         const optionBank = $(`//XCUIElementTypeCell[.//XCUIElementTypeStaticText[contains(@label, "${bankName}")]]`)
         const inputBank = this.selectBank
-        const inputAgency =  this.inputAgency
+        const inputAgency = this.inputAgency
         const inputAccount = this.inputAccount
-        const inputDigit =  this.inputDigit
+        const inputDigit = this.inputDigit
         const btnConfirmDataBankPopUp = this.btnConfirmDataBankPopUp
 
         await this.checkpointScreen('Agora é só conferir ou alterar seus dados bancários cadastrados')
@@ -165,12 +191,50 @@ class ReembolsoIOS extends BaseScreen {
         await this.sendInvoicePhoto()
         await this.sendRecipePhoto()
         try {
-        await this.reportBankForRefund('Banco do Brasil')
+            await this.reportBankForRefund('Banco do Brasil')
         } catch (error) { console.log('Fluxo sem preenchimento de dados bancários.') }
         await labelSuccess.waitForDisplayed({ timeout: 20000 })
         await labelDataSended.waitForDisplayed({ timeout: 10000 })
         await this.waitAndClick(btnConcluir)
         await this.viewCardRefundAndGetProtocol()
+    }
+
+    async newRefundUsingCamera(medicineName: string, userName: string, reason: string) {
+        const btnSolicitarReembolso = this.btnRequestRefund
+
+        await this.viewTollbarReembolso()
+        await this.waitAndClick(btnSolicitarReembolso)
+        await this.fillAndSelectMedicineName(medicineName)
+        await this.whoIsTheRefundFor(userName)
+        await this.whatIsReasonRefund(reason)
+
+        await this.checkpointScreen('Envie a foto da nota fiscal')
+        await this.takePhoto(1)
+        await this.takePhoto(2)
+        await this.waitAndClick(this.btnSendInvoice)
+
+        await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica')
+        await this.takePhoto(1)
+        await this.takePhoto(2)
+        await this.waitAndClick(this.btnSendRecipe)
+
+        await this.labelSuccess.waitForDisplayed({ timeout: 20000 })
+        await this.labelDataSended.waitForDisplayed({ timeout: 10000 })
+        await this.waitAndClick(this.btnFinish)
+        await this.viewCardRefundAndGetProtocol()
+    }
+
+    async validateRefundStatus(status: string) {
+        await this.viewTollbarReembolso()
+        const cardRefund = $(`(${this.cardRefund})[1]`)
+        await cardRefund.waitForDisplayed({ timeout: 30000 })
+
+        const statusElement = $(this.refundStatus)
+        await statusElement.waitForDisplayed()
+
+        const statusAtual = await statusElement.getValue()
+        // console.log(`Status recebido na tela: ${statusAtual}`)
+        await expect(statusAtual).toEqual(status)
     }
 
 }

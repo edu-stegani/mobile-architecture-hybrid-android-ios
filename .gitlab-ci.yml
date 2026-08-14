@@ -1,0 +1,48 @@
+stages:
+  - test
+
+# Template oculto para compartilhar a configuração base entre os jobs de teste
+.mobile_test_template:
+  stage: test
+  image: node:20-alpine
+  
+  rules:
+    # 1. Regra temporária para validar diretamente na sua branch atual
+    - if: '$CI_COMMIT_BRANCH == "sprint16"'
+    
+    # 2. Regras definitivas para Merge Requests e Master
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+
+  before_script:
+    - echo "Verificando versão do Node.js..."
+    - node -v
+    - echo "Instalando dependências do projeto..."
+    - npm ci
+
+  artifacts:
+    when: always
+    paths:
+      - allure-results/
+    expire_in: 7 days
+
+# Job para executar a regressão no Android
+android_regression:
+  extends: .mobile_test_template
+  script:
+    - echo "Iniciando execução da suíte regressiva Android no BrowserStack..."
+    - npm run test:browserstack:android
+
+# Job para executar a regressão no iOS
+ios_regression:
+  extends: .mobile_test_template
+  script:
+    - echo "Iniciando execução da suíte regressiva iOS no BrowserStack..."
+    - npm run test:browserstack:ios

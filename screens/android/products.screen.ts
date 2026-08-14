@@ -5,7 +5,7 @@ import BaseScreen from '../shared/base.screen.js'
 class ProdutosAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
-    get produtosTab(){
+    get produtosTab() {
         return $(`//android.widget.TextView[@text="Produtos"]`)
     }
     get inputSearch() {
@@ -68,10 +68,47 @@ class ProdutosAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/tvAddress')
     }
 
+    get modalProductNoSubsidy() {
+        return $('id:com.astl.vidalink.beta:id/tvDialogDescription')
+    }
+
+    get iconDoubtProduct() {
+        return `//android.widget.ImageView[@resource-id="com.astl.vidalink.beta:id/icDoubt"]`
+    }
+
+    get labelDiscountPaper() {
+        return $('id:com.astl.vidalink.beta:id/tvPaper')
+    }
+
     // ======== ACTIONS ========
     async viewTollbarBuscarMedicamentos() {
         const tollbarBuscarMedicamento = $(`${this.tollbar}//android.widget.TextView[@text="Buscar medicamentos"]`)
         await tollbarBuscarMedicamento.waitForDisplayed({ timeout: 10000 })
+    }
+
+    async selectFirstProduct() {
+        const cardMedicine = `(${this.cardProduct})[1]`
+        await $(cardMedicine).waitForDisplayed({ timeout: 60000 })
+        await $(cardMedicine).click()
+    }
+
+    async checkDoubtProduct() {
+        const doubtProduct = $(`(${this.iconDoubtProduct})[1]`)
+        await doubtProduct.waitForDisplayed({ timeout: 60000 })
+        await doubtProduct.click()
+        await this.checkpointScreen('Características do medicamento')
+        await this.scrollToElement(this.labelDiscountPaper)
+    }
+
+    async filterPharmacyByOption(option: string) {
+        const filter = this.filterButton
+        const options = this.optionsFilter
+        const selectedOption = $(`//*[contains(@text, "${option}")]`)
+
+        await filter.waitForDisplayed({ timeout: 30000, interval: 1000 })
+        await filter.click()
+        await options.waitForDisplayed()
+        await this.waitAndClick(selectedOption)
     }
 
     // ======== METHODS ========
@@ -100,26 +137,15 @@ class ProdutosAndroid extends BaseScreen {
     }
 
     async selectProductAndFilterByOption(option: string) {
-        const cardMedicine = `(${this.cardProduct})[1]`
-        const filter = this.filterButton
-        const options = this.optionsFilter
-
-        const selectedOption = $(`//*[contains(@text, "${option}")]`)   //android.widget.TextView
-
         const firstPharmacy = `(${this.cardPharmacy})[1]`
-
         const pharmacyDistance = $(`${firstPharmacy}${this.pharmacyDistance}`)
         const pharmacyName = $(`${firstPharmacy}${this.pharmacyName}`)
         const pharmacyPriceMax = $(`${firstPharmacy}${this.priceMax}`)
         const pharmacyPriceMin = $(`${firstPharmacy}${this.priceMin}`)
         const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
 
-        await this.waitAndClick($(cardMedicine))
-
-        await filter.waitForDisplayed({timeout: 30000, interval: 1000})
-        await filter.click()
-        await options.waitForDisplayed()
-        await this.waitAndClick(selectedOption)
+        await this.selectFirstProduct()
+        await this.filterPharmacyByOption(option)
 
         await $(firstPharmacy).waitForDisplayed()
         await pharmacyName.waitForDisplayed()
@@ -130,15 +156,32 @@ class ProdutosAndroid extends BaseScreen {
     }
 
     async selectTheFirstPharmacy() {
-        const medicineCard = $(`(${this.cardProduct})[1]`)
         const firstPharmacy = `(${this.cardPharmacy})[1]`
         const pharmacyViewDetails = $(`${firstPharmacy}${this.pharmacyViewDetails}`)
 
-        await medicineCard.waitForDisplayed({ timeout: 60000 })
-        await medicineCard.click()
+        await this.selectFirstProduct()
         await $(firstPharmacy).waitForDisplayed({ timeout: 60000 })
         await pharmacyViewDetails.waitForDisplayed()
         await this.waitAndClick(pharmacyViewDetails)
+    }
+
+    async productNoSubsidy() {
+        const noSubsidyText = $(`(${this.cardProduct})[1]//*[@text="Não subsidiado"]`)
+
+        await noSubsidyText.waitForDisplayed()
+        await this.selectFirstProduct()
+        await this.modalProductNoSubsidy.waitForDisplayed({ timeout: 60000 })
+        await this.confirmAlert()
+    }
+
+    async productDiscountInSheet() {
+        const discountInSheet = $(`(${this.cardProduct})[1]//*[contains(@text, "Desconto em folha")]`)
+        const subsidyProduct = $(`(${this.cardProduct})[1]//*[contains(@text, "Subsidiado")]`)
+
+        await discountInSheet.waitForDisplayed({ timeout: 60000 })
+        await subsidyProduct.waitForDisplayed()
+        await this.selectFirstProduct()
+        await this.checkDoubtProduct()
     }
 
 }
