@@ -4,5 +4,11 @@ allure-results/
 allure-report/
 log/
 logs/
+<<<<<<< HEAD
 local.log
 package-lock.json
+=======
+package-lock.json
+*.apk
+*.ipa
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f

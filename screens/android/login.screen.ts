@@ -1,7 +1,10 @@
 import { $ } from '@wdio/globals'
 import BaseScreen from '../shared/base.screen.js'
+<<<<<<< HEAD
 import oracleHelpers from '../../support/utils/oracleHelpers.js'
 import { faker } from '@faker-js/faker'
+=======
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 
 class LoginAndroid extends BaseScreen {
 
@@ -10,10 +13,13 @@ class LoginAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/btnHave')
     }
 
+<<<<<<< HEAD
     get btnFirstAccess() {
         return $('id:com.astl.vidalink.beta:id/tvNewUserPassword')
     }
 
+=======
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     get inputCpf() {
         return $('id=com.astl.vidalink.beta:id/etFirstField')
     }
@@ -30,6 +36,7 @@ class LoginAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/btnAccess')
     }
 
+<<<<<<< HEAD
     get ForgotPasswordLink() {
         return $('id:com.astl.vidalink.beta:id/tvNewLoginForgotPassword')
     }
@@ -138,12 +145,43 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndClick(btnNao)
     }
 
+=======
+    // ======== ACTIONS ========
+    async tapEntrar(){
+        await this.btnEntrar.waitForDisplayed({ timeout: 60000, interval: 2000 })
+        await this.btnEntrar.click()
+    }
+
+    async fillCpf(cpf: string) {
+        await this.inputCpf.waitForDisplayed({ timeout: 15000 })
+        await this.inputCpf.setValue(cpf)
+        const iconCpfCheck = await $(`//android.widget.EditText[@resource-id='com.astl.vidalink.beta:id/etFirstField']/..//android.widget.ImageButton[@resource-id='com.astl.vidalink.beta:id/text_input_end_icon']`)
+        await iconCpfCheck.waitForDisplayed({ timeout: 15000 })
+    }
+
+    async fillSenha(senha: string) {
+        await this.inputSenha.waitForDisplayed({ timeout: 15000 })
+        await this.inputSenha.setValue(senha)
+        const iconPasswordCheck = await $(`//android.widget.EditText[@resource-id='com.astl.vidalink.beta:id/etSecondField']/..//android.widget.ImageButton[@resource-id='com.astl.vidalink.beta:id/text_input_end_icon']`)
+        await iconPasswordCheck.waitForDisplayed({ timeout: 15000 })
+    }
+
+    async fillMatricula(matricula: string) {
+        const labelMatricula = await $('//android.widget.TextView[contains(@text,"Matricula do titular")]')
+        await labelMatricula.waitForDisplayed({ timeout: 30000 })
+        await this.inputMatricula.waitForDisplayed({ timeout: 15000 })
+        await this.inputMatricula.setValue(matricula)
+        await this.waitAndClick(this.btnAcessar)
+    }
+
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     // ======== METHODS ========
     async login(cpf: string, senha: string) {
         await this.tapEntrar()
         await this.fillCpf(cpf)
         await this.fillSenha(senha)
         await this.waitAndClick(this.btnAcessar)
+<<<<<<< HEAD
         try { await this.refuseBiometrics()} catch(e) { }
     }
 
@@ -281,6 +319,12 @@ class LoginAndroid extends BaseScreen {
         await this.waitAndClick(checkboxAgreeTerm)
         await this.waitAndClick(checkboxAgreeInfo)
         await this.waitAndClick(btnAceitar)
+=======
+    }
+
+    async viewMessageError(){
+        await this.checkpointScreen('Senha incorreta')
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
 }

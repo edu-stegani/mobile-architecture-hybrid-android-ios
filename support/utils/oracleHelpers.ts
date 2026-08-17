@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import oracledb from 'oracledb';
 import os from 'os';
 
@@ -14,6 +15,9 @@ try {
     console.error('LOG_ORACLE_ERRO:', err.message);
   }
 }
+=======
+import oracledb from 'oracledb'
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 
 class OracleHelper {
   async executeQuery(query: string, params: any[] = []) {
@@ -21,12 +25,21 @@ class OracleHelper {
 
     try {
       connection = await oracledb.getConnection({
+<<<<<<< HEAD
         user: 'XXXXXXXXXXXXXX',
         password: 'XXXXXXXXXXX',
         connectString: 'host:port/XXXXXXXXX'
       })
 
       const result = await connection.execute(query, params, { autoCommit: true })
+=======
+        user: 'username',
+        password: 'password',
+        connectString: '11.11.11.11:1234/password'
+      })
+
+      const result = await connection.execute(query, params, {autoCommit: true})
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 
       return result.rowsAffected
 
@@ -37,6 +50,7 @@ class OracleHelper {
     }
   }
 
+<<<<<<< HEAD
   async executeSelect(query: string, params: any[] = []) {
     let connection: oracledb.Connection | undefined
     try {
@@ -95,6 +109,15 @@ class OracleHelper {
 
     return rows[0][0];
   }
+=======
+  // Métodos
+
+  async acceptTermAndConditions(socialId: string) {
+        const query = `UPDATE IIS.RMB_CLIENTE SET TERMO_ADESAO_ACEITO=6 WHERE CPF=:1`
+
+        return await this.executeQuery(query, [socialId]);
+    }
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 }
 
 export default new OracleHelper()

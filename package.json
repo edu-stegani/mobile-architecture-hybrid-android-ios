@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+<<<<<<< HEAD
     "test:local:android": "cross-env PLATFORM=android wdio run config/wdio.android.emulator.ts",
     "test:local:ios": "cross-env PLATFORM=ios wdio run config/wdio.ios.emulator.ts",
 
@@ -28,6 +29,17 @@
     "report:serve": "npx allure serve allure-results",
     "clean:allure": "rimraf allure-results",
     "clean:screenshots": "rimraf screenshots"
+=======
+    "test:android": "cross-env PLATFORM=android wdio run config/wdio.android.conf.ts",
+    "test:ios": "cross-env PLATFORM=ios wdio run config/wdio.ios.conf.ts",
+    "temp": "cross-env PLATFORM=android wdio run config/wdio.android.conf.ts --spec login",
+    "test:ios:bstack": "cross-env PLATFORM=ios npx wdio run config/wdio.browserstack.ios.conf.ts",
+    "temp:bstack": "cross-env PLATFORM=ios npx wdio run config/wdio.browserstack.ios.conf.ts --spec receita",
+    "report:generate": "npx allure generate -o allure-report allure-results",
+    "report:open": "npx allure open allure-report",
+    "report:serve": "npx allure serve allure-results",
+    "clean:allure": "rimraf allure-results"
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
   },
   "keywords": [],
   "author": "",
@@ -36,8 +48,13 @@
   "devDependencies": {
     "@badisi/wdio-harness": "^4.3.1",
     "@testing-library/webdriverio": "^3.2.1",
+<<<<<<< HEAD
     "@types/node": "^25.5.2",
     "@types/oracledb": "^6.10.3",
+=======
+    "@types/node": "^25.3.3",
+    "@types/oracledb": "^6.10.2",
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     "@types/pg": "^8.18.0",
     "@wdio/appium-service": "^9.24.0",
     "@wdio/browserstack-service": "^9.24.0",
@@ -50,7 +67,10 @@
     "appium-device-farm": "^11.3.2",
     "appium-uiautomator2-driver": "^7.0.0",
     "appium-xcuitest-driver": "^10.24.2",
+<<<<<<< HEAD
     "browserstack-local": "^1.5.13",
+=======
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     "cross-env": "^10.1.0",
     "expect-webdriverio": "^5.6.4",
     "rimraf": "^6.1.3",
@@ -62,7 +82,10 @@
   "dependencies": {
     "@wdio/allure-reporter": "^9.24.0",
     "appium": "^3.2.0",
+<<<<<<< HEAD
     "axios": "^1.15.0",
+=======
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     "dotenv": "^17.3.1",
     "oracledb": "^6.10.0",
     "pg": "^8.20.0"

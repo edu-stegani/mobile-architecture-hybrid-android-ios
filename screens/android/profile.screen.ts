@@ -4,6 +4,7 @@ import BaseScreen from '../shared/base.screen.js'
 class ProfileAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
+<<<<<<< HEAD
     get perfilTab() {
         return $('//android.widget.TextView[@text="Perfil"]')
     }
@@ -83,6 +84,41 @@ class ProfileAndroid extends BaseScreen {
     // ======== ACTIONS ========
 
     async confirmLogout() {
+=======
+    get perfilTab(){
+        return $('//android.widget.TextView[@text="Perfil"]')
+    }
+
+    get cardBeneficios() {
+        return $(`id=com.astl.vidalink.beta:id/tvCardHolderName`)
+    }
+
+    get logoutIcon (){
+        return $('id:com.astl.vidalink.beta:id/ivLogout')
+    }
+
+    get modalLogout(){
+        return $('id:com.astl.vidalink.beta:id/clLogoutDialog')
+    }
+
+    get btnLogoutYES(){
+        return $('id:com.astl.vidalink.beta:id/tvYes')
+    }
+
+    // ======== ACTIONS ========
+    async checkPerfilIcon() {
+        await this.perfilTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
+    }
+
+    async checkUserCard(fullName: string) {
+        await this.cardBeneficios.waitForDisplayed({ timeout: 30000, interval: 2000 })
+
+        const cardText = await this.cardBeneficios.getText()
+        await expect(cardText).toContain(fullName)
+    }
+
+    async confirmLogout(){
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         const btnLogoutYES = this.btnLogoutYES
         await this.modalLogout.waitForDisplayed()
         await this.waitAndClick(btnLogoutYES)
@@ -91,6 +127,7 @@ class ProfileAndroid extends BaseScreen {
         await btnEntrar.waitForDisplayed({ timeout: 60000, interval: 2000 })
     }
 
+<<<<<<< HEAD
     async selectOptionProfileByName(name: string) {
         const optionProfile = `${this.optionsProfile}//*[contains(@text, "${name}")]`
         const titleTollbarOption = `${this.tollbar}/../*[contains(@text, "${name}")]`
@@ -159,10 +196,22 @@ class ProfileAndroid extends BaseScreen {
     async logout() {
         await this.confirmAlert()
         const logoutIcon = this.logoutIcon
+=======
+    // ======== METHODS ========
+    async checkUsernameInCard(fullName: string) {
+        await this.checkUserCard(fullName)
+    }
+
+    async logout(){
+        const logoutIcon = this.logoutIcon
+        const perfil = this.perfilTab
+        await this.waitAndClick(perfil)
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         await this.waitAndClick(logoutIcon)
         await this.confirmLogout()
     }
 
+<<<<<<< HEAD
     async navigateMenuProfile(userPlan: string){
         const iconePerfil = this.perfilTab
 
@@ -174,6 +223,8 @@ class ProfileAndroid extends BaseScreen {
         await this.validateManageApp()
     }
 
+=======
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 }
 
 export default new ProfileAndroid()

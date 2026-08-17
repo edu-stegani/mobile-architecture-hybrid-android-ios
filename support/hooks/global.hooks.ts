@@ -1,4 +1,5 @@
 import type { Options } from '@wdio/types'
+<<<<<<< HEAD
 import { Frameworks } from '@wdio/types';
 import fs from 'fs';
 import path from 'path';
@@ -8,10 +9,18 @@ export const globalBeforeEach = async () => {
   const platform = driver.isAndroid ? 'Android' : 'iOS';
   console.log(`--- [${platform}] Sessão iniciada: ${browser.sessionId} ---`);
 };
+=======
+
+export const globalBeforeEach = async () => {
+    console.log('Sessão iniciada:', browser.sessionId)
+    // console.log('App pronto na tela inicial')
+}
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 
 export const globalAfterEach: Options.Testrunner['afterTest'] = async (
   test,
   context,
+<<<<<<< HEAD
   { error, passed }
 ) => {
   const message = passed
@@ -88,3 +97,12 @@ export const setBSTestResult = async (
     }
   })}`)
 };
+=======
+  { passed }
+) => {
+  if (!passed) {
+    const fileName = `./screenshots/FAIL_${test.title}_${Date.now()}.png`
+    await browser.saveScreenshot(fileName)
+  }
+}
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f

@@ -3,8 +3,12 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+<<<<<<< HEAD
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
+=======
+    "baseUrl": ".",
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     "paths": {
       "@screens/*": ["./screens/*"]
     },

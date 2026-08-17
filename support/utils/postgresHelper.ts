@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+<<<<<<< HEAD
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -29,6 +30,24 @@ class DbHelper {
     async executeQuery(target: TargetDb, query: string, params?: any[]) {
         const pool = this.pools[target];
         const client = await pool.connect();
+=======
+
+class DbHelper {
+    private pool: Pool;
+
+    constructor() {
+        this.pool = new Pool({
+            user: 'username',
+            host: '11.11.11.11',
+            database: 'postgres',
+            password: 'password',
+            port: 1232,
+        });
+    }
+
+    async executeQuery(query: string, params?: any[]) {
+        const client = await this.pool.connect();
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         try {
             const res = await client.query(query, params);
             return res.rows;
@@ -38,15 +57,20 @@ class DbHelper {
     }
 
     async disconnect() {
+<<<<<<< HEAD
         const keys = Object.keys(this.pools) as TargetDb[];
         for (const key of keys) {
             await this.pools[key].end();
         }
+=======
+        await this.pool.end();
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
     // metodos 
 
     async resetPasswordCount(count: number, socialId: string) {
+<<<<<<< HEAD
         const query = `UPDATE login.tabela_exemplo SET params_exemplo = $1 WHERE socialid = $2`;
 
         return await this.executeQuery('db_1', query, [count, socialId]);
@@ -96,6 +120,23 @@ class DbHelper {
         const query = `DELETE FROM public.tabela_exemplo WHERE params_exemplo= $1 AND ct= $2;`;
 
         return await this.executeQuery('db_2', query, [cd_tutorial, ct]);
+=======
+        const query = `UPDATE login.users SET invalidpasswordcount = $1 WHERE socialid = $2`;
+
+        return await this.executeQuery(query, [count, socialId]);
+    }
+
+    async updatePasswordForWeakPass(socialId: string) {
+        const query = `UPDATE login.users SET "password" = 'lcxPQnjvA78=' WHERE socialid = $1`;
+
+        return await this.executeQuery(query, [socialId]);
+    }
+
+    async updatePasswordForStrong(socialId: string) {
+        const query = `UPDATE login.users SET "password" = 'fkd18oQxC4cypDiYRsC23Q==' WHERE socialid = $1`;
+
+        return await this.executeQuery(query, [socialId]);
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
 }
