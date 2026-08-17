@@ -46,9 +46,23 @@ class ReceitaAndroid extends BaseScreen {
         return $('id:com.astl.vidalink.beta:id/tvSecondOption')
     }
 
+<<<<<<< HEAD
     // get btnDeleteSim() {
     //     return $('id:com.astl.vidalink.beta:id/btConfirm')
     // }
+=======
+    get btnDeletePicture() {
+        return $('id:com.astl.vidalink.beta:id/btDeletePicture')
+    }
+
+    get btnDeleteRecipe() {
+        return $('id:com.astl.vidalink.beta:id/btDeleteRecipe')
+    }
+
+    get btnDeleteSim() {
+        return $('id:com.astl.vidalink.beta:id/btConfirm')
+    }
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 
     get btnFinish() {
         return $('id:com.astl.vidalink.beta:id/btnFinish')
@@ -99,6 +113,7 @@ class ReceitaAndroid extends BaseScreen {
         }
     }
 
+<<<<<<< HEAD
     async selectUserAndGiveNameRecipe(fullNname: string) {
 
         const selectUser = $(`//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/layout"]/*[contains(@text, '${fullNname}')]`)
@@ -114,6 +129,30 @@ class ReceitaAndroid extends BaseScreen {
         await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
         await this.addPhoto('recipe.jpg')
         await this.waitAndClick(this.btnConfirmar)
+=======
+    async selectUser(userName: string) {
+        await this.checkpointScreen('Para quem é esta receita?')
+        const userSelected = $(`//android.view.ViewGroup[@resource-id="com.astl.vidalink.beta:id/layout"]/*[contains(@text, '${userName}')]`)
+        await this.waitAndClick(userSelected)
+        await this.waitAndSetValue(this.inputRecipeName, `Receita ${userName}`)
+        await this.waitAndClick(this.btnConfirmar)
+    }
+
+    async addPhotoRecipe() {
+        await this.uploadImageFromProject()
+        await this.checkpointScreen('Envie um ou mais arquivos da sua receita médica.')
+        await this.waitAndClick(this.btnAddImage)
+        await this.waitAndClick(this.btnGaleryPhotos)
+
+        const photo = $('(//android.widget.FrameLayout[@package="com.google.android.photopicker"]//android.view.View[@clickable="true"])[6]');
+        await this.waitAndClick(photo)
+
+        const btnDone = $('//android.widget.TextView[@text="Done"]')
+        await this.waitAndClick(btnDone)
+
+        await this.btnDeletePicture.waitForDisplayed()
+        this.waitAndClick(this.btnConfirmar)
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
     async getYesterdayDate() {
@@ -149,7 +188,11 @@ class ReceitaAndroid extends BaseScreen {
         await this.waitAndSetValue(this.inputMedicineName, `${medicineName}`)
         const selectMedicine = $(`//android.widget.LinearLayout[@resource-id="com.astl.vidalink.beta:id/llMedicineFilter"]//android.widget.TextView[@text='${medicineName}']`)
         await this.waitAndClick(selectMedicine)
+<<<<<<< HEAD
         await this.btnDeleteAndroid.waitForDisplayed()
+=======
+        await this.btnDeleteRecipe.waitForDisplayed()
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         await this.waitAndClick(this.btnConfirmar)
     }
 
@@ -178,19 +221,36 @@ class ReceitaAndroid extends BaseScreen {
         await this.waitAndClick(closeIcon)
     }
 
+<<<<<<< HEAD
     async sendNewRecipe(fullNname: string, typeRecipe: string, uf: string, medicine: string) {
         // Screen Informe nome para receita
         await this.selectUserAndGiveNameRecipe(fullNname)
         // Screen anexar foto da receita
         await this.sendRecipePhoto()
+=======
+    async sendNewRecipe(fullName: string, typeRecipe: string, uf: string, medicine: string) {
+        await this.waitAndClick(this.btnNewRecipe)
+        // Screen para quem é a receita
+        await this.selectUser(fullName)
+        // Screen anexar foto da receita
+        await this.addPhotoRecipe()
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         // Screen informe os dados da receita
         await this.fillDataRecipe(typeRecipe, uf)
         // Screen quais medicamentos 
         await this.fillAndSelectMedicine(medicine)
+<<<<<<< HEAD
         // // Screen receita enviada
         await this.checkpointScreen('Receita enviada!')
         await this.waitAndClick(this.btnFinish)
         await this.btnFinish.waitForDisplayed({ reverse: true })
+=======
+        // Screen receita enviada
+        await this.checkpointScreen('Receita enviada!')
+        await this.waitAndClick(this.btnFinish)
+        // Screen Minhas receitas
+        await this.tollbarMyRecipes.waitForDisplayed()
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
     async viewDetailsRecipe() {
@@ -203,15 +263,25 @@ class ReceitaAndroid extends BaseScreen {
         for (const el of Object.values(elements)) {
             await el.waitForDisplayed({ timeout: 15000 });
         }
+<<<<<<< HEAD
         await this.back()
+=======
+        await this.waitAndClick($('//android.widget.ImageButton'))
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
     async deleteRecipe() {
         await this.checkpointScreen('Tem certeza que deseja apagar essa receita?')
+<<<<<<< HEAD
         await this.waitAndClick(this.btnConfirmPopUp)
         await this.btnNewRecipe.waitForDisplayed()
     }
 
+=======
+        await this.waitAndClick(this.btnDeleteSim)
+        await this.btnNewRecipe.waitForDisplayed()
+    }
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 }
 
 export default new ReceitaAndroid()

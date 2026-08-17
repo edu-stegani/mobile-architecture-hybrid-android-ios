@@ -4,11 +4,19 @@ import BaseScreen from '../shared/base.screen.js'
 class HomeAndroid extends BaseScreen {
 
     // ====== SELECTORS ======
+<<<<<<< HEAD
     get btnPular() {
         return $('id:com.astl.vidalink.beta:id/tvPrevious')
     }
 
     get closeIcon() {
+=======
+    get labelNewApp() {
+        return $('//android.widget.TextView[@text="Novo app, nova estrutura"]')
+    }
+
+    get closeNewApp() {
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         return $('id=com.astl.vidalink.beta:id/ivClose')
     }
 
@@ -20,6 +28,7 @@ class HomeAndroid extends BaseScreen {
         return $('id=com.astl.vidalink.beta:id/tvGreeting')
     }
 
+<<<<<<< HEAD
     get btnNotShowAgain() {
         return $('//XCUIElementTypeButton[@name="Não exibir novamente"]')
     }
@@ -60,11 +69,25 @@ class HomeAndroid extends BaseScreen {
         if (await btnNoThanks.isDisplayed()) {
             await this.checkpointScreen('Que tal avaliar nosso aplicativo?')
             await this.waitAndClick(btnNoThanks)
+=======
+    // ======== ACTIONS ========
+    async closeInfoNewApp() {
+        try {
+            await this.labelNewApp.waitForDisplayed({ timeout: 30000 })
+            await this.waitAndClick(this.closeNewApp)
+            await this.closeNewApp.waitForDisplayed({ reverse: true, timeout: 10000 })
+        } catch (error) {
+            console.log('Info Novo App não apareceu, continuando com o teste...')
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         }
     }
 
     async checkHomeIcon() {
+<<<<<<< HEAD
         await this.homeTab.waitForDisplayed({ timeout: 50000, interval: 2000 })
+=======
+        await this.homeTab.waitForDisplayed({ timeout: 30000, interval: 2000 })
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
     async helloUser(firstName: string) {
@@ -76,10 +99,15 @@ class HomeAndroid extends BaseScreen {
 
     // ======== METHODS ========
     async checkDashboard() {
+<<<<<<< HEAD
         // await this.closeTutorial()
         // await this.maintenanceNotice()
         await this.HowAboutEvaluatingUs()
         await this.homeTab.waitForDisplayed({ timeout: 60000, interval: 2000 })
+=======
+        await this.closeInfoNewApp()
+        await this.checkHomeIcon()
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
     async tapCardByText(cardText: string) {
@@ -88,6 +116,7 @@ class HomeAndroid extends BaseScreen {
         await this.waitAndClick($(cardName))
     }
 
+<<<<<<< HEAD
     async tapPilarByName(pilarName: string) {
         const pilarSelector = `//android.widget.TextView[@resource-id="com.astl.vidalink.beta:id/tvPillarName" and @text="${pilarName}"]`
         await this.scrollToElement(pilarSelector)
@@ -108,6 +137,8 @@ class HomeAndroid extends BaseScreen {
         await $(`${onlyOnePillar}]`).waitForDisplayed()
     }
 
+=======
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
 }
 
 export default new HomeAndroid()

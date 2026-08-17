@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default class BaseScreen {
+<<<<<<< HEAD
     // LOCATORS ANDROID
     get btnOk() {
         return $(`id:com.astl.vidalink.beta:id/btConfirmOption`)
@@ -125,12 +126,42 @@ export default class BaseScreen {
             ]
         }]);
         await driver.pause(600);
+=======
+    async waitAndClick(element: ChainablePromiseElement) {
+        await element.waitForDisplayed()
+        await element.waitForEnabled()
+        await element.click()
+    }
+
+    async hideKeyboard() {
+        await this.waitAndClick($('~OK_toolbar'))
+    }
+
+    async scrollToElement(selector: string, maxRetries = 10) {
+        for (let i = 0; i < maxRetries; i++) {
+            await driver.pause(1000);
+            const el = await $(selector);
+            if (await el.isExisting()) {
+                if (await el.isDisplayed()) {
+                    console.log(`Elemento encontrado e visível no scroll ${i}`);
+                    return; // PARA o loop aqui
+                }
+            }
+            console.log(`Elemento não visível, tentando swipe ${i + 1}...`);
+            await this.performSwipeUp();
+        }
+        throw new Error(`Elemento não encontrado: ${selector}`);
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
     }
 
     private async performSwipeUp() {
         const size = await driver.getWindowRect();
         const centerX = size.width / 2;
+<<<<<<< HEAD
         const startY = size.height * 0.6;
+=======
+        const startY = size.height * 0.7;
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         const endY = size.height * 0.2;
 
         await driver.performActions([{
@@ -147,6 +178,7 @@ export default class BaseScreen {
         await driver.pause(500);
     }
 
+<<<<<<< HEAD
     async uploadImageFromProject(imageJPG: string) {
         const localFilePath = path.resolve(__dirname, `../../support/image/${imageJPG}`);
         const data = fs.readFileSync(localFilePath).toString('base64');
@@ -226,11 +258,28 @@ export default class BaseScreen {
 
     async waitAndSetValue(element: ChainablePromiseElement, value: string) {
         await element.waitForDisplayed({ timeout: 10000 })
+=======
+    async uploadImageFromProject() {
+        // Caminho da imagem no projeto
+        const localFilePath = path.resolve(__dirname, '../../support/image/recipe.jpg');
+
+        // Caminho de destino no dispositivo
+        const devicePath = '/sdcard/Download/recipe.jpg';
+
+        const data = fs.readFileSync(localFilePath).toString('base64');
+        await driver.pushFile(devicePath, data);
+        console.log(`Arquivo enviado para: ${devicePath}`);
+    }
+
+    async waitAndSetValue(element: ChainablePromiseElement, value: string) {
+        await element.waitForDisplayed()
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
         await element.setValue(value)
     }
 
     async checkpointScreen(textCheckpoint: string) {
         const selector = process.env.PLATFORM === 'ios'
+<<<<<<< HEAD
             ? `//*[contains(@label, '${textCheckpoint}')]`
             : `//*[contains(@text, '${textCheckpoint}')]`;
 
@@ -284,3 +333,26 @@ export default class BaseScreen {
         }
     }
 }
+=======
+            ? `//*[@label='${textCheckpoint}']`
+            : `//*[@text='${textCheckpoint}']`;
+
+        const checkpointText = $(selector);
+        await checkpointText.waitForDisplayed()
+    }
+
+    async acceptPermissionAlertLocation() {
+        try {
+            const btnAllowAlert = $('//XCUIElementTypeButton[@name="Allow While Using App"]')
+            // Aguarda até 10 segundos por qualquer alerta do sistema
+            await btnAllowAlert.waitForDisplayed({
+                timeout: 10000,
+                timeoutMsg: 'Alerta não apareceu, seguindo...'
+            });
+            await btnAllowAlert.click()
+        } catch (e) {
+            // Se não houver alerta, ele apenas ignora e segue
+        }
+    }
+}
+>>>>>>> ce270225ab302744831f1e85ab4a8e3988109e0f
