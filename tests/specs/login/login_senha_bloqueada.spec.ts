@@ -3,7 +3,7 @@ import { loginScreen } from '../../../screens/index.js'
 import postgresHelper from '../../../support/utils/postgresHelper.js'
 import { AppHelper } from '../../../support/utils/appHelper.js'
 
-const user = data.users.Marcia
+const user = data.users.Eduardo
 
 before(async () => {
   await postgresHelper.updatePasswordForStrong(user.cpf)

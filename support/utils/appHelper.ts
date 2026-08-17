@@ -4,8 +4,8 @@ import { only } from 'node:test';
 export class AppHelper {
     static async resetApp() {
         const appId = driver.isAndroid 
-            ? 'com.astl.vidalink.beta' 
-            : 'br.com.vidalink.beta';
+            ? 'com.astl.app-beta-exemplo.beta' 
+            : 'br.com.app-beta-exemplo.beta';
 
         try { await driver.terminateApp(appId);  } catch (e) { }
         await driver.activateApp(appId);

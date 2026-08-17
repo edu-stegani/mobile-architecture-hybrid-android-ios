@@ -56,8 +56,8 @@ export const config: Options.Testrunner & { capabilities: WebdriverIO.Capabiliti
     capabilities: [{
         'platformName': 'Android',
         'appium:automationName': 'UiAutomator2',
-        'appium:app': 'bs://520c3cea9edbe07039cc5e762d4faafea94860a6', //v5.10.5
-        'appium:appPackage': 'com.astl.vidalink.beta',
+        'appium:app': 'bs://xxxxxxxxxxxxxxxxxxxxxxxxxxxx', 
+        'appium:appPackage': 'com.astl.app-beta-exemplo.beta',
         
         'appium:autoGrantPermissions': true,
 

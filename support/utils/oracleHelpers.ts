@@ -21,9 +21,9 @@ class OracleHelper {
 
     try {
       connection = await oracledb.getConnection({
-        user: 'GERENCIADOR',
-        password: 'grncdr',
-        connectString: '10.10.10.18:1521/DBPROD_PDB1'
+        user: 'XXXXXXXXXXXXXX',
+        password: 'XXXXXXXXXXX',
+        connectString: 'host:port/XXXXXXXXX'
       })
 
       const result = await connection.execute(query, params, { autoCommit: true })
@@ -41,9 +41,9 @@ class OracleHelper {
     let connection: oracledb.Connection | undefined
     try {
       connection = await oracledb.getConnection({
-        user: 'GERENCIADOR',
-        password: 'grncdr',
-        connectString: '10.10.10.18:1521/DBPROD_PDB1'
+        user: 'XXXXXXXXXXXXXX',
+        password: 'XXXXXXXXXXX',
+        connectString: 'host:port/XXXXXXXXX'
       })
 
       const result = await connection.execute(query, params)
@@ -59,30 +59,30 @@ class OracleHelper {
   // Métodos
 
   async acceptTermAndConditions(socialId: string) {
-    const query = `UPDATE IIS.RMB_CLIENTE SET TERMO_ADESAO_ACEITO=6 WHERE CPF=:1`
+    const query = `UPDATE IIS.TABELA_EXEMPLO SET PARAMETRO_EXEMPLO=6 WHERE CPF=:1`
 
     return await this.executeQuery(query, [socialId]);
   }
 
   async resetTermAndConditions(socialId: string) {
-    const query = `UPDATE IIS.RMB_CLIENTE SET TERMO_ADESAO_ACEITO=NULL WHERE CPF=:1`
+    const query = `UPDATE IIS.TABELA_EXEMPLO SET PARAMETRO_EXEMPLO=NULL WHERE CPF=:1`
 
     return await this.executeQuery(query, [socialId]);
   }
 
   async resetBankData(socialId: string) {
-    const query = `UPDATE IIS.RMB_CLIENTE SET CONTA_CORRENTE=NULL, BANCO=NULL, AGENCIA_DV=NULL WHERE CPF=:1`
+    const query = `UPDATE IIS.TABELA_EXEMPLO SET PARAMETRO_EXEMPLO=NULL, PARAMETRO_EXEMPLO_2=NULL, PARAMETRO_EXEMPLO_3=NULL WHERE CPF=:1`
 
     return await this.executeQuery(query, [socialId]);
   }
 
   async getLastSMS(socialId: string) {
     const query = `
-      SELECT TOKENSMS 
+      SELECT TABELA_EXEMPLO 
       FROM (
-        SELECT TOKENSMS 
-        FROM IIS.TOKEN 
-        WHERE MEMBER_ID = :1 
+        SELECT TABELA_EXEMPLO 
+        FROM IIS.TABELA_EXEMPLO 
+        WHERE PARAMETRO_EXEMPLO = :1 
           AND DATA >= SYSDATE - (1/1440) 
         ORDER BY DATA DESC
       ) WHERE ROWNUM = 1

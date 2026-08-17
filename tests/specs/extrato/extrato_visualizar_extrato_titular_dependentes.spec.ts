@@ -4,7 +4,7 @@ import postgresHelper from '../../../support/utils/postgresHelper.js'
 import oracleHelpers from '../../../support/utils/oracleHelpers.js'
 import { AppHelper } from '../../../support/utils/appHelper.js'
 
-const user = data.users.Marcia
+const user = data.users.Eduardo
 
 beforeEach(async () => {
     await postgresHelper.updateRecognitionFace('NO_FACE', user.CT)

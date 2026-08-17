@@ -3,17 +3,13 @@ import FormData from 'form-data';
 import fs from 'fs';
 import path from 'path';
 
-const baseUrl = 'https://hachimon-staging.vidalink.com.br';
-
-const data = new Date();
-data.setDate(data.getDate() - 1);
-const yesterday = `${data.toISOString().split('T')[0]}T00:00:00`;
+const baseUrl = 'https://servidor-hml-exemplo.com.br';
 
 export async function createToken(): Promise<string> {
     const url = `${baseUrl}/token`;
 
     const payloadApp = {
-        service_hash: '0a32427a-aaa6-4c3f-a22f-e1f9e5ad8916'
+        service_hash: 'xxxxxxxxxxxxxxxxxxxxxxxxxx'
     };
 
     const params = {
@@ -32,7 +28,7 @@ export async function createToken(): Promise<string> {
 }
 
 export async function sendRecipe(token: string, fullName: string, cardNumber: string, CT: string, cpf: string, clientGroup: string): Promise<string> {
-    const url = `${baseUrl}/v1.0/prescription/Previous-Shipment/`;
+    const url = `${baseUrl}/rota-endpoint`;
 
     const today = new Date();
     const prescriptionDate = `${today.toISOString().split('T')[0]}T00:00:00`;
@@ -50,7 +46,7 @@ export async function sendRecipe(token: string, fullName: string, cardNumber: st
         "phoneNumber": "00000-0000",
         "userName": `${fullName}`,
         "socialId": `${cpf}`,
-        "prescriptionDate": yesterday,
+        "prescriptionDate": prescriptionDate,
         "regionalCouncil": 123456,
         "regionalCouncilType": 1,
         "stateRegionalCouncil": "SP"
@@ -74,8 +70,7 @@ export async function sendRecipe(token: string, fullName: string, cardNumber: st
 }
 
 export async function uploadImage(token: string, objectId: string) {
-    const url = `${baseUrl}/v1.0/Prescription/Previous-Shipment/${objectId}/add-file`;
-
+    const url = `${baseUrl}/rota-endpoint`;
     const form = new FormData();
 
     const imagePath = path.resolve(process.cwd(), 'support/image/recipe.jpg');
@@ -90,7 +85,7 @@ export async function uploadImage(token: string, objectId: string) {
         headers: {
             ...form.getHeaders(),
             'Authorization': `Bearer ${token}`,
-            'Vidalink-Session-Id': 'a01170e8-4481-40b6-b970-7184195f25de',
+            'Vidalink-Session-Id': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             'Accept': 'application/json',
         },
     });
@@ -110,11 +105,7 @@ export async function flowSendRecipe(massa: any): Promise<void> {
 }
 
 export async function createRequestRefund(token: string, customerId: string, cardNumber: string): Promise<{ id: number, protocol: string }> {
-    const url = `${baseUrl}/v1.0/refund?customerId=${customerId}&cardNumber=${cardNumber}`;
-    // const payload = {
-    //     "motiveId": 45, 
-    //     "products": ["Produto de Teste API"]
-    // };
+    const url = `${baseUrl}/rota-endpoint`;    
 
     const payload = {
         "motiveId": 45,
@@ -126,7 +117,7 @@ export async function createRequestRefund(token: string, customerId: string, car
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json',
-            'Vidalink-Session-Id': 'a01170e8-4481-40b6-b970-7184195f25de',
+            'Vidalink-Session-Id': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             'Content-Type': 'application/json',
         },
     };
@@ -138,7 +129,7 @@ export async function createRequestRefund(token: string, customerId: string, car
 }
 
 export async function uploadRefundFile(token: string, refundId: number, fileType: 'invoice' | 'prescription'): Promise<number> {
-    const url = `${baseUrl}/v1.0/refund/${refundId}/file?type=${fileType}`;
+    const url = `${baseUrl}/rota-endpoint`;
     const form = new FormData();
     const imagePath = path.resolve(process.cwd(), 'support/image/recipe.jpg');
     const imageStream = fs.createReadStream(imagePath);
@@ -150,7 +141,7 @@ export async function uploadRefundFile(token: string, refundId: number, fileType
         headers: {
             ...form.getHeaders(),
             'Authorization': `Bearer ${token}`,
-            'Vidalink-Session-Id': 'a01170e8-4481-40b6-b970-7184195f25de',
+            'Vidalink-Session-Id': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             'Accept': 'application/json',
         },
     });
@@ -161,7 +152,7 @@ export async function uploadRefundFile(token: string, refundId: number, fileType
 }
 
 export async function validateRequest(token: string, refundId: number, protocol: string, cardNumber: string, purchaseDate: string) {
-    const url = `${baseUrl}/v2/refund/validate-request`;
+    const url = `${baseUrl}/rota-endpoint`;
     const payload = {
         "refundId": refundId,
         "CnpjOfPharmacy": "0900836000132",
@@ -186,7 +177,7 @@ export async function validateRequest(token: string, refundId: number, protocol:
 }
 
 export async function quotation(token: string, refundId: number, massa: any, invoiceFileId: number, purchaseDate: string): Promise<string> {
-    const url = `${baseUrl}/v1.1/authorization/refund/quotation`;
+    const url = `${baseUrl}/rota-endpoint`;
     const payload = {
         "operationType": 1,
         "refundId": refundId,
@@ -220,7 +211,7 @@ export async function quotation(token: string, refundId: number, massa: any, inv
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json',
-            'Vidalink-Session-Id': 'a01170e8-4481-40b6-b970-7184195f25de',
+            'Vidalink-Session-Id': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             'Content-Type': 'application/json',
         },
     };
@@ -232,12 +223,12 @@ export async function quotation(token: string, refundId: number, massa: any, inv
 }
 
 export async function authorizeConfirmSales(token: string, authorizationCode: string) {
-    const url = `${baseUrl}/v1.1/authorization/refund/authorize-confirm-sales/${authorizationCode}`;
+    const url = `${baseUrl}/rota-endpoint`;
     const params = {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json',
-            'Vidalink-Session-Id': 'a01170e8-4481-40b6-b970-7184195f25de',
+            'Vidalink-Session-Id': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
             'Content-Type': 'application/json',
         },
     };
@@ -252,7 +243,7 @@ export async function authorizeConfirmSales(token: string, authorizationCode: st
 }
 
 export async function processRefund(token: string, refundId: number, authorizationCode: string) {
-    const url = `${baseUrl}/v2/refund/set-authorization`;
+    const url = `${baseUrl}/rota-endpoint`;
     const params = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -277,8 +268,7 @@ export async function processRefund(token: string, refundId: number, authorizati
 }
 
 export async function reproveRefund(token: string, refundId: number, protocol: string) {
-    const url = `${baseUrl}/v2/refund/disapprove`;
-
+    const url = `${baseUrl}/rota-endpoint`;
     const params = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -309,35 +299,19 @@ export async function reproveRefund(token: string, refundId: number, protocol: s
 }
 
 export async function sendRefundAndApprove(massa: any): Promise<void> {
-    // console.log(`[API] Iniciando fluxo de aprovação de reembolso para ${massa.fullName}`);
     const token = await createToken();
 
     const purchaseDate = new Date();
     purchaseDate.setDate(purchaseDate.getDate() - 30);
     const formattedPurchaseDate = `${String(purchaseDate.getDate()).padStart(2, '0')}/${String(purchaseDate.getMonth() + 1).padStart(2, '0')}/${purchaseDate.getFullYear()}`;
 
-    // Criar solicitação de reembolso
     const { id: refundId, protocol } = await createRequestRefund(token, massa.CT, massa.cardNumber);
-    // console.log(`[API] Solicitação de reembolso criada: ID ${refundId}, Protocolo ${protocol}`);
-
-    // Fazer upload dos arquivos
     const invoiceFileId = await uploadRefundFile(token, refundId, 'invoice');
-    // console.log(`[API] Upload do cupom fiscal (invoice) concluído. File ID: ${invoiceFileId}`);
     await uploadRefundFile(token, refundId, 'prescription');
-    // console.log(`[API] Upload da receita (prescription) concluído.`);
-
-    // Validar a solicitação
     await validateRequest(token, refundId, protocol, massa.cardNumber, formattedPurchaseDate);
-    // console.log(`[API] Validação da solicitação concluída.`);
-
-    // Fazer a cotação
     const authorizationCode = await quotation(token, refundId, massa, invoiceFileId, formattedPurchaseDate);
-    // console.log(`[API] Cotação realizada. Código de autorização: ${authorizationCode}`);
-
-    // Confirmar a venda e processar o reembolso
     await authorizeConfirmSales(token, authorizationCode);
     await processRefund(token, refundId, authorizationCode);
-    // console.log(`[API] Reembolso processado e aprovado com sucesso!`);
 }
 
 export async function sendRefundAndReprove(massa: any): Promise<void> {

@@ -4,7 +4,7 @@ import oracleHelpers from '../../../support/utils/oracleHelpers.js'
 import postgresHelper from '../../../support/utils/postgresHelper.js'
 import { homeScreen, reembolsoScreen, benefitsScreen } from '../../../screens/index.js'
 
-const user = data.users.William
+const user = data.users.Eduardo
 
 before(async () => {
     await oracleHelpers.resetBankData(user.cpf)
